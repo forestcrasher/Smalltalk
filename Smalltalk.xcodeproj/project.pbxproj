@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1420BEAA5E488C514A1E5D84 /* Pods_Smalltalk.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8F5A1E12649C8945A742DCDA /* Pods_Smalltalk.framework */; };
 		C01D31DD256EBB7A002438ED /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01D31DC256EBB7A002438ED /* AppDelegate.swift */; };
 		C01D31DF256EBB7A002438ED /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01D31DE256EBB7A002438ED /* SceneDelegate.swift */; };
 		C01D31E1256EBB7A002438ED /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01D31E0256EBB7A002438ED /* ViewController.swift */; };
@@ -16,6 +17,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1FE3B1AC9C24EEAB378EA114 /* Pods-Smalltalk.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Smalltalk.release.xcconfig"; path = "Target Support Files/Pods-Smalltalk/Pods-Smalltalk.release.xcconfig"; sourceTree = "<group>"; };
+		8F5A1E12649C8945A742DCDA /* Pods_Smalltalk.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Smalltalk.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		BB186A3563242FE9D8F8CC24 /* Pods-Smalltalk.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Smalltalk.debug.xcconfig"; path = "Target Support Files/Pods-Smalltalk/Pods-Smalltalk.debug.xcconfig"; sourceTree = "<group>"; };
 		C01D31D9256EBB7A002438ED /* Smalltalk.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Smalltalk.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C01D31DC256EBB7A002438ED /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C01D31DE256EBB7A002438ED /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -31,17 +35,38 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1420BEAA5E488C514A1E5D84 /* Pods_Smalltalk.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		03D966393AA529F0FF10EF08 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				8F5A1E12649C8945A742DCDA /* Pods_Smalltalk.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		32E1A5FAA0912AE54ACAAB7B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				BB186A3563242FE9D8F8CC24 /* Pods-Smalltalk.debug.xcconfig */,
+				1FE3B1AC9C24EEAB378EA114 /* Pods-Smalltalk.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		C01D31D0256EBB7A002438ED = {
 			isa = PBXGroup;
 			children = (
 				C01D31DB256EBB7A002438ED /* Smalltalk */,
 				C01D31DA256EBB7A002438ED /* Products */,
+				32E1A5FAA0912AE54ACAAB7B /* Pods */,
+				03D966393AA529F0FF10EF08 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -74,6 +99,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = C01D31ED256EBB7E002438ED /* Build configuration list for PBXNativeTarget "Smalltalk" */;
 			buildPhases = (
+				7546EC047EC5520297B0DF82 /* [CP] Check Pods Manifest.lock */,
 				C01D31D5256EBB7A002438ED /* Sources */,
 				C01D31D6256EBB7A002438ED /* Frameworks */,
 				C01D31D7256EBB7A002438ED /* Resources */,
@@ -131,6 +157,31 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		7546EC047EC5520297B0DF82 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Smalltalk-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		C01D31D5256EBB7A002438ED /* Sources */ = {
@@ -283,6 +334,7 @@
 		};
 		C01D31EE256EBB7E002438ED /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = BB186A3563242FE9D8F8CC24 /* Pods-Smalltalk.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -302,6 +354,7 @@
 		};
 		C01D31EF256EBB7E002438ED /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1FE3B1AC9C24EEAB378EA114 /* Pods-Smalltalk.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
