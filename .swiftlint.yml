@@ -1,0 +1,18 @@
+warning_threshold: 15
+
+excluded:
+  - Pods
+  - R.generated.swift
+
+disabled_rules:
+  - identifier_name
+
+line_length:
+  warning: 300
+
+file_length:
+  warning: 500
+
+force_cast: warning
+force_try:
+  severity: warning

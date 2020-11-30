@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,8 @@
 		C01D31E4256EBB7A002438ED /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C01D31E2256EBB7A002438ED /* Main.storyboard */; };
 		C01D31E6256EBB7E002438ED /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C01D31E5256EBB7E002438ED /* Assets.xcassets */; };
 		C01D31E9256EBB7E002438ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C01D31E7256EBB7E002438ED /* LaunchScreen.storyboard */; };
+		C01F5EDF257577BB00D974A2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C01F5EDE257577BB00D974A2 /* GoogleService-Info.plist */; };
+		C01F5F562575935B00D974A2 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01F5F552575935B00D974A2 /* R.generated.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +30,8 @@
 		C01D31E5256EBB7E002438ED /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C01D31E8256EBB7E002438ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C01D31EA256EBB7E002438ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		C01F5EDE257577BB00D974A2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C01F5F552575935B00D974A2 /* R.generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = R.generated.swift; path = ../R.generated.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -56,7 +60,6 @@
 				BB186A3563242FE9D8F8CC24 /* Pods-Smalltalk.debug.xcconfig */,
 				1FE3B1AC9C24EEAB378EA114 /* Pods-Smalltalk.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -88,6 +91,8 @@
 				C01D31E5256EBB7E002438ED /* Assets.xcassets */,
 				C01D31E7256EBB7E002438ED /* LaunchScreen.storyboard */,
 				C01D31EA256EBB7E002438ED /* Info.plist */,
+				C01F5EDE257577BB00D974A2 /* GoogleService-Info.plist */,
+				C01F5F552575935B00D974A2 /* R.generated.swift */,
 			);
 			path = Smalltalk;
 			sourceTree = "<group>";
@@ -100,9 +105,12 @@
 			buildConfigurationList = C01D31ED256EBB7E002438ED /* Build configuration list for PBXNativeTarget "Smalltalk" */;
 			buildPhases = (
 				7546EC047EC5520297B0DF82 /* [CP] Check Pods Manifest.lock */,
+				C01F5F53257591DD00D974A2 /* R.swift */,
+				C01F5F512575831B00D974A2 /* SwiftLint */,
 				C01D31D5256EBB7A002438ED /* Sources */,
 				C01D31D6256EBB7A002438ED /* Frameworks */,
 				C01D31D7256EBB7A002438ED /* Resources */,
+				75F242DEE478A7DA028EE89E /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -151,6 +159,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C01D31E9256EBB7E002438ED /* LaunchScreen.storyboard in Resources */,
+				C01F5EDF257577BB00D974A2 /* GoogleService-Info.plist in Resources */,
 				C01D31E6256EBB7E002438ED /* Assets.xcassets in Resources */,
 				C01D31E4256EBB7A002438ED /* Main.storyboard in Resources */,
 			);
@@ -181,6 +190,61 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		75F242DEE478A7DA028EE89E /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Smalltalk/Pods-Smalltalk-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-Smalltalk/Pods-Smalltalk-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Smalltalk/Pods-Smalltalk-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C01F5F512575831B00D974A2 /* SwiftLint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = SwiftLint;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "${PODS_ROOT}/SwiftLint/swiftlint\n";
+		};
+		C01F5F53257591DD00D974A2 /* R.swift */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$TEMP_DIR/rswift-lastrun",
+			);
+			name = R.swift;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				$SRCROOT/R.generated.swift,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"$PODS_ROOT/R.swift/rswift\" generate \"$SRCROOT/R.generated.swift\"\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -191,6 +255,7 @@
 				C01D31E1256EBB7A002438ED /* ViewController.swift in Sources */,
 				C01D31DD256EBB7A002438ED /* AppDelegate.swift in Sources */,
 				C01D31DF256EBB7A002438ED /* SceneDelegate.swift in Sources */,
+				C01F5F562575935B00D974A2 /* R.generated.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,7 +332,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -322,7 +387,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 13.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
