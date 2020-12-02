@@ -12,7 +12,7 @@ class MessagesCoordinator {
 
     init() {
         let messagesViewController = MessagesViewController()
-        messagesViewController.tabBarItem = UITabBarItem(title: "Messages", image: UIImage(systemName: "message.fill"), tag: 1)
+        messagesViewController.tabBarItem = UITabBarItem(title: "Messages", image: UIImage(systemName: "message.fill"), tag: 2)
         navigationController = BaseNavigationController(rootViewController: messagesViewController)
     }
 }

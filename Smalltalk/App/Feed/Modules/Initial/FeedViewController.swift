@@ -9,6 +9,8 @@ import UIKit
 
 class FeedViewController: UIViewController {
 
+    var viewModel: FeedViewModel!
+
     override func viewDidLoad() {
         super.viewDidLoad()
 

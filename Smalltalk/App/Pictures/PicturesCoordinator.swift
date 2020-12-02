@@ -12,7 +12,7 @@ class PicturesCoordinator {
 
     init() {
         let picturesViewController = PicturesViewController()
-        picturesViewController.tabBarItem = UITabBarItem(title: "Pictures", image: UIImage(systemName: "photo.fill"), tag: 1)
+        picturesViewController.tabBarItem = UITabBarItem(title: "Pictures", image: UIImage(systemName: "photo.on.rectangle.fill"), tag: 1)
         navigationController = BaseNavigationController(rootViewController: picturesViewController)
     }
 }

@@ -12,7 +12,7 @@ class ActivityCoordinator {
 
     init() {
         let activityViewController = ActivityViewController()
-        activityViewController.tabBarItem = UITabBarItem(title: "Activity", image: UIImage(systemName: "heart.fill"), tag: 1)
+        activityViewController.tabBarItem = UITabBarItem(title: "Activity", image: UIImage(systemName: "heart.fill"), tag: 3)
         navigationController = BaseNavigationController(rootViewController: activityViewController)
     }
 }

@@ -12,7 +12,7 @@ class ProfileCoordinator {
 
     init() {
         let profileViewController = ProfileViewController()
-        profileViewController.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 1)
+        profileViewController.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 4)
         navigationController = BaseNavigationController(rootViewController: profileViewController)
     }
 }

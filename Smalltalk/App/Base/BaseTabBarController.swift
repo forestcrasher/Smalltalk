@@ -17,6 +17,12 @@ class BaseTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        viewControllers = [feed.navigationController, pictures.navigationController, messages.navigationController, activity.navigationController, profile.navigationController]
+        viewControllers = [
+            feed.navigationController,
+            pictures.navigationController,
+            messages.navigationController,
+            activity.navigationController,
+            profile.navigationController
+        ]
     }
 }
