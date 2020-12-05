@@ -12,19 +12,16 @@ import FirebaseFirestore
 
 class PostsStorage {
 
-    private lazy var firestore = Firestore.firestore()
-
+    // MARK: - Public
     func fetchPosts() -> Observable<[Post]> {
         return Observable.create { observer in
-            let listener = self.firestore.collection("posts").addSnapshotListener { querySnapshot, error in
-                guard let documents = querySnapshot?.documents else {
-                    observer.onError(error!)
-                    return
+            let listener = self.firestore.collection("posts").addSnapshotListener { querySnapshot, _ in
+                if let documents = querySnapshot?.documents {
+                    let posts = documents.compactMap { document -> Post? in
+                        try? document.data(as: Post.self)
+                    }
+                    observer.onNext(posts)
                 }
-                let posts = documents.compactMap { document -> Post? in
-                    try? document.data(as: Post.self)
-                }
-                observer.onNext(posts)
             }
             return Disposables.create {
                 listener.remove()
@@ -34,16 +31,9 @@ class PostsStorage {
 
     func fetchAuthor(by ref: DocumentReference) -> Observable<User> {
         return Observable.create { observer in
-            let listener = ref.addSnapshotListener { querySnapshot, error in
-                guard let document = querySnapshot else {
-                    observer.onError(error!)
-                    return
-                }
-                do {
-                    let author = try document.data(as: User.self)
-                    observer.onNext(author!)
-                } catch {
-                    observer.onError(error)
+            let listener = ref.addSnapshotListener { querySnapshot, _ in
+                if let author = try? querySnapshot?.data(as: User.self) {
+                    observer.onNext(author)
                 }
             }
             return Disposables.create {
@@ -51,5 +41,8 @@ class PostsStorage {
             }
         }
     }
+
+    // MARK: - Private
+    private lazy var firestore = Firestore.firestore()
 
 }
