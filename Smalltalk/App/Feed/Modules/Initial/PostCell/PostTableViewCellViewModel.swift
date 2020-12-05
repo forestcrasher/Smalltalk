@@ -1,36 +1,42 @@
 //
-//  FeedViewModel.swift
+//  PostTableViewCellViewModel.swift
 //  Smalltalk
 //
-//  Created by Anton Pryakhin on 02.12.2020.
+//  Created by Anton Pryakhin on 05.12.2020.
 //
 
 import Foundation
 import RxSwift
 import RxCocoa
 
-class FeedViewModel {
+class PostTableViewCellViewModel {
 
     // MARK: - Dependencies
     private var postsStorage: PostsStorage = AppDelegate.container.resolve(PostsStorage.self)!
-    weak var coordinator: FeedCoordinator!
 
     // MARK: - Setup
     struct Input {}
 
     func setup(with input: Input) -> Disposable {
         postsStorage
-            .fetchPosts()
-            .bind(to: posts)
+            .fetchAuthor(by: post.value.authorRef)
+            .bind(to: author)
             .disposed(by: disposeBag)
 
         return Disposables.create()
     }
 
     // MARK: - Public
-    let posts = BehaviorRelay<[Post]>(value: [])
+
+    let post: BehaviorRelay<Post>
+    let author = BehaviorRelay<User?>(value: nil)
 
     // MARK: - Private
-    private let disposeBag = DisposeBag()
+    let disposeBag = DisposeBag()
+
+    // MARK: - Init
+    init(post: Post) {
+        self.post = BehaviorRelay(value: post)
+    }
 
 }

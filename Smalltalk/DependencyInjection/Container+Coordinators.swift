@@ -9,6 +9,7 @@ import Swinject
 import SwinjectAutoregistration
 
 extension Container {
+
     func registerCoordinators() {
         self.autoregister(AppCoordinator.self, argument: UIWindow.self, initializer: AppCoordinator.init)
         self.autoregister(FeedCoordinator.self, initializer: FeedCoordinator.init)
@@ -17,4 +18,5 @@ extension Container {
         self.autoregister(ActivityCoordinator.self, initializer: ActivityCoordinator.init)
         self.autoregister(ProfileCoordinator.self, initializer: ProfileCoordinator.init)
     }
+
 }

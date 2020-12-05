@@ -8,14 +8,19 @@
 import UIKit
 
 class AppCoordinator {
-    private let window: UIWindow
 
-    init(window: UIWindow) {
-        self.window = window
-    }
-
+    // MARK: - Public
     func start() {
         window.rootViewController = BaseTabBarController()
         window.makeKeyAndVisible()
     }
+
+    // MARK: - Private
+    private let window: UIWindow
+
+    // MARK: - Init
+    init(window: UIWindow) {
+        self.window = window
+    }
+
 }

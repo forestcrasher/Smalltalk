@@ -9,7 +9,10 @@ import Swinject
 import SwinjectAutoregistration
 
 extension Container {
+
     func registerViewModels() {
         self.autoregister(FeedViewModel.self, initializer: FeedViewModel.init)
+        self.autoregister(PostTableViewCellViewModel.self, argument: Post.self, initializer: PostTableViewCellViewModel.init)
     }
+
 }

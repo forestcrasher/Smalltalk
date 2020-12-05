@@ -14,7 +14,6 @@
 		C01D31E9256EBB7E002438ED /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C01D31E7256EBB7E002438ED /* LaunchScreen.storyboard */; };
 		C01F5EDF257577BB00D974A2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C01F5EDE257577BB00D974A2 /* GoogleService-Info.plist */; };
 		C01F5F562575935B00D974A2 /* R.generated.swift in Sources */ = {isa = PBXBuildFile; fileRef = C01F5F552575935B00D974A2 /* R.generated.swift */; };
-		C0286D7C2576CECD00768D6B /* Person.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0286D7B2576CECD00768D6B /* Person.swift */; };
 		C0286D802576CEE500768D6B /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0286D7F2576CEE500768D6B /* Post.swift */; };
 		C0286D832576CEF800768D6B /* Picture.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0286D822576CEF800768D6B /* Picture.swift */; };
 		C0286D862576CF1600768D6B /* Dialog.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0286D852576CF1600768D6B /* Dialog.swift */; };
@@ -38,11 +37,14 @@
 		C0286DD02576E1B400768D6B /* ActivityCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0286DCF2576E1B400768D6B /* ActivityCoordinator.swift */; };
 		C0286DD32576E1E300768D6B /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0286DD22576E1E300768D6B /* ProfileViewController.swift */; };
 		C0286DD72576E20B00768D6B /* ProfileCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0286DD62576E20B00768D6B /* ProfileCoordinator.swift */; };
+		C03CE2572579680F005CC466 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03CE2562579680F005CC466 /* User.swift */; };
+		C03CE27925798327005CC466 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C03CE27825798327005CC466 /* PostTableViewCell.swift */; };
 		C05338FA2578251C00DEF37D /* FeedViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05338F92578251C00DEF37D /* FeedViewModel.swift */; };
 		C05339012578264E00DEF37D /* Container+Coordinators.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05339002578264E00DEF37D /* Container+Coordinators.swift */; };
 		C05339042578266100DEF37D /* Container+ViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05339032578266100DEF37D /* Container+ViewModels.swift */; };
 		C05339072578267400DEF37D /* Container+Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05339062578267400DEF37D /* Container+Services.swift */; };
 		C053390A2578268400DEF37D /* Container+RegisterDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05339092578268400DEF37D /* Container+RegisterDependencies.swift */; };
+		C08113F6257BB8970035D1E3 /* PostTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08113F5257BB8970035D1E3 /* PostTableViewCellViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -57,7 +59,6 @@
 		C01D31EA256EBB7E002438ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C01F5EDE257577BB00D974A2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C01F5F552575935B00D974A2 /* R.generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = R.generated.swift; path = ../R.generated.swift; sourceTree = "<group>"; };
-		C0286D7B2576CECD00768D6B /* Person.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Person.swift; sourceTree = "<group>"; };
 		C0286D7F2576CEE500768D6B /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		C0286D822576CEF800768D6B /* Picture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picture.swift; sourceTree = "<group>"; };
 		C0286D852576CF1600768D6B /* Dialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
@@ -81,11 +82,14 @@
 		C0286DCF2576E1B400768D6B /* ActivityCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityCoordinator.swift; sourceTree = "<group>"; };
 		C0286DD22576E1E300768D6B /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
 		C0286DD62576E20B00768D6B /* ProfileCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileCoordinator.swift; sourceTree = "<group>"; };
+		C03CE2562579680F005CC466 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		C03CE27825798327005CC466 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
 		C05338F92578251C00DEF37D /* FeedViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeedViewModel.swift; sourceTree = "<group>"; };
 		C05339002578264E00DEF37D /* Container+Coordinators.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Coordinators.swift"; sourceTree = "<group>"; };
 		C05339032578266100DEF37D /* Container+ViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+ViewModels.swift"; sourceTree = "<group>"; };
 		C05339062578267400DEF37D /* Container+Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Services.swift"; sourceTree = "<group>"; };
 		C05339092578268400DEF37D /* Container+RegisterDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+RegisterDependencies.swift"; sourceTree = "<group>"; };
+		C08113F5257BB8970035D1E3 /* PostTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCellViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -169,12 +173,12 @@
 		C0286D742576CDDC00768D6B /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				C0286D7B2576CECD00768D6B /* Person.swift */,
 				C0286D7F2576CEE500768D6B /* Post.swift */,
 				C0286D822576CEF800768D6B /* Picture.swift */,
 				C0286D852576CF1600768D6B /* Dialog.swift */,
 				C0286D882576CF2300768D6B /* Message.swift */,
 				C0286D8B2576CF3300768D6B /* Comment.swift */,
+				C03CE2562579680F005CC466 /* User.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -265,6 +269,7 @@
 		C05338FE2578255100DEF37D /* Initial */ = {
 			isa = PBXGroup;
 			children = (
+				C08113FC257BD68C0035D1E3 /* PostCell */,
 				C0286DB92576E0ED00768D6B /* FeedViewController.swift */,
 				C05338F92578251C00DEF37D /* FeedViewModel.swift */,
 			);
@@ -280,6 +285,15 @@
 				C05339002578264E00DEF37D /* Container+Coordinators.swift */,
 			);
 			path = DependencyInjection;
+			sourceTree = "<group>";
+		};
+		C08113FC257BD68C0035D1E3 /* PostCell */ = {
+			isa = PBXGroup;
+			children = (
+				C03CE27825798327005CC466 /* PostTableViewCell.swift */,
+				C08113F5257BB8970035D1E3 /* PostTableViewCellViewModel.swift */,
+			);
+			path = PostCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -438,15 +452,17 @@
 			files = (
 				C0286DBD2576E11400768D6B /* FeedCoordinator.swift in Sources */,
 				C0286D922576CF9000768D6B /* PicturesStorage.swift in Sources */,
-				C0286D7C2576CECD00768D6B /* Person.swift in Sources */,
 				C0286DA32576D1C300768D6B /* BaseTabBarController.swift in Sources */,
 				C0286D9A2576D02400768D6B /* NotificationsStorage.swift in Sources */,
+				C03CE2572579680F005CC466 /* User.swift in Sources */,
 				C0286DBA2576E0ED00768D6B /* FeedViewController.swift in Sources */,
 				C0286DD32576E1E300768D6B /* ProfileViewController.swift in Sources */,
 				C05339012578264E00DEF37D /* Container+Coordinators.swift in Sources */,
 				C0286DD72576E20B00768D6B /* ProfileCoordinator.swift in Sources */,
 				C053390A2578268400DEF37D /* Container+RegisterDependencies.swift in Sources */,
 				C0286DD02576E1B400768D6B /* ActivityCoordinator.swift in Sources */,
+				C03CE27925798327005CC466 /* PostTableViewCell.swift in Sources */,
+				C08113F6257BB8970035D1E3 /* PostTableViewCellViewModel.swift in Sources */,
 				C01D31DD256EBB7A002438ED /* AppDelegate.swift in Sources */,
 				C0286DCC2576E1A300768D6B /* ActivityViewController.swift in Sources */,
 				C05339072578267400DEF37D /* Container+Services.swift in Sources */,

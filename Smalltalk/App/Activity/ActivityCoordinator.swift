@@ -8,11 +8,14 @@
 import UIKit
 
 class ActivityCoordinator {
-    var navigationController: UINavigationController
 
-    init() {
+    // MARK: - Public
+    var navigationController: UINavigationController = BaseNavigationController()
+
+    func start() {
         let activityViewController = ActivityViewController()
         activityViewController.tabBarItem = UITabBarItem(title: "Activity", image: UIImage(systemName: "heart.fill"), tag: 3)
-        navigationController = BaseNavigationController(rootViewController: activityViewController)
+        navigationController.viewControllers = [activityViewController]
     }
+
 }

@@ -8,14 +8,23 @@
 import UIKit
 
 class BaseTabBarController: UITabBarController {
-    let feed = FeedCoordinator()
-    let pictures = PicturesCoordinator()
-    let messages = MessagesCoordinator()
-    let activity = ActivityCoordinator()
-    let profile = ProfileCoordinator()
 
+    // MARK: - Private
+    private let feed = FeedCoordinator()
+    private let pictures = PicturesCoordinator()
+    private let messages = MessagesCoordinator()
+    private let activity = ActivityCoordinator()
+    private let profile = ProfileCoordinator()
+
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        feed.start()
+        pictures.start()
+        messages.start()
+        activity.start()
+        profile.start()
 
         viewControllers = [
             feed.navigationController,
@@ -25,4 +34,5 @@ class BaseTabBarController: UITabBarController {
             profile.navigationController
         ]
     }
+
 }

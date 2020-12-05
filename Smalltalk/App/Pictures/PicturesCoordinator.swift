@@ -8,11 +8,14 @@
 import UIKit
 
 class PicturesCoordinator {
-    var navigationController: UINavigationController
 
-    init() {
+    // MARK: - Public
+    var navigationController: UINavigationController = BaseNavigationController()
+
+    func start() {
         let picturesViewController = PicturesViewController()
         picturesViewController.tabBarItem = UITabBarItem(title: "Pictures", image: UIImage(systemName: "photo.on.rectangle.fill"), tag: 1)
-        navigationController = BaseNavigationController(rootViewController: picturesViewController)
+        navigationController.viewControllers = [picturesViewController]
     }
+
 }

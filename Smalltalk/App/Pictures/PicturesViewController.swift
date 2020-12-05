@@ -9,6 +9,7 @@ import UIKit
 
 class PicturesViewController: UIViewController {
 
+    // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
 

@@ -8,11 +8,14 @@
 import UIKit
 
 class ProfileCoordinator {
-    var navigationController: UINavigationController
 
-    init() {
+    // MARK: - Public
+    var navigationController: UINavigationController = BaseNavigationController()
+
+    func start() {
         let profileViewController = ProfileViewController()
         profileViewController.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 4)
-        navigationController = BaseNavigationController(rootViewController: profileViewController)
+        navigationController.viewControllers = [profileViewController]
     }
+
 }
