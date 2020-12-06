@@ -17,23 +17,25 @@ class PostTableViewCell: UITableViewCell {
     // MARK: - ViewModel
     var viewModel: PostTableViewCellViewModel! {
         didSet {
-            viewModel
-                .setup(with: PostTableViewCellViewModel.Input())
-                .disposed(by: disposeBag)
+            if oldValue == nil {
+                viewModel
+                    .setup(with: PostTableViewCellViewModel.Input())
+                    .disposed(by: disposeBag)
 
-            viewModel
-                .post
-                .subscribe(onNext: { [unowned self] post in
-                    self.textLabel?.text = post.text
-                })
-                .disposed(by: disposeBag)
+                viewModel
+                    .post
+                    .subscribe(onNext: { [unowned self] post in
+                        self.textLabel?.text = post.text
+                    })
+                    .disposed(by: disposeBag)
 
-            viewModel
-                .author
-                .subscribe(onNext: { [unowned self] author in
-                    self.detailTextLabel?.text = author?.fullName
-                })
-                .disposed(by: disposeBag)
+                viewModel
+                    .author
+                    .subscribe(onNext: { [unowned self] author in
+                        self.detailTextLabel?.text = author?.fullName
+                    })
+                    .disposed(by: disposeBag)
+            }
         }
     }
 

@@ -18,11 +18,7 @@ class FeedViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = .white
-        title = "Feed"
-
-        setupTableView()
+        setupUI()
 
         viewModel
             .setup(with: FeedViewModel.Input())
@@ -32,21 +28,32 @@ class FeedViewController: UIViewController {
             .posts
             .bind(to: tableView.rx.items(cellIdentifier: PostTableViewCell.reuseIdentifier,
                                          cellType: PostTableViewCell.self)) { _, post, cell in
-                cell.viewModel = AppDelegate.container.resolve(PostTableViewCellViewModel.self, argument: post)
+                if cell.viewModel == nil {
+                    cell.viewModel = AppDelegate.container.resolve(PostTableViewCellViewModel.self, argument: post)
+                }
             }
             .disposed(by: disposeBag)
     }
 
     // MARK: - Private
-    private let tableView = UITableView()
+    private lazy var tableView: UITableView = {
+        let tableView = UITableView()
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
+    }()
+
     private let disposeBag = DisposeBag()
 
-    private func setupTableView() {
+    private func setupUI() {
+        navigationController?.navigationBar.prefersLargeTitles = true
+        view.backgroundColor = .white
+        title = "Feed"
+
         view.addSubview(tableView)
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+
+        tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: PostTableViewCell.reuseIdentifier)
     }

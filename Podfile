@@ -12,6 +12,7 @@ target 'Smalltalk' do
   pod 'SwiftLint'
   pod 'Firebase/Analytics'
   pod 'Firebase/Firestore'
+  pod 'Firebase/Storage'
   pod 'FirebaseFirestoreSwift', '~> 7.0-beta'
   
 end

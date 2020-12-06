@@ -45,6 +45,9 @@
 		C05339072578267400DEF37D /* Container+Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05339062578267400DEF37D /* Container+Services.swift */; };
 		C053390A2578268400DEF37D /* Container+RegisterDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05339092578268400DEF37D /* Container+RegisterDependencies.swift */; };
 		C08113F6257BB8970035D1E3 /* PostTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08113F5257BB8970035D1E3 /* PostTableViewCellViewModel.swift */; };
+		C081143E257BE1800035D1E3 /* PicturesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C081143D257BE1800035D1E3 /* PicturesViewModel.swift */; };
+		C08114A2257BEC630035D1E3 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */; };
+		C08114A5257BEC740035D1E3 /* PictureCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08114A4257BEC740035D1E3 /* PictureCollectionViewCellViewModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +93,9 @@
 		C05339062578267400DEF37D /* Container+Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Services.swift"; sourceTree = "<group>"; };
 		C05339092578268400DEF37D /* Container+RegisterDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+RegisterDependencies.swift"; sourceTree = "<group>"; };
 		C08113F5257BB8970035D1E3 /* PostTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCellViewModel.swift; sourceTree = "<group>"; };
+		C081143D257BE1800035D1E3 /* PicturesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewModel.swift; sourceTree = "<group>"; };
+		C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
+		C08114A4257BEC740035D1E3 /* PictureCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,7 +205,7 @@
 		C0286D762576CE0A00768D6B /* Feed */ = {
 			isa = PBXGroup;
 			children = (
-				C05338FD2578254000DEF37D /* Coordinator */,
+				C0286DBC2576E11400768D6B /* FeedCoordinator.swift */,
 				C05338FC2578252E00DEF37D /* Modules */,
 			);
 			path = Feed;
@@ -209,7 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				C0286DC22576E14600768D6B /* PicturesCoordinator.swift */,
-				C0286DBF2576E13300768D6B /* PicturesViewController.swift */,
+				C081143B257BE11C0035D1E3 /* Modules */,
 			);
 			path = Pictures;
 			sourceTree = "<group>";
@@ -258,14 +264,6 @@
 			path = Modules;
 			sourceTree = "<group>";
 		};
-		C05338FD2578254000DEF37D /* Coordinator */ = {
-			isa = PBXGroup;
-			children = (
-				C0286DBC2576E11400768D6B /* FeedCoordinator.swift */,
-			);
-			path = Coordinator;
-			sourceTree = "<group>";
-		};
 		C05338FE2578255100DEF37D /* Initial */ = {
 			isa = PBXGroup;
 			children = (
@@ -294,6 +292,33 @@
 				C08113F5257BB8970035D1E3 /* PostTableViewCellViewModel.swift */,
 			);
 			path = PostCell;
+			sourceTree = "<group>";
+		};
+		C081143B257BE11C0035D1E3 /* Modules */ = {
+			isa = PBXGroup;
+			children = (
+				C081143C257BE15B0035D1E3 /* Initial */,
+			);
+			path = Modules;
+			sourceTree = "<group>";
+		};
+		C081143C257BE15B0035D1E3 /* Initial */ = {
+			isa = PBXGroup;
+			children = (
+				C081149F257BE8880035D1E3 /* PictureCell */,
+				C0286DBF2576E13300768D6B /* PicturesViewController.swift */,
+				C081143D257BE1800035D1E3 /* PicturesViewModel.swift */,
+			);
+			path = Initial;
+			sourceTree = "<group>";
+		};
+		C081149F257BE8880035D1E3 /* PictureCell */ = {
+			isa = PBXGroup;
+			children = (
+				C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */,
+				C08114A4257BEC740035D1E3 /* PictureCollectionViewCellViewModel.swift */,
+			);
+			path = PictureCell;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -459,11 +484,13 @@
 				C0286DD32576E1E300768D6B /* ProfileViewController.swift in Sources */,
 				C05339012578264E00DEF37D /* Container+Coordinators.swift in Sources */,
 				C0286DD72576E20B00768D6B /* ProfileCoordinator.swift in Sources */,
+				C08114A2257BEC630035D1E3 /* PictureCollectionViewCell.swift in Sources */,
 				C053390A2578268400DEF37D /* Container+RegisterDependencies.swift in Sources */,
 				C0286DD02576E1B400768D6B /* ActivityCoordinator.swift in Sources */,
 				C03CE27925798327005CC466 /* PostTableViewCell.swift in Sources */,
 				C08113F6257BB8970035D1E3 /* PostTableViewCellViewModel.swift in Sources */,
 				C01D31DD256EBB7A002438ED /* AppDelegate.swift in Sources */,
+				C08114A5257BEC740035D1E3 /* PictureCollectionViewCellViewModel.swift in Sources */,
 				C0286DCC2576E1A300768D6B /* ActivityViewController.swift in Sources */,
 				C05339072578267400DEF37D /* Container+Services.swift in Sources */,
 				C0286DC92576E18000768D6B /* MessagesCoordinator.swift in Sources */,
@@ -477,6 +504,7 @@
 				C05339042578266100DEF37D /* Container+ViewModels.swift in Sources */,
 				C0286D802576CEE500768D6B /* Post.swift in Sources */,
 				C0286D8C2576CF3300768D6B /* Comment.swift in Sources */,
+				C081143E257BE1800035D1E3 /* PicturesViewModel.swift in Sources */,
 				C0286D832576CEF800768D6B /* Picture.swift in Sources */,
 				C01D31DF256EBB7A002438ED /* SceneDelegate.swift in Sources */,
 				C01F5F562575935B00D974A2 /* R.generated.swift in Sources */,

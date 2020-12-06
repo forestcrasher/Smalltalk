@@ -33,6 +33,8 @@ class BaseTabBarController: UITabBarController {
             activity.navigationController,
             profile.navigationController
         ]
+
+        selectedIndex = 1
     }
 
 }

@@ -14,6 +14,7 @@ extension Container {
 
     func registerServices() {
         self.autoregister(PostsStorage.self, initializer: PostsStorage.init).inObjectScope(.container)
+        self.autoregister(PicturesStorage.self, initializer: PicturesStorage.init).inObjectScope(.container)
     }
 
 }
