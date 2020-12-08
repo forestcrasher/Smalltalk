@@ -34,7 +34,7 @@ class BaseTabBarController: UITabBarController {
             profile.navigationController
         ]
 
-        selectedIndex = 1
+        selectedIndex = 2
     }
 
 }

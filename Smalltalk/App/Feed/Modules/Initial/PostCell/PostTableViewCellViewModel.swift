@@ -32,7 +32,7 @@ class PostTableViewCellViewModel {
     let author = BehaviorRelay<User?>(value: nil)
 
     // MARK: - Private
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     // MARK: - Init
     init(post: Post) {

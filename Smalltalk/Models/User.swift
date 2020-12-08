@@ -13,6 +13,7 @@ struct User: Identifiable, Codable {
     @DocumentID var id: String?
     let firstName: String
     let lastName: String
+    let photoUrl: String
 
     var fullName: String {
         "\(firstName) \(lastName)"

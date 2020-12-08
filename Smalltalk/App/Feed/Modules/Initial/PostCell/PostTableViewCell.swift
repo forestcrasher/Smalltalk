@@ -18,29 +18,33 @@ class PostTableViewCell: UITableViewCell {
     var viewModel: PostTableViewCellViewModel! {
         didSet {
             if oldValue == nil {
-                viewModel
-                    .setup(with: PostTableViewCellViewModel.Input())
-                    .disposed(by: disposeBag)
-
-                viewModel
-                    .post
-                    .subscribe(onNext: { [unowned self] post in
-                        self.textLabel?.text = post.text
-                    })
-                    .disposed(by: disposeBag)
-
-                viewModel
-                    .author
-                    .subscribe(onNext: { [unowned self] author in
-                        self.detailTextLabel?.text = author?.fullName
-                    })
-                    .disposed(by: disposeBag)
+                setupInternalBindings()
             }
         }
     }
 
     // MARK: - Private
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
+
+    private func setupInternalBindings() {
+        viewModel
+            .setup(with: PostTableViewCellViewModel.Input())
+            .disposed(by: disposeBag)
+
+        viewModel
+            .post
+            .subscribe(onNext: { [unowned self] post in
+                self.textLabel?.text = post.text
+            })
+            .disposed(by: disposeBag)
+
+        viewModel
+            .author
+            .subscribe(onNext: { [unowned self] author in
+                self.detailTextLabel?.text = author?.fullName
+            })
+            .disposed(by: disposeBag)
+    }
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {

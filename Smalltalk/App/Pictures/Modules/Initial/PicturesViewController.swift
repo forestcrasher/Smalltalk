@@ -19,22 +19,12 @@ class PicturesViewController: UIViewController {
         super.viewDidLoad()
 
         setupUI()
-
-        viewModel
-            .setup(with: PicturesViewModel.Input())
-            .disposed(by: disposeBag)
-
-        viewModel
-            .pictures
-            .bind(to: collectionView.rx.items(cellIdentifier: PictureCollectionViewCell.reuseIdentifier, cellType: PictureCollectionViewCell.self)) { _, picture, cell in
-                if cell.viewModel == nil {
-                    cell.viewModel = AppDelegate.container.resolve(PictureCollectionViewCellViewModel.self, argument: picture)
-                }
-            }
-            .disposed(by: disposeBag)
+        setupInternalBindings()
     }
 
     // MARK: - Private
+    private let disposeBag = DisposeBag()
+
     private lazy var collectionView: UICollectionView = {
         let screenSizeWidth: CGFloat = view.safeAreaLayoutGuide.layoutFrame.width
         let leftAndRightPaddings: CGFloat = 20.0
@@ -51,8 +41,6 @@ class PicturesViewController: UIViewController {
         return collectionView
     }()
 
-    private let disposeBag = DisposeBag()
-
     private func setupUI() {
         navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .white
@@ -65,6 +53,21 @@ class PicturesViewController: UIViewController {
         collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         collectionView.register(PictureCollectionViewCell.self, forCellWithReuseIdentifier: PictureCollectionViewCell.reuseIdentifier)
+    }
+
+    private func setupInternalBindings() {
+        viewModel
+            .setup(with: PicturesViewModel.Input())
+            .disposed(by: disposeBag)
+
+        viewModel
+            .pictures
+            .bind(to: collectionView.rx.items(cellIdentifier: PictureCollectionViewCell.reuseIdentifier, cellType: PictureCollectionViewCell.self)) { _, picture, cell in
+                if cell.viewModel == nil {
+                    cell.viewModel = AppDelegate.container.resolve(PictureCollectionViewCellViewModel.self, argument: picture)
+                }
+            }
+            .disposed(by: disposeBag)
     }
 
 }

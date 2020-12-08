@@ -38,7 +38,7 @@ class PictureCollectionViewCellViewModel {
     let image = BehaviorRelay<Data?>(value: nil)
 
     // MARK: - Private
-    let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
 
     // MARK: - Init
     init(picture: Picture) {

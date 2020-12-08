@@ -18,31 +18,14 @@ class PictureCollectionViewCell: UICollectionViewCell {
     var viewModel: PictureCollectionViewCellViewModel! {
         didSet {
             if oldValue == nil {
-                viewModel?
-                    .setup(with: PictureCollectionViewCellViewModel.Input())
-                    .disposed(by: disposeBag)
-
-                viewModel?
-                    .author
-                    .subscribe(onNext: { [unowned self] author in
-                        self.authorLabel.text = author?.fullName
-                    })
-                    .disposed(by: disposeBag)
-
-                viewModel?
-                    .image
-                    .observeOn(MainScheduler.instance)
-                    .subscribe(onNext: { [unowned self] image in
-                        if let data = image {
-                            self.imageView.image = UIImage(data: data)
-                        }
-                    })
-                    .disposed(by: disposeBag)
+                setupInternalBindings()
             }
         }
     }
 
     // MARK: - Private
+    private let disposeBag = DisposeBag()
+
     private lazy var authorLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 14)
@@ -58,8 +41,6 @@ class PictureCollectionViewCell: UICollectionViewCell {
         return imageView
     }()
 
-    private let disposeBag = DisposeBag()
-
     private func setupUI() {
         addSubview(authorLabel)
         addSubview(imageView)
@@ -73,6 +54,28 @@ class PictureCollectionViewCell: UICollectionViewCell {
         imageView.leftAnchor.constraint(equalTo: leftAnchor).isActive = true
         imageView.bottomAnchor.constraint(equalTo: bottomAnchor).isActive = true
         imageView.rightAnchor.constraint(equalTo: rightAnchor).isActive = true
+    }
+
+    private func setupInternalBindings() {
+        viewModel
+            .setup(with: PictureCollectionViewCellViewModel.Input())
+            .disposed(by: disposeBag)
+
+        viewModel
+            .author
+            .subscribe(onNext: { [unowned self] author in
+                self.authorLabel.text = author?.fullName
+            })
+            .disposed(by: disposeBag)
+
+        viewModel
+            .image
+            .subscribe(onNext: { [unowned self] image in
+                if let data = image {
+                    self.imageView.image = UIImage(data: data)
+                }
+            })
+            .disposed(by: disposeBag)
     }
 
     // MARK: - Init

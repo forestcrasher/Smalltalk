@@ -13,7 +13,10 @@ class MessagesCoordinator {
     var navigationController: UINavigationController = BaseNavigationController()
 
     func start() {
+        let messagesViewModel = AppDelegate.container.resolve(MessagesViewModel.self)!
+        messagesViewModel.coordinator = self
         let messagesViewController = MessagesViewController()
+        messagesViewController.viewModel = messagesViewModel
         messagesViewController.tabBarItem = UITabBarItem(title: "Messages", image: UIImage(systemName: "message.fill"), tag: 2)
         navigationController.viewControllers = [messagesViewController]
     }
