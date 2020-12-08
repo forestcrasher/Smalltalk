@@ -9,7 +9,7 @@ import UIKit
 import Swinject
 import Firebase
 
-@main
+@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     static let container = Container()
