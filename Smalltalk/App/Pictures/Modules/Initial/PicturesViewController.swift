@@ -38,6 +38,7 @@ class PicturesViewController: UIViewController {
         let collectionView = UICollectionView(frame: view.frame, collectionViewLayout: collectionViewLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
+        collectionView.register(PictureCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: PictureCollectionViewCell.self))
         return collectionView
     }()
 
@@ -52,7 +53,6 @@ class PicturesViewController: UIViewController {
         collectionView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         collectionView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
-        collectionView.register(PictureCollectionViewCell.self, forCellWithReuseIdentifier: PictureCollectionViewCell.reuseIdentifier)
     }
 
     private func setupInternalBindings() {
@@ -62,10 +62,8 @@ class PicturesViewController: UIViewController {
 
         viewModel
             .pictures
-            .bind(to: collectionView.rx.items(cellIdentifier: PictureCollectionViewCell.reuseIdentifier, cellType: PictureCollectionViewCell.self)) { _, picture, cell in
-                if cell.viewModel == nil {
-                    cell.viewModel = AppDelegate.container.resolve(PictureCollectionViewCellViewModel.self, argument: picture)
-                }
+            .bind(to: collectionView.rx.items(cellIdentifier: String(describing: PictureCollectionViewCell.self), cellType: PictureCollectionViewCell.self)) { _, model, cell in
+                cell.model = model
             }
             .disposed(by: disposeBag)
     }

@@ -9,7 +9,6 @@ import Foundation
 import RxSwift
 import RxCocoa
 import FirebaseFirestore
-import FirebaseStorage
 
 class PicturesStorage {
 
@@ -30,36 +29,7 @@ class PicturesStorage {
         }
     }
 
-    func fetchAuthor(by ref: DocumentReference) -> Observable<User> {
-        return Observable.create { observer in
-            let listener = ref.addSnapshotListener { querySnapshot, _ in
-                if let author = try? querySnapshot?.data(as: User.self) {
-                    observer.onNext(author)
-                }
-            }
-            return Disposables.create {
-                listener.remove()
-            }
-        }
-    }
-
-    func downloadImage(url: String) -> Observable<Data> {
-        return Observable.create { observer in
-                let ref = self.storage.reference(withPath: url)
-                ref.getData(maxSize: self.maxSize) { data, _ in
-                    if let data = data {
-                        observer.onNext(data)
-                    }
-                    observer.onCompleted()
-                }
-            return Disposables.create()
-        }
-    }
-
     // MARK: - Private
     private lazy var firestore = Firestore.firestore()
-    private lazy var storage = Storage.storage()
-
-    private let maxSize: Int64 = 10 * 1024 * 1024
 
 }

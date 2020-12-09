@@ -26,22 +26,6 @@ class DialogTableViewCell: UITableViewCell {
 
     private func setupInternalBindings() {
         viewModel
-            .participant
-            .flatMap { [unowned self] participant -> Observable<(User?, Data?)> in
-                guard let photoUrl = participant?.photoUrl else {
-                    return Observable.just((participant, nil))
-                }
-                return self.filesStorage.downloadImage(url: photoUrl).map { image in (participant, image) }
-            }
-            .subscribe(onNext: { [unowned self] (participant, image) in
-                self.textLabel?.text = participant?.fullName
-                if let data = image {
-                    self.imageView?.image = UIImage(data: data)
-                }
-            })
-            .disposed(by: disposeBag)
-
-        viewModel
             .message
             .subscribe(onNext: { [unowned self] message in
                 self.detailTextLabel?.text = message?.text

@@ -13,21 +13,18 @@ import FirebaseStorage
 class FilesStorage {
 
     // MARK: - Public
-    func downloadImage(url: String) -> Observable<Data> {
-        return Observable.create { observer in
-                let ref = self.storage.reference(withPath: url)
-                ref.getData(maxSize: self.maxSize) { data, _ in
-                    if let data = data {
-                        observer.onNext(data)
-                    }
-                    observer.onCompleted()
+    func fetchUrl(by url: String) -> Observable<URL> {
+        return Observable.create { [weak self] observer in
+            let ref = self?.storage.reference(withPath: url)
+            ref?.downloadURL { url, _ in
+                if let url = url {
+                    observer.onNext(url)
                 }
+            }
             return Disposables.create()
         }
     }
 
     // MARK: - Private
-    private lazy var storage = Storage.storage()
-
-    private let maxSize: Int64 = 10 * 1024 * 1024
+    private let storage = Storage.storage()
 }
