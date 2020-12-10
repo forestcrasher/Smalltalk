@@ -27,7 +27,10 @@ class PictureCollectionViewCell: UICollectionViewCell {
     var model: Model! {
         didSet {
             authorLabel.text = model.authorFullName
-            imageView.kf.setImage(with: model.url)
+            if let url = model?.url {
+                let resourse = ImageResource(downloadURL: url, cacheKey: url.absoluteString)
+                imageView.kf.setImage(with: resourse, options: [.loadDiskFileSynchronously, .backgroundDecode])
+            }
         }
     }
 
