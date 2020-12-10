@@ -13,7 +13,7 @@ import FirebaseStorage
 class FilesStorage {
 
     // MARK: - Public
-    func fetchUrl(by url: String) -> Observable<URL> {
+    func fetchDownloadURL(by url: String) -> Observable<URL> {
         return Observable.create { [weak self] observer in
             let ref = self?.storage.reference(withPath: url)
             ref?.downloadURL { url, _ in

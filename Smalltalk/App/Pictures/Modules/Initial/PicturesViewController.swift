@@ -8,6 +8,7 @@
 import UIKit
 import RxSwift
 import RxCocoa
+import Kingfisher
 
 class PicturesViewController: UIViewController {
 
@@ -27,15 +28,16 @@ class PicturesViewController: UIViewController {
 
     private lazy var collectionView: UICollectionView = {
         let screenSizeWidth: CGFloat = view.safeAreaLayoutGuide.layoutFrame.width
-        let leftAndRightPaddings: CGFloat = 20.0
+        let leftAndRightPaddings: CGFloat = 40.0
         let numberOfItemsPerRow: CGFloat = 1.0
         let side = (screenSizeWidth - leftAndRightPaddings) / numberOfItemsPerRow
 
-        let collectionViewLayout = UICollectionViewFlowLayout()
-        collectionViewLayout.sectionInset = UIEdgeInsets(top: 20, left: 10, bottom: 10, right: 10)
-        collectionViewLayout.itemSize = CGSize(width: side, height: side)
+        let layout = UICollectionViewFlowLayout()
+        layout.sectionInset = UIEdgeInsets(top: 20.0, left: 20.0, bottom: 20.0, right: 20.0)
+        layout.itemSize = CGSize(width: side, height: side)
+        layout.minimumLineSpacing = 30.0
 
-        let collectionView = UICollectionView(frame: view.frame, collectionViewLayout: collectionViewLayout)
+        let collectionView = UICollectionView(frame: view.frame, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .white
         collectionView.register(PictureCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: PictureCollectionViewCell.self))
@@ -61,9 +63,9 @@ class PicturesViewController: UIViewController {
             .disposed(by: disposeBag)
 
         viewModel
-            .pictures
-            .bind(to: collectionView.rx.items(cellIdentifier: String(describing: PictureCollectionViewCell.self), cellType: PictureCollectionViewCell.self)) { _, model, cell in
-                cell.model = model
+            .pictureCellViewModels
+            .bind(to: collectionView.rx.items(cellIdentifier: String(describing: PictureCollectionViewCell.self), cellType: PictureCollectionViewCell.self)) { _, viewModel, cell in
+                cell.viewModel = viewModel
             }
             .disposed(by: disposeBag)
     }

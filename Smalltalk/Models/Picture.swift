@@ -12,7 +12,7 @@ import FirebaseFirestoreSwift
 struct Picture: Identifiable, Codable {
 
     @DocumentID var id: String?
-    var url: String
+    var path: String
     var description: String
     var date: Date
     var authorRef: DocumentReference
@@ -33,7 +33,7 @@ struct Picture: Identifiable, Codable {
     }
 
     enum CodingKeys: String, CodingKey {
-        case url
+        case path
         case description
         case date
         case authorRef = "author"

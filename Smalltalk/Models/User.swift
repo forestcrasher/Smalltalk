@@ -13,10 +13,16 @@ struct User: Identifiable, Codable {
     @DocumentID var id: String?
     let firstName: String
     let lastName: String
-    let photoUrl: String
+    let photoPath: String
 
     var fullName: String {
         "\(firstName) \(lastName)"
+    }
+
+    enum CodingKeys: String, CodingKey {
+        case firstName
+        case lastName
+        case photoPath
     }
 
 }
