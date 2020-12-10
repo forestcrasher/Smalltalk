@@ -23,7 +23,7 @@ class PicturesViewModel {
             .fetchPictures()
             .subscribe(onNext: { [weak self] pictures in
                 let pictureCellViewModels: [PictureCollectionViewCellViewModel] = pictures.reduce(into: []) { result, picture in
-                    result.append(PictureCollectionViewCellViewModel(picture: picture))
+                    result.append(AppDelegate.container.resolve(PictureCollectionViewCellViewModel.self, argument: picture)!)
                 }
                 self?.pictureCellViewModels.accept(pictureCellViewModels)
             })
