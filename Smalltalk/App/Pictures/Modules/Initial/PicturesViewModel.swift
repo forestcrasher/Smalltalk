@@ -8,11 +8,15 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Swinject
 
 class PicturesViewModel {
 
+    // MARK: - Container
+    private let container: Container
+
     // MARK: - Dependencies
-    private var picturesStorage: PicturesStorage = AppDelegate.container.resolve(PicturesStorage.self)!
+    private lazy var picturesStorage: PicturesStorage = container.resolve(PicturesStorage.self, argument: container)!
     weak var coordinator: PicturesCoordinator!
 
     // MARK: - Setup
@@ -32,5 +36,10 @@ class PicturesViewModel {
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
+
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+    }
 
 }

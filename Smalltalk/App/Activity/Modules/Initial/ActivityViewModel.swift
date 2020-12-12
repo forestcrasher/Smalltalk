@@ -8,11 +8,15 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Swinject
 
 class ActivityViewModel {
 
+    // MARK: - Container
+    private let container: Container
+
     // MARK: - Dependencies
-    private var notificationsStorage: NotificationsStorage = AppDelegate.container.resolve(NotificationsStorage.self)!
+    private lazy var notificationsStorage: NotificationsStorage = container.resolve(NotificationsStorage.self, argument: container)!
     weak var coordinator: ActivityCoordinator!
 
     // MARK: - Setup
@@ -32,5 +36,10 @@ class ActivityViewModel {
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
+
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+    }
 
 }

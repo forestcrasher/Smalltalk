@@ -11,11 +11,11 @@ import SwinjectAutoregistration
 extension Container {
 
     func registerViewModels() {
-        autoregister(FeedViewModel.self, initializer: FeedViewModel.init)
-        autoregister(PicturesViewModel.self, initializer: PicturesViewModel.init)
-        autoregister(MessagesViewModel.self, initializer: MessagesViewModel.init)
-        autoregister(ActivityViewModel.self, initializer: ActivityViewModel.init)
-        autoregister(ProfileViewModel.self, initializer: ProfileViewModel.init)
+        autoregister(FeedViewModel.self, argument: Container.self, initializer: FeedViewModel.init)
+        autoregister(PicturesViewModel.self, argument: Container.self, initializer: PicturesViewModel.init)
+        autoregister(MessagesViewModel.self, argument: Container.self, initializer: MessagesViewModel.init)
+        autoregister(ActivityViewModel.self, argument: Container.self, initializer: ActivityViewModel.init)
+        autoregister(ProfileViewModel.self, argument: Container.self, initializer: ProfileViewModel.init)
     }
 
 }

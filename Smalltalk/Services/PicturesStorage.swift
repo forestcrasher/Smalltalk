@@ -9,12 +9,16 @@ import Foundation
 import Firebase
 import RxSwift
 import RxCocoa
+import Swinject
 
 class PicturesStorage {
 
+    // MARK: - Container
+    private let container: Container
+
     // MARK: - Dependencies
-    private var usersStorage: UsersStorage = AppDelegate.container.resolve(UsersStorage.self)!
-    private var filesStorage: FilesStorage = AppDelegate.container.resolve(FilesStorage.self)!
+    private lazy var usersStorage: UsersStorage = container.resolve(UsersStorage.self, argument: container)!
+    private lazy var filesStorage: FilesStorage = container.resolve(FilesStorage.self)!
 
     // MARK: - Public
     func fetchPictures() -> Observable<[Picture]> {
@@ -55,6 +59,11 @@ class PicturesStorage {
             }
             return Disposables.create()
         }
+    }
+
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
     }
 
 }

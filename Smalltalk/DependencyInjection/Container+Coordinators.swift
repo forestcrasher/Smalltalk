@@ -11,12 +11,12 @@ import SwinjectAutoregistration
 extension Container {
 
     func registerCoordinators() {
-        autoregister(AppCoordinator.self, argument: UIWindow.self, initializer: AppCoordinator.init)
-        autoregister(FeedCoordinator.self, initializer: FeedCoordinator.init)
-        autoregister(PicturesCoordinator.self, initializer: PicturesCoordinator.init)
-        autoregister(MessagesCoordinator.self, initializer: MessagesCoordinator.init)
-        autoregister(ActivityCoordinator.self, initializer: ActivityCoordinator.init)
-        autoregister(ProfileCoordinator.self, initializer: ProfileCoordinator.init)
+        autoregister(AppCoordinator.self, arguments: UIWindow.self, Container.self, initializer: AppCoordinator.init)
+        autoregister(FeedCoordinator.self, argument: Container.self, initializer: FeedCoordinator.init)
+        autoregister(PicturesCoordinator.self, argument: Container.self, initializer: PicturesCoordinator.init)
+        autoregister(MessagesCoordinator.self, argument: Container.self, initializer: MessagesCoordinator.init)
+        autoregister(ActivityCoordinator.self, argument: Container.self, initializer: ActivityCoordinator.init)
+        autoregister(ProfileCoordinator.self, argument: Container.self, initializer: ProfileCoordinator.init)
     }
 
 }

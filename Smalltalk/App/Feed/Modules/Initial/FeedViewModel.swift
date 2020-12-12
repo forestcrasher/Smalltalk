@@ -8,11 +8,15 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Swinject
 
 class FeedViewModel {
 
+    // MARK: - Container
+    private let container: Container
+
     // MARK: - Dependencies
-    private var postsStorage: PostsStorage = AppDelegate.container.resolve(PostsStorage.self)!
+    private lazy var postsStorage: PostsStorage = container.resolve(PostsStorage.self, argument: container)!
     weak var coordinator: FeedCoordinator!
 
     // MARK: - Setup
@@ -32,5 +36,10 @@ class FeedViewModel {
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
+
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+    }
 
 }

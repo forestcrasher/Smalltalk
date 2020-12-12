@@ -6,12 +6,16 @@
 //
 
 import UIKit
+import Swinject
 
 class AppCoordinator {
 
+    // MARK: - Container
+    private let container: Container
+
     // MARK: - Public
     func start() {
-        window.rootViewController = BaseTabBarController()
+        window.rootViewController = BaseTabBarController(container: container)
         window.makeKeyAndVisible()
     }
 
@@ -19,8 +23,9 @@ class AppCoordinator {
     private let window: UIWindow
 
     // MARK: - Init
-    init(window: UIWindow) {
+    init(window: UIWindow, container: Container) {
         self.window = window
+        self.container = container
     }
 
 }

@@ -13,11 +13,11 @@ import SwinjectAutoregistration
 extension Container {
 
     func registerServices() {
-        autoregister(PostsStorage.self, initializer: PostsStorage.init).inObjectScope(.container)
-        autoregister(PicturesStorage.self, initializer: PicturesStorage.init).inObjectScope(.container)
-        autoregister(DialogsStorage.self, initializer: DialogsStorage.init).inObjectScope(.container)
-        autoregister(NotificationsStorage.self, initializer: NotificationsStorage.init).inObjectScope(.container)
-        autoregister(UsersStorage.self, initializer: UsersStorage.init).inObjectScope(.container)
+        autoregister(PostsStorage.self, argument: Container.self, initializer: PostsStorage.init).inObjectScope(.container)
+        autoregister(PicturesStorage.self, argument: Container.self, initializer: PicturesStorage.init).inObjectScope(.container)
+        autoregister(DialogsStorage.self, argument: Container.self, initializer: DialogsStorage.init).inObjectScope(.container)
+        autoregister(NotificationsStorage.self, argument: Container.self, initializer: NotificationsStorage.init).inObjectScope(.container)
+        autoregister(UsersStorage.self, argument: Container.self, initializer: UsersStorage.init).inObjectScope(.container)
         autoregister(FilesStorage.self, initializer: FilesStorage.init).inObjectScope(.container)
     }
 

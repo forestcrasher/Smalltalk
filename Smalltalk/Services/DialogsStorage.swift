@@ -9,11 +9,15 @@ import Foundation
 import Firebase
 import RxSwift
 import RxCocoa
+import Swinject
 
 class DialogsStorage {
 
+    // MARK: - Container
+    private let container: Container
+
     // MARK: - Dependencies
-    private var usersStorage: UsersStorage = AppDelegate.container.resolve(UsersStorage.self)!
+    private lazy var usersStorage: UsersStorage = container.resolve(UsersStorage.self, argument: container)!
 
     // MARK: - Public
     func fetchDialogs() -> Observable<[Dialog]> {
@@ -87,6 +91,11 @@ class DialogsStorage {
                 }
             return Disposables.create()
         }
+    }
+
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
     }
 
 }

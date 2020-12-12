@@ -26,7 +26,7 @@ class ActivityViewController: UIViewController {
     private let disposeBag = DisposeBag()
 
     private lazy var tableView: UITableView = {
-        let tableView = UITableView()
+        let tableView = UITableView(frame: view.frame, style: .plain)
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.rowHeight = 64.0 + 32.0
         tableView.separatorStyle = .none

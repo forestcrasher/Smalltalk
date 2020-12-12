@@ -6,18 +6,25 @@
 //
 
 import UIKit
+import Swinject
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
     var appCoordinator: AppCoordinator!
 
+    let container: Container = {
+        let container = Container()
+        container.registerDependencies()
+        return container
+    }()
+
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
 
-        appCoordinator = AppDelegate.container.resolve(AppCoordinator.self, argument: window!)!
+        appCoordinator = container.resolve(AppCoordinator.self, arguments: window!, container)!
         appCoordinator.start()
     }
 

@@ -6,14 +6,18 @@
 //
 
 import UIKit
+import Swinject
 
 class FeedCoordinator {
+
+    // MARK: - Container
+    private let container: Container
 
     // MARK: - Public
     var navigationController: UINavigationController = BaseNavigationController()
 
     func start() {
-        let feedViewModel = AppDelegate.container.resolve(FeedViewModel.self)!
+        let feedViewModel = container.resolve(FeedViewModel.self, argument: container)!
         feedViewModel.coordinator = self
         let feedViewController = FeedViewController()
         feedViewController.viewModel = feedViewModel
@@ -21,4 +25,8 @@ class FeedCoordinator {
         navigationController.viewControllers = [feedViewController]
     }
 
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+    }
 }

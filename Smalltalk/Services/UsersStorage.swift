@@ -9,11 +9,15 @@ import Foundation
 import Firebase
 import RxSwift
 import RxCocoa
+import Swinject
 
 class UsersStorage {
 
+    // MARK: - Container
+    private let container: Container
+
     // MARK: - Dependencies
-    private var filesStorage: FilesStorage = AppDelegate.container.resolve(FilesStorage.self)!
+    private lazy var filesStorage: FilesStorage = container.resolve(FilesStorage.self)!
 
     // MARK: - Public
     var currentUserId: String { "1qrqguAWA5JZio8Zx8AV" }
@@ -50,6 +54,11 @@ class UsersStorage {
             }
             return Disposables.create()
         }
+    }
+
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
     }
 
 }

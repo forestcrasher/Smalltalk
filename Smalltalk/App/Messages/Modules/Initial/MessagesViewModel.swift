@@ -8,11 +8,15 @@
 import Foundation
 import RxSwift
 import RxCocoa
+import Swinject
 
 class MessagesViewModel {
 
+    // MARK: - Container
+    private let container: Container
+
     // MARK: - Dependencies
-    private var dialogsStorage: DialogsStorage = AppDelegate.container.resolve(DialogsStorage.self)!
+    private lazy var dialogsStorage: DialogsStorage = container.resolve(DialogsStorage.self, argument: container)!
     weak var coordinator: MessagesCoordinator!
 
     // MARK: - Setup
@@ -32,5 +36,10 @@ class MessagesViewModel {
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
+
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+    }
 
 }
