@@ -59,7 +59,7 @@ class DialogsStorage {
     func fetchLastMessage(by dialogId: String) -> Observable<Message?> {
         return getLastMessageDocument(by: dialogId)
             .flatMap { [weak self] messageDocument -> Observable<(DocumentSnapshot?, User?)> in
-                let authorId = messageDocument?.data()?["author"] as? String ?? ""
+                let authorId = messageDocument?.data()?["authorId"] as? String ?? ""
                 let fetchUserRequest = self?.fetchUser(by: authorId)
                     .map { author in (messageDocument, author) }
                 return fetchUserRequest ?? Observable.just((messageDocument, nil))

@@ -19,23 +19,23 @@ class PicturesStorage {
             .flatMap { Observable.from($0 ?? []) }
             .flatMap { [weak self] pictureDocument -> Observable<(QueryDocumentSnapshot, User?)> in
                 let authorId = pictureDocument.data()["authorId"] as? String ?? ""
-                let fetchUserRequest = self?.fetchUser(by: authorId).map { user in (pictureDocument, user) }
+                let fetchUserRequest = self?.fetchUser(by: authorId).map { author in (pictureDocument, author) }
                 return fetchUserRequest ?? Observable.just((pictureDocument, nil))
             }
-            .flatMap { [weak self] (pictureDocument, user) -> Observable<(QueryDocumentSnapshot, User?, URL?)> in
+            .flatMap { [weak self] (pictureDocument, author) -> Observable<(QueryDocumentSnapshot, User?, URL?)> in
                 let path = pictureDocument.data()["path"] as? String ?? ""
                 let downloadURLRequest = self?.getDownloadURL(with: path)
-                    .map { URL in (pictureDocument, user, URL) }
+                    .map { URL in (pictureDocument, author, URL) }
                 return downloadURLRequest ?? Observable.just((pictureDocument, user, nil))
             }
-            .map { (pictureDocument, user, URL) -> Picture in
+            .map { (pictureDocument, author, URL) -> Picture in
                 let id = pictureDocument.documentID
                 let description = pictureDocument.data()["description"] as? String ?? ""
                 let date = pictureDocument.data()["date"] as? Date ?? Date()
                 let likes = pictureDocument.data()["likes"] as? [String] ?? []
                 let reposts = pictureDocument.data()["reposts"] as? [String] ?? []
                 let comments = pictureDocument.data()["comments"] as? [String] ?? []
-                return Picture(id: id, URL: URL, description: description, date: date, author: user, likes: likes, reposts: reposts, comments: comments)
+                return Picture(id: id, URL: URL, description: description, date: date, author: author, likes: likes, reposts: reposts, comments: comments)
             }
             .toArray()
             .asObservable()

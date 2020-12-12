@@ -19,17 +19,17 @@ class PostsStorage {
             .flatMap { Observable.from($0 ?? []) }
             .flatMap { [weak self] postDocument -> Observable<(QueryDocumentSnapshot, User?)> in
                 let authorId = postDocument.data()["authorId"] as? String ?? ""
-                let fetchUserRequest = self?.fetchUser(by: authorId).map { user in (postDocument, user) }
+                let fetchUserRequest = self?.fetchUser(by: authorId).map { author in (postDocument, author) }
                 return fetchUserRequest ?? Observable.just((postDocument, nil))
             }
-            .map { (postDocument, user) -> Post in
+            .map { (postDocument, author) -> Post in
                 let id = postDocument.documentID
                 let text = postDocument.data()["text"] as? String ?? ""
                 let date = postDocument.data()["date"] as? Date ?? Date()
                 let likes = postDocument.data()["likes"] as? [String] ?? []
                 let reposts = postDocument.data()["reposts"] as? [String] ?? []
                 let comments = postDocument.data()["comments"] as? [String] ?? []
-                return Post(id: id, text: text, date: date, author: user, likes: likes, reposts: reposts, comments: comments)
+                return Post(id: id, text: text, date: date, author: author, likes: likes, reposts: reposts, comments: comments)
             }
             .toArray()
             .asObservable()
