@@ -21,19 +21,14 @@ class PicturesViewModel {
     func setup(with input: Input) -> Disposable {
         picturesStorage
             .fetchPictures()
-            .subscribe(onNext: { [weak self] pictures in
-                let pictureCellViewModels: [PictureCollectionViewCellViewModel] = pictures.reduce(into: []) { result, picture in
-                    result.append(AppDelegate.container.resolve(PictureCollectionViewCellViewModel.self, argument: picture)!)
-                }
-                self?.pictureCellViewModels.accept(pictureCellViewModels)
-            })
+            .bind(to: pictures)
             .disposed(by: disposeBag)
 
         return Disposables.create()
     }
 
     // MARK: - Public
-    let pictureCellViewModels = BehaviorRelay<[PictureCollectionViewCellViewModel]>(value: [])
+    let pictures = BehaviorRelay<[Picture]>(value: [])
 
     // MARK: - Private
     private let disposeBag = DisposeBag()

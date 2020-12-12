@@ -6,40 +6,20 @@
 //
 
 import Foundation
-import FirebaseFirestore
-import FirebaseFirestoreSwift
 
-struct Picture: Identifiable, Codable {
+struct Picture {
 
-    @DocumentID var id: String?
-    var path: String
-    var description: String
-    var date: Date
-    var authorRef: DocumentReference
-    var likesRefs: [DocumentReference]?
-    var repostsRefs: [DocumentReference]?
-    var commentsRefs: [DocumentReference]?
+    let id: String
+    let URL: URL?
+    let description: String
+    let date: Date
+    let author: User?
+    var likes: [String]
+    var reposts: [String]
+    var comments: [String]
 
-    var countLikes: Int {
-        likesRefs?.count ?? 0
-    }
-
-    var countReposts: Int {
-        repostsRefs?.count ?? 0
-    }
-
-    var countComments: Int {
-        commentsRefs?.count ?? 0
-    }
-
-    enum CodingKeys: String, CodingKey {
-        case path
-        case description
-        case date
-        case authorRef = "author"
-        case likesRefs = "likes"
-        case repostsRefs = "reposts"
-        case commentsRefs = "comments"
-    }
+    var countLikes: Int { likes.count }
+    var countReposts: Int { reposts.count }
+    var countComments: Int { comments.count }
 
 }

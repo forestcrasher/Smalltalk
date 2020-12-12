@@ -12,38 +12,28 @@ import Kingfisher
 
 class PictureCollectionViewCell: UICollectionViewCell {
 
-    // MARK: - ViewModel
-    var viewModel: PictureCollectionViewCellViewModel! {
-        didSet {
-            viewModel.author
-                .subscribe(onNext: { [weak self] author in
-                    self?.authorLabel.text = author?.fullName
-                })
-                .disposed(by: disposeBag)
+    // MARK: - Public
+    struct Model {
+        let URL: URL?
+        let authorFullName: String?
+        let authorPhotoURL: URL?
+    }
 
-            viewModel.authorPhotoDownloadURL
-                .subscribe(onNext: { [weak self] authorPhotoDownloadURL in
-                    if let downloadURL = authorPhotoDownloadURL {
-                        let resourse = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
-                        self?.authorImageView.kf.setImage(with: resourse, options: [.loadDiskFileSynchronously, .backgroundDecode])
-                    }
-                })
-                .disposed(by: disposeBag)
-
-            viewModel.downloadURL
-                .subscribe(onNext: { [weak self] downloadURL in
-                    if let downloadURL = downloadURL {
-                        let resourse = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
-                        self?.imageView.kf.setImage(with: resourse, options: [.loadDiskFileSynchronously, .backgroundDecode])
-                    }
-                })
-                .disposed(by: disposeBag)
+    func configure(with model: Model) {
+        authorLabel.text = model.authorFullName
+        if let downloadURL = model.URL {
+            let processor = DownsamplingImageProcessor(size: imageView.superview?.bounds.size ?? CGSize(width: 0, height: 0))
+            let resourse = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
+            imageView.kf.setImage(with: resourse, options: [.processor(processor), .loadDiskFileSynchronously, .backgroundDecode])
+        }
+        if let downloadURL = model.authorPhotoURL {
+            let processor = DownsamplingImageProcessor(size: authorImageView.superview?.bounds.size ?? CGSize(width: 0, height: 0))
+            let resourse = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
+            authorImageView.kf.setImage(with: resourse, options: [.processor(processor), .loadDiskFileSynchronously, .backgroundDecode])
         }
     }
 
     // MARK: - Private
-    private let disposeBag = DisposeBag()
-
     private let authorImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
@@ -55,7 +45,7 @@ class PictureCollectionViewCell: UICollectionViewCell {
 
     private let authorLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 14)
+        label.font = .systemFont(ofSize: 20)
         label.textColor = .darkGray
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -78,19 +68,19 @@ class PictureCollectionViewCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             authorImageView.topAnchor.constraint(equalTo: topAnchor),
             authorImageView.leftAnchor.constraint(equalTo: leftAnchor),
-            authorImageView.widthAnchor.constraint(equalToConstant: 60.0),
-            authorImageView.heightAnchor.constraint(equalToConstant: 60.0)
+            authorImageView.widthAnchor.constraint(equalToConstant: 64.0),
+            authorImageView.heightAnchor.constraint(equalToConstant: 64.0)
         ])
 
         NSLayoutConstraint.activate([
             authorLabel.topAnchor.constraint(equalTo: topAnchor),
-            authorLabel.leftAnchor.constraint(equalTo: authorImageView.rightAnchor, constant: 10.0),
+            authorLabel.leftAnchor.constraint(equalTo: authorImageView.rightAnchor, constant: 16.0),
             authorLabel.rightAnchor.constraint(equalTo: rightAnchor),
-            authorLabel.heightAnchor.constraint(equalToConstant: 60.0)
+            authorLabel.heightAnchor.constraint(equalToConstant: 64.0)
         ])
 
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: authorImageView.bottomAnchor, constant: 10.0),
+            imageView.topAnchor.constraint(equalTo: authorImageView.bottomAnchor, constant: 16.0),
             imageView.leftAnchor.constraint(equalTo: leftAnchor),
             imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
             imageView.rightAnchor.constraint(equalTo: rightAnchor)

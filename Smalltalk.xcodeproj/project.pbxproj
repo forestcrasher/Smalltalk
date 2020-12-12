@@ -49,7 +49,6 @@
 		C081143E257BE1800035D1E3 /* PicturesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C081143D257BE1800035D1E3 /* PicturesViewModel.swift */; };
 		C08114A2257BEC630035D1E3 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */; };
 		C0812529258002E4004A9394 /* FilesStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0812528258002E4004A9394 /* FilesStorage.swift */; };
-		C0AE01C42582B51000338B37 /* PictureCollectionViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0AE01C32582B51000338B37 /* PictureCollectionViewCellViewModel.swift */; };
 		C0F1EF51257D120A009DC5EC /* MessagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F1EF50257D120A009DC5EC /* MessagesViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -100,7 +99,6 @@
 		C081143D257BE1800035D1E3 /* PicturesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewModel.swift; sourceTree = "<group>"; };
 		C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
 		C0812528258002E4004A9394 /* FilesStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesStorage.swift; sourceTree = "<group>"; };
-		C0AE01C32582B51000338B37 /* PictureCollectionViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCellViewModel.swift; sourceTree = "<group>"; };
 		C0F1EF50257D120A009DC5EC /* MessagesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MessagesViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -331,7 +329,6 @@
 			isa = PBXGroup;
 			children = (
 				C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */,
-				C0AE01C32582B51000338B37 /* PictureCollectionViewCellViewModel.swift */,
 			);
 			path = PictureCell;
 			sourceTree = "<group>";
@@ -519,7 +516,6 @@
 				C05339012578264E00DEF37D /* Container+Coordinators.swift in Sources */,
 				C0286DD72576E20B00768D6B /* ProfileCoordinator.swift in Sources */,
 				C08114A2257BEC630035D1E3 /* PictureCollectionViewCell.swift in Sources */,
-				C0AE01C42582B51000338B37 /* PictureCollectionViewCellViewModel.swift in Sources */,
 				C053390A2578268400DEF37D /* Container+RegisterDependencies.swift in Sources */,
 				C0286DD02576E1B400768D6B /* ActivityCoordinator.swift in Sources */,
 				C03CE27925798327005CC466 /* PostTableViewCell.swift in Sources */,
