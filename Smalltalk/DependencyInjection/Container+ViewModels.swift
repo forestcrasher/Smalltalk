@@ -14,7 +14,6 @@ extension Container {
         autoregister(FeedViewModel.self, initializer: FeedViewModel.init)
         autoregister(PicturesViewModel.self, initializer: PicturesViewModel.init)
         autoregister(MessagesViewModel.self, initializer: MessagesViewModel.init)
-        autoregister(DialogTableViewCellViewModel.self, argument: Dialog.self, initializer: DialogTableViewCellViewModel.init)
     }
 
 }

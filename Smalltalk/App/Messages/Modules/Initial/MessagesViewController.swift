@@ -28,12 +28,12 @@ class MessagesViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.rowHeight = 54.0
+        tableView.rowHeight = 64.0
+        tableView.separatorStyle = .none
+        tableView.allowsSelection = false
         tableView.register(DialogTableViewCell.self, forCellReuseIdentifier: String(describing: DialogTableViewCell.self))
         return tableView
     }()
-
-    private var cellViewModels: BehaviorRelay<[DialogTableViewCellViewModel]> = BehaviorRelay(value: [])
 
     private func setupUI() {
         navigationController?.navigationBar.prefersLargeTitles = true
@@ -55,17 +55,8 @@ class MessagesViewController: UIViewController {
 
         viewModel
             .dialogs
-            .subscribe(onNext: { dialogs in
-                let viewModels = dialogs.reduce(into: []) { result, dialogs in
-                    result.append(AppDelegate.container.resolve(DialogTableViewCellViewModel.self, argument: dialogs)!)
-                }
-                self.cellViewModels.accept(viewModels)
-            })
-            .disposed(by: disposeBag)
-
-        cellViewModels
-            .bind(to: tableView.rx.items(cellIdentifier: String(describing: DialogTableViewCell.self), cellType: DialogTableViewCell.self)) { _, dialogViewModel, cell in
-                cell.viewModel = dialogViewModel
+            .bind(to: tableView.rx.items(cellIdentifier: String(describing: DialogTableViewCell.self), cellType: DialogTableViewCell.self)) { _, dialog, cell in
+                cell.configure(with: DialogTableViewCell.Model(recipientFullName: dialog.recipient?.fullName, recipientPhotoURL: dialog.recipient?.photoURL, lastMessageText: dialog.lastMessage?.text))
             }
             .disposed(by: disposeBag)
     }

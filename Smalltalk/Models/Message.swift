@@ -6,22 +6,13 @@
 //
 
 import Foundation
-import FirebaseFirestore
-import FirebaseFirestoreSwift
 
-struct Message: Identifiable, Codable {
+struct Message {
 
-    @DocumentID var id: String?
-    var text: String
-    var date: Date
-    var isRead: Bool
-    var authorRef: DocumentReference
-
-    enum CodingKeys: String, CodingKey {
-        case text
-        case date
-        case isRead
-        case authorRef = "author"
-    }
+    let id: String
+    let text: String
+    let date: Date
+    let isRead: Bool
+    let author: User?
 
 }
