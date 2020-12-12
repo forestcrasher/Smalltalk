@@ -12,6 +12,9 @@ import RxCocoa
 
 class DialogsStorage {
 
+    // MARK: - Dependencies
+    private var usersStorage: UsersStorage = AppDelegate.container.resolve(UsersStorage.self)!
+
     // MARK: - Public
     func fetchDialogs() -> Observable<[Dialog]> {
         return getDialogsDocuments()
@@ -19,7 +22,7 @@ class DialogsStorage {
             .flatMap { [weak self] dialogDocument -> Observable<(QueryDocumentSnapshot, User?)> in
                 let participants = dialogDocument.data()["participants"] as? [String] ?? []
                 let recipientId = participants.first ?? ""
-                let fetchUserRequest = self?.fetchUser(by: recipientId)
+                let fetchUserRequest = self?.usersStorage.fetchUser(by: recipientId)
                     .map { recipient in (dialogDocument, recipient) }
                 return fetchUserRequest ?? Observable.just((dialogDocument, nil))
             }
@@ -39,28 +42,11 @@ class DialogsStorage {
             .asObservable()
     }
 
-    func fetchUser(by id: String) -> Observable<User?> {
-        return getUserDocument(by: id)
-            .flatMap { [weak self] userDocument -> Observable<(DocumentSnapshot?, URL?)> in
-                let photoPath = userDocument?.data()?["photoPath"] as? String ?? ""
-                let downloadURLRequest = self?.getDownloadURL(with: photoPath)
-                    .map { photoURL in (userDocument, photoURL) }
-                return downloadURLRequest ?? Observable.just((userDocument, nil))
-            }
-            .map { (userDocument, photoURL) -> User? in
-                guard let userDocument = userDocument else { return nil }
-                let id = userDocument.documentID
-                let firstName = userDocument.data()?["firstName"] as? String ?? ""
-                let lastName = userDocument.data()?["lastName"] as? String ?? ""
-                return User(id: id, firstName: firstName, lastName: lastName, photoURL: photoURL)
-            }
-    }
-
     func fetchLastMessage(by dialogId: String) -> Observable<Message?> {
         return getLastMessageDocument(by: dialogId)
             .flatMap { [weak self] messageDocument -> Observable<(DocumentSnapshot?, User?)> in
                 let authorId = messageDocument?.data()?["authorId"] as? String ?? ""
-                let fetchUserRequest = self?.fetchUser(by: authorId)
+                let fetchUserRequest = self?.usersStorage.fetchUser(by: authorId)
                     .map { author in (messageDocument, author) }
                 return fetchUserRequest ?? Observable.just((messageDocument, nil))
             }
@@ -76,7 +62,6 @@ class DialogsStorage {
 
     // MARK: - Private
     private let firestore = Firestore.firestore()
-    private let storage = Storage.storage()
 
     private func getDialogsDocuments() -> Observable<[QueryDocumentSnapshot]?> {
         return Observable.create { [weak self] observer in
@@ -104,28 +89,4 @@ class DialogsStorage {
         }
     }
 
-    private func getUserDocument(by id: String) -> Observable<DocumentSnapshot?> {
-        return Observable.create { [weak self] observer in
-            self?.firestore
-                .collection("users")
-                .document(id)
-                .getDocument { (snapshot, _) in
-                    observer.onNext(snapshot)
-                    observer.onCompleted()
-                }
-            return Disposables.create()
-        }
-    }
-
-    private func getDownloadURL(with path: String) -> Observable<URL?> {
-        return Observable.create { [weak self] observer in
-            self?.storage
-                .reference(withPath: path)
-                .downloadURL { (url, _) in
-                    observer.onNext(url)
-                    observer.onCompleted()
-                }
-            return Disposables.create()
-        }
-    }
 }

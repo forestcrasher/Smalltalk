@@ -28,7 +28,7 @@ class MessagesViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.rowHeight = 64.0
+        tableView.rowHeight = 64.0 + 32.0
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
         tableView.register(DialogTableViewCell.self, forCellReuseIdentifier: String(describing: DialogTableViewCell.self))
@@ -42,10 +42,12 @@ class MessagesViewController: UIViewController {
 
         view.addSubview(tableView)
 
-        tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
-        tableView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-        tableView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        NSLayoutConstraint.activate([
+            tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
+            tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
     }
 
     private func setupInternalBindings() {

@@ -62,7 +62,8 @@ class DialogTableViewCell: UITableViewCell {
             recipientImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16.0),
             recipientImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16.0),
             recipientImageView.widthAnchor.constraint(equalToConstant: 64.0),
-            recipientImageView.heightAnchor.constraint(equalToConstant: 64.0)
+            recipientImageView.heightAnchor.constraint(equalToConstant: 64.0),
+            recipientImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16.0)
         ])
 
         NSLayoutConstraint.activate([

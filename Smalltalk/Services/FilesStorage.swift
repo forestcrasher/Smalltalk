@@ -6,20 +6,18 @@
 //
 
 import Foundation
+import Firebase
 import RxSwift
 import RxCocoa
-import FirebaseStorage
 
 class FilesStorage {
 
     // MARK: - Public
-    func fetchDownloadURL(by url: String) -> Observable<URL> {
+    func getDownloadURL(with path: String) -> Observable<URL?> {
         return Observable.create { [weak self] observer in
-            let ref = self?.storage.reference(withPath: url)
-            ref?.downloadURL { url, _ in
-                if let url = url {
-                    observer.onNext(url)
-                }
+            self?.storage.reference(withPath: path).downloadURL { (url, _) in
+                observer.onNext(url)
+                observer.onCompleted()
             }
             return Disposables.create()
         }

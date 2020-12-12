@@ -6,12 +6,15 @@
 //
 
 import Foundation
+import Firebase
 import RxSwift
 import RxCocoa
-import FirebaseFirestore
-import FirebaseStorage
 
 class PicturesStorage {
+
+    // MARK: - Dependencies
+    private var usersStorage: UsersStorage = AppDelegate.container.resolve(UsersStorage.self)!
+    private var filesStorage: FilesStorage = AppDelegate.container.resolve(FilesStorage.self)!
 
     // MARK: - Public
     func fetchPictures() -> Observable<[Picture]> {
@@ -19,14 +22,14 @@ class PicturesStorage {
             .flatMap { Observable.from($0 ?? []) }
             .flatMap { [weak self] pictureDocument -> Observable<(QueryDocumentSnapshot, User?)> in
                 let authorId = pictureDocument.data()["authorId"] as? String ?? ""
-                let fetchUserRequest = self?.fetchUser(by: authorId).map { author in (pictureDocument, author) }
+                let fetchUserRequest = self?.usersStorage.fetchUser(by: authorId).map { author in (pictureDocument, author) }
                 return fetchUserRequest ?? Observable.just((pictureDocument, nil))
             }
             .flatMap { [weak self] (pictureDocument, author) -> Observable<(QueryDocumentSnapshot, User?, URL?)> in
                 let path = pictureDocument.data()["path"] as? String ?? ""
-                let downloadURLRequest = self?.getDownloadURL(with: path)
+                let downloadURLRequest = self?.filesStorage.getDownloadURL(with: path)
                     .map { URL in (pictureDocument, author, URL) }
-                return downloadURLRequest ?? Observable.just((pictureDocument, user, nil))
+                return downloadURLRequest ?? Observable.just((pictureDocument, author, nil))
             }
             .map { (pictureDocument, author, URL) -> Picture in
                 let id = pictureDocument.documentID
@@ -41,51 +44,13 @@ class PicturesStorage {
             .asObservable()
     }
 
-    func fetchUser(by id: String) -> Observable<User?> {
-        return getUserDocument(by: id)
-            .flatMap { [weak self] userDocument -> Observable<(DocumentSnapshot?, URL?)> in
-                let photoPath = userDocument?.data()?["photoPath"] as? String ?? ""
-                let downloadURLRequest = self?.getDownloadURL(with: photoPath)
-                    .map { photoURL in (userDocument, photoURL) }
-                return downloadURLRequest ?? Observable.just((userDocument, nil))
-            }
-            .map { (userDocument, photoURL) -> User? in
-                guard let userDocument = userDocument else { return nil }
-                let id = userDocument.documentID
-                let firstName = userDocument.data()?["firstName"] as? String ?? ""
-                let lastName = userDocument.data()?["lastName"] as? String ?? ""
-                return User(id: id, firstName: firstName, lastName: lastName, photoURL: photoURL)
-            }
-    }
-
     // MARK: - Private
     private let firestore = Firestore.firestore()
-    private let storage = Storage.storage()
 
     private func getPicturesDocuments() -> Observable<[QueryDocumentSnapshot]?> {
         return Observable.create { [weak self] observer in
             self?.firestore.collection("pictures").getDocuments { (querySnapshot, _) in
                 observer.onNext(querySnapshot?.documents)
-                observer.onCompleted()
-            }
-            return Disposables.create()
-        }
-    }
-
-    private func getUserDocument(by id: String) -> Observable<DocumentSnapshot?> {
-        return Observable.create { [weak self] observer in
-            self?.firestore.collection("users").document(id).getDocument { (snapshot, _) in
-                observer.onNext(snapshot)
-                observer.onCompleted()
-            }
-            return Disposables.create()
-        }
-    }
-
-    private func getDownloadURL(with path: String) -> Observable<URL?> {
-        return Observable.create { [weak self] observer in
-            self?.storage.reference(withPath: path).downloadURL { (url, _) in
-                observer.onNext(url)
                 observer.onCompleted()
             }
             return Disposables.create()
