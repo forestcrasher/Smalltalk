@@ -12,7 +12,6 @@ extension Container {
 
     func registerViewModels() {
         autoregister(FeedViewModel.self, initializer: FeedViewModel.init)
-        autoregister(PostTableViewCellViewModel.self, argument: Post.self, initializer: PostTableViewCellViewModel.init)
         autoregister(PicturesViewModel.self, initializer: PicturesViewModel.init)
         autoregister(PictureCollectionViewCellViewModel.self, argument: Picture.self, initializer: PictureCollectionViewCellViewModel.init)
         autoregister(MessagesViewModel.self, initializer: MessagesViewModel.init)

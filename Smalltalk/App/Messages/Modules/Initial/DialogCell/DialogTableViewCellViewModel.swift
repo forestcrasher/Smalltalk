@@ -28,13 +28,6 @@ class DialogTableViewCellViewModel {
     init(dialog: Dialog) {
         self.dialog = BehaviorRelay(value: dialog)
 
-        if let participantRef = dialog.participantsRefs?.first {
-            usersStorage
-                .fetchUser(by: participantRef)
-                .bind(to: participant)
-                .disposed(by: disposeBag)
-        }
-
         if let lastMessageRef = dialog.messagesRefs?.last {
             dialogsStorage
                 .fetchMessage(by: lastMessageRef)

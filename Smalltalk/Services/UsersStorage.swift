@@ -23,16 +23,4 @@ class UsersStorage {
         }
     }
 
-    func fetchUser(by ref: DocumentReference) -> Observable<User> {
-        return Observable.create { observer in
-            let listener = ref.addSnapshotListener { querySnapshot, _ in
-                if let author = try? querySnapshot?.data(as: User.self) {
-                    observer.onNext(author)
-                }
-            }
-            return Disposables.create {
-                listener.remove()
-            }
-        }
-    }
 }

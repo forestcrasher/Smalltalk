@@ -32,16 +32,5 @@ class PictureCollectionViewCellViewModel {
             .fetchDownloadURL(by: picture.path)
             .bind(to: downloadURL)
             .disposed(by: disposeBag)
-
-        usersStorage
-            .fetchUser(by: picture.authorRef)
-            .flatMap { [weak self] author in
-                self?.filesStorage.fetchDownloadURL(by: author.photoPath).map { (author, $0) } ?? Observable.just((author, nil))
-            }
-            .subscribe(onNext: { [weak self] (author, authorPhotoDownloadURL) in
-                self?.author.accept(author)
-                self?.authorPhotoDownloadURL.accept(authorPhotoDownloadURL)
-            })
-            .disposed(by: disposeBag)
     }
 }

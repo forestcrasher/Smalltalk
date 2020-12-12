@@ -46,7 +46,6 @@
 		C05339042578266100DEF37D /* Container+ViewModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05339032578266100DEF37D /* Container+ViewModels.swift */; };
 		C05339072578267400DEF37D /* Container+Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05339062578267400DEF37D /* Container+Services.swift */; };
 		C053390A2578268400DEF37D /* Container+RegisterDependencies.swift in Sources */ = {isa = PBXBuildFile; fileRef = C05339092578268400DEF37D /* Container+RegisterDependencies.swift */; };
-		C08113F6257BB8970035D1E3 /* PostTableViewCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08113F5257BB8970035D1E3 /* PostTableViewCellViewModel.swift */; };
 		C081143E257BE1800035D1E3 /* PicturesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C081143D257BE1800035D1E3 /* PicturesViewModel.swift */; };
 		C08114A2257BEC630035D1E3 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */; };
 		C0812529258002E4004A9394 /* FilesStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0812528258002E4004A9394 /* FilesStorage.swift */; };
@@ -98,7 +97,6 @@
 		C05339032578266100DEF37D /* Container+ViewModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+ViewModels.swift"; sourceTree = "<group>"; };
 		C05339062578267400DEF37D /* Container+Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+Services.swift"; sourceTree = "<group>"; };
 		C05339092578268400DEF37D /* Container+RegisterDependencies.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Container+RegisterDependencies.swift"; sourceTree = "<group>"; };
-		C08113F5257BB8970035D1E3 /* PostTableViewCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCellViewModel.swift; sourceTree = "<group>"; };
 		C081143D257BE1800035D1E3 /* PicturesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewModel.swift; sourceTree = "<group>"; };
 		C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
 		C0812528258002E4004A9394 /* FilesStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesStorage.swift; sourceTree = "<group>"; };
@@ -307,7 +305,6 @@
 			isa = PBXGroup;
 			children = (
 				C03CE27825798327005CC466 /* PostTableViewCell.swift */,
-				C08113F5257BB8970035D1E3 /* PostTableViewCellViewModel.swift */,
 			);
 			path = PostCell;
 			sourceTree = "<group>";
@@ -526,7 +523,6 @@
 				C053390A2578268400DEF37D /* Container+RegisterDependencies.swift in Sources */,
 				C0286DD02576E1B400768D6B /* ActivityCoordinator.swift in Sources */,
 				C03CE27925798327005CC466 /* PostTableViewCell.swift in Sources */,
-				C08113F6257BB8970035D1E3 /* PostTableViewCellViewModel.swift in Sources */,
 				C01D31DD256EBB7A002438ED /* AppDelegate.swift in Sources */,
 				C0286DCC2576E1A300768D6B /* ActivityViewController.swift in Sources */,
 				C05339072578267400DEF37D /* Container+Services.swift in Sources */,
