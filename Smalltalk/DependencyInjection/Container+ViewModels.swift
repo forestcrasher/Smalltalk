@@ -15,6 +15,7 @@ extension Container {
         autoregister(PicturesViewModel.self, initializer: PicturesViewModel.init)
         autoregister(MessagesViewModel.self, initializer: MessagesViewModel.init)
         autoregister(ActivityViewModel.self, initializer: ActivityViewModel.init)
+        autoregister(ProfileViewModel.self, initializer: ProfileViewModel.init)
     }
 
 }

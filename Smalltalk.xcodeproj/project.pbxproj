@@ -48,6 +48,7 @@
 		C06C0C8025851E9900220B92 /* Notification.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06C0C7F25851E9900220B92 /* Notification.swift */; };
 		C06C0C852585258400220B92 /* ActivityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06C0C842585258400220B92 /* ActivityViewModel.swift */; };
 		C06C0C8A258525B500220B92 /* NotificationTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06C0C89258525B500220B92 /* NotificationTableViewCell.swift */; };
+		C06C0C8F2585312400220B92 /* ProfileViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C06C0C8E2585312400220B92 /* ProfileViewModel.swift */; };
 		C081143E257BE1800035D1E3 /* PicturesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C081143D257BE1800035D1E3 /* PicturesViewModel.swift */; };
 		C08114A2257BEC630035D1E3 /* PictureCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */; };
 		C0812529258002E4004A9394 /* FilesStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0812528258002E4004A9394 /* FilesStorage.swift */; };
@@ -100,6 +101,7 @@
 		C06C0C7F25851E9900220B92 /* Notification.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notification.swift; sourceTree = "<group>"; };
 		C06C0C842585258400220B92 /* ActivityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActivityViewModel.swift; sourceTree = "<group>"; };
 		C06C0C89258525B500220B92 /* NotificationTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationTableViewCell.swift; sourceTree = "<group>"; };
+		C06C0C8E2585312400220B92 /* ProfileViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewModel.swift; sourceTree = "<group>"; };
 		C081143D257BE1800035D1E3 /* PicturesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PicturesViewModel.swift; sourceTree = "<group>"; };
 		C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PictureCollectionViewCell.swift; sourceTree = "<group>"; };
 		C0812528258002E4004A9394 /* FilesStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilesStorage.swift; sourceTree = "<group>"; };
@@ -252,7 +254,7 @@
 			isa = PBXGroup;
 			children = (
 				C0286DD62576E20B00768D6B /* ProfileCoordinator.swift */,
-				C0286DD22576E1E300768D6B /* ProfileViewController.swift */,
+				C06C0C8C258530ED00220B92 /* Modules */,
 			);
 			path = Profile;
 			sourceTree = "<group>";
@@ -266,14 +268,6 @@
 			path = Base;
 			sourceTree = "<group>";
 		};
-		C03C587D257ECA6900721CBF /* DialogCell */ = {
-			isa = PBXGroup;
-			children = (
-				C03C587E257ECA8E00721CBF /* DialogTableViewCell.swift */,
-			);
-			path = DialogCell;
-			sourceTree = "<group>";
-		};
 		C05338FC2578252E00DEF37D /* Modules */ = {
 			isa = PBXGroup;
 			children = (
@@ -285,7 +279,7 @@
 		C05338FE2578255100DEF37D /* Initial */ = {
 			isa = PBXGroup;
 			children = (
-				C08113FC257BD68C0035D1E3 /* PostCell */,
+				C03CE27825798327005CC466 /* PostTableViewCell.swift */,
 				C0286DB92576E0ED00768D6B /* FeedViewController.swift */,
 				C05338F92578251C00DEF37D /* FeedViewModel.swift */,
 			);
@@ -314,27 +308,28 @@
 		C06C0C832585253600220B92 /* Initial */ = {
 			isa = PBXGroup;
 			children = (
-				C06C0C882585259100220B92 /* NotificationCell */,
-				C06C0C842585258400220B92 /* ActivityViewModel.swift */,
+				C06C0C89258525B500220B92 /* NotificationTableViewCell.swift */,
 				C0286DCB2576E1A300768D6B /* ActivityViewController.swift */,
+				C06C0C842585258400220B92 /* ActivityViewModel.swift */,
 			);
 			path = Initial;
 			sourceTree = "<group>";
 		};
-		C06C0C882585259100220B92 /* NotificationCell */ = {
+		C06C0C8C258530ED00220B92 /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				C06C0C89258525B500220B92 /* NotificationTableViewCell.swift */,
+				C06C0C8D258530FA00220B92 /* Initial */,
 			);
-			path = NotificationCell;
+			path = Modules;
 			sourceTree = "<group>";
 		};
-		C08113FC257BD68C0035D1E3 /* PostCell */ = {
+		C06C0C8D258530FA00220B92 /* Initial */ = {
 			isa = PBXGroup;
 			children = (
-				C03CE27825798327005CC466 /* PostTableViewCell.swift */,
+				C0286DD22576E1E300768D6B /* ProfileViewController.swift */,
+				C06C0C8E2585312400220B92 /* ProfileViewModel.swift */,
 			);
-			path = PostCell;
+			path = Initial;
 			sourceTree = "<group>";
 		};
 		C081143B257BE11C0035D1E3 /* Modules */ = {
@@ -348,19 +343,11 @@
 		C081143C257BE15B0035D1E3 /* Initial */ = {
 			isa = PBXGroup;
 			children = (
-				C0AE01C22582B4E500338B37 /* PictureCell */,
+				C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */,
 				C0286DBF2576E13300768D6B /* PicturesViewController.swift */,
 				C081143D257BE1800035D1E3 /* PicturesViewModel.swift */,
 			);
 			path = Initial;
-			sourceTree = "<group>";
-		};
-		C0AE01C22582B4E500338B37 /* PictureCell */ = {
-			isa = PBXGroup;
-			children = (
-				C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */,
-			);
-			path = PictureCell;
 			sourceTree = "<group>";
 		};
 		C0F1EF4E257D11C4009DC5EC /* Modules */ = {
@@ -374,7 +361,7 @@
 		C0F1EF4F257D11DD009DC5EC /* Initial */ = {
 			isa = PBXGroup;
 			children = (
-				C03C587D257ECA6900721CBF /* DialogCell */,
+				C03C587E257ECA8E00721CBF /* DialogTableViewCell.swift */,
 				C0286DC52576E16700768D6B /* MessagesViewController.swift */,
 				C0F1EF50257D120A009DC5EC /* MessagesViewModel.swift */,
 			);
@@ -541,6 +528,7 @@
 				C0286D9A2576D02400768D6B /* NotificationsStorage.swift in Sources */,
 				C03CE2572579680F005CC466 /* User.swift in Sources */,
 				C0286DBA2576E0ED00768D6B /* FeedViewController.swift in Sources */,
+				C06C0C8F2585312400220B92 /* ProfileViewModel.swift in Sources */,
 				C0286DD32576E1E300768D6B /* ProfileViewController.swift in Sources */,
 				C0812529258002E4004A9394 /* FilesStorage.swift in Sources */,
 				C05339012578264E00DEF37D /* Container+Coordinators.swift in Sources */,
