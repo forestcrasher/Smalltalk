@@ -19,9 +19,8 @@ class ProfileCoordinator {
     func start() {
         let profileViewModel = container.resolve(ProfileViewModel.self, argument: container)!
         profileViewModel.coordinator = self
-        let profileViewController = ProfileViewController()
-        profileViewController.viewModel = profileViewModel
-        profileViewController.tabBarItem = UITabBarItem(title: "Profile", image: UIImage(systemName: "person.fill"), tag: 4)
+        let profileViewController = ProfileViewController(viewModel: profileViewModel)
+        profileViewController.tabBarItem = UITabBarItem(title: R.string.localizable.profileTitle(), image: UIImage.personFill, tag: 4)
         navigationController.viewControllers = [profileViewController]
     }
 

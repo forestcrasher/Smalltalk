@@ -19,9 +19,8 @@ class FeedCoordinator {
     func start() {
         let feedViewModel = container.resolve(FeedViewModel.self, argument: container)!
         feedViewModel.coordinator = self
-        let feedViewController = FeedViewController()
-        feedViewController.viewModel = feedViewModel
-        feedViewController.tabBarItem = UITabBarItem(title: "Feed", image: UIImage(systemName: "rectangle.stack.fill"), tag: 0)
+        let feedViewController = FeedViewController(viewModel: feedViewModel)
+        feedViewController.tabBarItem = UITabBarItem(title: R.string.localizable.feedTitle(), image: UIImage.rectangleStackFill, tag: 0)
         navigationController.viewControllers = [feedViewController]
     }
 

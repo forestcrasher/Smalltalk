@@ -13,7 +13,7 @@ import Kingfisher
 class ProfileViewController: UIViewController {
 
     // MARK: - ViewModel
-    var viewModel: ProfileViewModel!
+    private var viewModel: ProfileViewModel
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -46,7 +46,7 @@ class ProfileViewController: UIViewController {
     private func setupUI() {
         navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .white
-        title = "Profile"
+        title = R.string.localizable.profileTitle()
 
         view.addSubview(photoImageView)
         view.addSubview(fullNameLabel)
@@ -82,4 +82,13 @@ class ProfileViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 
+    // MARK: - Init
+    init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

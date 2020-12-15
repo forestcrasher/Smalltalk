@@ -19,9 +19,8 @@ class ActivityCoordinator {
     func start() {
         let activityViewModel = container.resolve(ActivityViewModel.self, argument: container)!
         activityViewModel.coordinator = self
-        let activityViewController = ActivityViewController()
-        activityViewController.viewModel = activityViewModel
-        activityViewController.tabBarItem = UITabBarItem(title: "Activity", image: UIImage(systemName: "heart.fill"), tag: 3)
+        let activityViewController = ActivityViewController(viewModel: activityViewModel)
+        activityViewController.tabBarItem = UITabBarItem(title: R.string.localizable.activityTitle(), image: UIImage.heartFill, tag: 3)
         navigationController.viewControllers = [activityViewController]
     }
 

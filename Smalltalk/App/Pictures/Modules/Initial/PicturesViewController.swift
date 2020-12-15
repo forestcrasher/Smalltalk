@@ -12,7 +12,7 @@ import RxCocoa
 class PicturesViewController: UIViewController {
 
     // MARK: - ViewModel
-    var viewModel: PicturesViewModel!
+    private var viewModel: PicturesViewModel
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -46,7 +46,7 @@ class PicturesViewController: UIViewController {
     private func setupUI() {
         navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .white
-        title = "Pictures"
+        title = R.string.localizable.picturesTitle()
 
         view.addSubview(collectionView)
 
@@ -69,6 +69,16 @@ class PicturesViewController: UIViewController {
                 cell.configure(with: PictureCollectionViewCell.Model(URL: picture.URL, authorFullName: picture.author?.fullName, authorPhotoURL: picture.author?.photoURL))
             }
             .disposed(by: disposeBag)
+    }
+
+    // MARK: - Init
+    init(viewModel: PicturesViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
 }

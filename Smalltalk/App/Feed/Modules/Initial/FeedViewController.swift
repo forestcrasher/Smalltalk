@@ -12,7 +12,7 @@ import RxCocoa
 class FeedViewController: UIViewController {
 
     // MARK: - ViewModel
-    var viewModel: FeedViewModel!
+    private var viewModel: FeedViewModel
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -39,7 +39,7 @@ class FeedViewController: UIViewController {
     private func setupUI() {
         navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .white
-        title = "Feed"
+        title = R.string.localizable.feedTitle()
 
         view.addSubview(tableView)
 
@@ -62,6 +62,16 @@ class FeedViewController: UIViewController {
                 cell.configure(with: PostTableViewCell.Model(text: post.text, authorFullName: post.author?.fullName, authorPhotoURL: post.author?.photoURL))
             }
             .disposed(by: disposeBag)
+    }
+
+    // MARK: - Init
+    init(viewModel: FeedViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
 }

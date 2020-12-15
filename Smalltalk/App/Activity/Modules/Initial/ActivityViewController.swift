@@ -12,7 +12,7 @@ import RxCocoa
 class ActivityViewController: UIViewController {
 
     // MARK: - ViewModel
-    var viewModel: ActivityViewModel!
+    private var viewModel: ActivityViewModel
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -38,7 +38,7 @@ class ActivityViewController: UIViewController {
     private func setupUI() {
         navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .white
-        title = "Activity"
+        title = R.string.localizable.activityTitle()
 
         view.addSubview(tableView)
 
@@ -64,6 +64,16 @@ class ActivityViewController: UIViewController {
                                 messageText: notification.message))
             }
             .disposed(by: disposeBag)
+    }
+
+    // MARK: - Init
+    init(viewModel: ActivityViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
 }

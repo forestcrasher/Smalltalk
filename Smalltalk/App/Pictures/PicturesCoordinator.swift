@@ -19,9 +19,8 @@ class PicturesCoordinator {
     func start() {
         let picturesViewModel = container.resolve(PicturesViewModel.self, argument: container)!
         picturesViewModel.coordinator = self
-        let picturesViewController = PicturesViewController()
-        picturesViewController.viewModel = picturesViewModel
-        picturesViewController.tabBarItem = UITabBarItem(title: "Pictures", image: UIImage(systemName: "photo.on.rectangle.fill"), tag: 1)
+        let picturesViewController = PicturesViewController(viewModel: picturesViewModel)
+        picturesViewController.tabBarItem = UITabBarItem(title: R.string.localizable.picturesTitle(), image: UIImage.photoOnRectangleFill, tag: 1)
         navigationController.viewControllers = [picturesViewController]
     }
 

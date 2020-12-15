@@ -41,6 +41,7 @@ class BaseTabBarController: UITabBarController {
         selectedIndex = 2
     }
 
+    // MARK: - Init
     init(container: Container) {
         self.container = container
         super.init(nibName: nil, bundle: nil)

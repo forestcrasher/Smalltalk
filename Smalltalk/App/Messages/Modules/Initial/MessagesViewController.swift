@@ -12,7 +12,7 @@ import RxCocoa
 class MessagesViewController: UIViewController {
 
     // MARK: - ViewModel
-    var viewModel: MessagesViewModel!
+    private var viewModel: MessagesViewModel
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
@@ -38,7 +38,7 @@ class MessagesViewController: UIViewController {
     private func setupUI() {
         navigationController?.navigationBar.prefersLargeTitles = true
         view.backgroundColor = .white
-        title = "Messages"
+        title = R.string.localizable.messagesTitle()
 
         view.addSubview(tableView)
 
@@ -61,6 +61,16 @@ class MessagesViewController: UIViewController {
                 cell.configure(with: DialogTableViewCell.Model(recipientFullName: dialog.recipient?.fullName, recipientPhotoURL: dialog.recipient?.photoURL, lastMessageText: dialog.lastMessage?.text))
             }
             .disposed(by: disposeBag)
+    }
+
+    // MARK: - Init
+    init(viewModel: MessagesViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
 }
