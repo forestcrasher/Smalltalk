@@ -17,7 +17,7 @@ class PicturesViewModel {
 
     // MARK: - Dependencies
     private lazy var picturesStorage: PicturesStorage = container.resolve(PicturesStorage.self, argument: container)!
-    weak var coordinator: PicturesCoordinator!
+    weak var coordinator: PicturesCoordinator?
 
     // MARK: - Setup
     struct Input {}

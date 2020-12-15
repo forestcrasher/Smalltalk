@@ -17,7 +17,7 @@ class FeedViewModel {
 
     // MARK: - Dependencies
     private lazy var postsStorage: PostsStorage = container.resolve(PostsStorage.self, argument: container)!
-    weak var coordinator: FeedCoordinator!
+    weak var coordinator: FeedCoordinator?
 
     // MARK: - Setup
     struct Input {}

@@ -17,7 +17,7 @@ class ActivityViewModel {
 
     // MARK: - Dependencies
     private lazy var notificationsStorage: NotificationsStorage = container.resolve(NotificationsStorage.self, argument: container)!
-    weak var coordinator: ActivityCoordinator!
+    weak var coordinator: ActivityCoordinator?
 
     // MARK: - Setup
     struct Input {}

@@ -17,7 +17,7 @@ class MessagesViewModel {
 
     // MARK: - Dependencies
     private lazy var dialogsStorage: DialogsStorage = container.resolve(DialogsStorage.self, argument: container)!
-    weak var coordinator: MessagesCoordinator!
+    weak var coordinator: MessagesCoordinator?
 
     // MARK: - Setup
     struct Input {}

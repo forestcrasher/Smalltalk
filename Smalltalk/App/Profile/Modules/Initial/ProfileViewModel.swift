@@ -17,7 +17,7 @@ class ProfileViewModel {
 
     // MARK: - Dependencies
     private lazy var usersStorage: UsersStorage = container.resolve(UsersStorage.self, argument: container)!
-    weak var coordinator: ProfileCoordinator!
+    weak var coordinator: ProfileCoordinator?
 
     // MARK: - Setup
     struct Input {}
