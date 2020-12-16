@@ -8,10 +8,11 @@ target 'Smalltalk' do
   pod 'RxDataSources', '~> 4.0'
   pod 'Swinject', '2.7.0'
   pod 'SwinjectAutoregistration', '2.7.0'
-  pod 'Cartography', '~> 3.0'
+  pod 'Kingfisher', '~> 5.0'
   pod 'R.swift'
   pod 'SwiftLint'
   pod 'Firebase/Analytics'
   pod 'Firebase/Firestore'
+  pod 'Firebase/Storage'
   
 end

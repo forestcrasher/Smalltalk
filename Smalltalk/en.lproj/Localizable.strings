@@ -1,0 +1,13 @@
+/* 
+  Localizable.strings
+  Smalltalk
+
+  Created by Anton Pryakhin on 15.12.2020.
+  
+*/
+
+"feedTitle" = "Feed";
+"picturesTitle" = "Pictures";
+"messagesTitle" = "Messages";
+"activityTitle" = "Activity";
+"profileTitle" = "Profile";
