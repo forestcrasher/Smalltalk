@@ -38,7 +38,8 @@ class FeedViewController: UIViewController {
 
     private func setupUI() {
         navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = .white
+        view.backgroundColor = R.color.backgroundColor()
+        tableView.backgroundColor = R.color.backgroundColor()
         title = R.string.localizable.feedTitle()
 
         view.addSubview(tableView)
