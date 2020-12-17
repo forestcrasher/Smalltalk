@@ -9,55 +9,78 @@ import UIKit
 
 class HeaderItemView: UIView {
 
+    // MARK: - Static
+    private static let dateFormatter = DateFormatter()
+
+    // MARK: - Public
+    var userText: String? {
+        get { userLabel.text }
+        set {
+            userLabel.text = newValue
+            setNeedsUpdateConstraints()
+        }
+    }
+
+    var geoText: String? {
+        get { geoLabel.text }
+        set {
+            geoLabel.text = newValue
+            setNeedsUpdateConstraints()
+        }
+    }
+
+    func setUserImage(with url: URL?) {
+        userImageView.setImage(with: url)
+    }
+
+    func setDate(_ date: Date?) {
+        if let date = date {
+            let dateFormatter = HeaderItemView.dateFormatter
+            dateFormatter.dateFormat = "MM/dd/yyyy"
+            dateLabel.text = dateFormatter.string(from: date)
+        }
+    }
+
     // MARK: - Private
     private lazy var userImageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .gray
+        imageView.backgroundColor = R.color.backgroundColor()
         imageView.contentMode = .scaleAspectFill
         imageView.layer.masksToBounds = true
+        imageView.layer.cornerRadius = 20.0
         addSubview(imageView)
         return imageView
     }()
 
     private lazy var userLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 16.0)
-        label.textColor = .darkGray
+        label.font = .systemFont(ofSize: 16.0, weight: .semibold)
+        label.textColor = R.color.labelColor()
         label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
-        label.text = "Peter Hardy"
-        label.backgroundColor = .blue
         return label
     }()
 
     private lazy var geoLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12.0)
-        label.textColor = .darkGray
+        label.textColor = R.color.secondaryLabelColor()
         label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
-        label.text = "New York New York New York"
-        label.backgroundColor = .brown
         return label
     }()
 
     private lazy var dateLabel: UILabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 12.0)
-        label.textColor = .darkGray
+        label.textColor = R.color.secondaryLabelColor()
         label.translatesAutoresizingMaskIntoConstraints = false
         addSubview(label)
-        label.text = "7 min ago 7 min ago"
-        label.backgroundColor = .cyan
         return label
     }()
 
-    // MARK: - Lifecycle
-    override func layoutSubviews() {
-        super.layoutSubviews()
-
-        backgroundColor = .lightGray
+    private func setupUI() {
         heightAnchor.constraint(equalToConstant: 48.0).isActive = true
 
         NSLayoutConstraint.activate([
@@ -68,7 +91,6 @@ class HeaderItemView: UIView {
         ])
 
         NSLayoutConstraint.activate([
-            userLabel.topAnchor.constraint(equalTo: topAnchor, constant: 7.0),
             userLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 20.0),
             userLabel.widthAnchor.constraint(lessThanOrEqualTo: geoLabel.widthAnchor)
         ])
@@ -86,12 +108,24 @@ class HeaderItemView: UIView {
         ])
     }
 
+    private lazy var userLabelTopAnchorConstraint = userLabel.topAnchor.constraint(equalTo: topAnchor, constant: 14.0)
+
+    // MARK: - Lifecycle
+    override func updateConstraints() {
+        super.updateConstraints()
+
+        userLabelTopAnchorConstraint.constant = (geoLabel.text?.isEmpty ?? true) ? 14.0 : 7.0
+        userLabelTopAnchorConstraint.isActive = true
+    }
+
     // MARK: - Init
-//    override init(frame: CGRect) {
-//        super.init(frame: frame)
-//    }
-//
-//    required init?(coder: NSCoder) {
-//        fatalError("init(coder:) has not been implemented")
-//    }
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+
+        setupUI()
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

@@ -55,6 +55,7 @@
 		C0A3C8E825892B2200AB4677 /* HeaderItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A3C8E725892B2200AB4677 /* HeaderItemView.swift */; };
 		C0A3C90B25892B7300AB4677 /* FooterItemView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0A3C90A25892B7300AB4677 /* FooterItemView.swift */; };
 		C0A3C90E25892DB800AB4677 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C0A3C90D25892DB800AB4677 /* Colors.xcassets */; };
+		C0B3DAC6258BD6E300CE6678 /* UIImageView+Kingfisher.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0B3DAC5258BD6E300CE6678 /* UIImageView+Kingfisher.swift */; };
 		C0CD1DCF2588BF8F00870639 /* UIImage+SystemIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0CD1DCE2588BF8F00870639 /* UIImage+SystemIcons.swift */; };
 		C0CD1DDA2588C52400870639 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = C0CD1DDC2588C52400870639 /* Localizable.strings */; };
 		C0F1EF51257D120A009DC5EC /* MessagesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0F1EF50257D120A009DC5EC /* MessagesViewModel.swift */; };
@@ -113,6 +114,7 @@
 		C0A3C8E725892B2200AB4677 /* HeaderItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HeaderItemView.swift; sourceTree = "<group>"; };
 		C0A3C90A25892B7300AB4677 /* FooterItemView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FooterItemView.swift; sourceTree = "<group>"; };
 		C0A3C90D25892DB800AB4677 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		C0B3DAC5258BD6E300CE6678 /* UIImageView+Kingfisher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+Kingfisher.swift"; sourceTree = "<group>"; };
 		C0CD1DCE2588BF8F00870639 /* UIImage+SystemIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+SystemIcons.swift"; sourceTree = "<group>"; };
 		C0CD1DDB2588C52400870639 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/Localizable.strings; sourceTree = "<group>"; };
 		C0CD1DDE2588C53F00870639 /* ru */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ru; path = ru.lproj/Localizable.strings; sourceTree = "<group>"; };
@@ -378,6 +380,7 @@
 			isa = PBXGroup;
 			children = (
 				C0CD1DCE2588BF8F00870639 /* UIImage+SystemIcons.swift */,
+				C0B3DAC5258BD6E300CE6678 /* UIImageView+Kingfisher.swift */,
 			);
 			path = Extension;
 			sourceTree = "<group>";
@@ -582,6 +585,7 @@
 				C05338FA2578251C00DEF37D /* FeedViewModel.swift in Sources */,
 				C0286D892576CF2300768D6B /* Message.swift in Sources */,
 				C0286DC02576E13300768D6B /* PicturesViewController.swift in Sources */,
+				C0B3DAC6258BD6E300CE6678 /* UIImageView+Kingfisher.swift in Sources */,
 				C06C0C8A258525B500220B92 /* NotificationTableViewCell.swift in Sources */,
 				C0A3C8E825892B2200AB4677 /* HeaderItemView.swift in Sources */,
 				C0286D8F2576CF6900768D6B /* PostsStorage.swift in Sources */,

@@ -60,7 +60,7 @@ class FeedViewController: UIViewController {
         viewModel
             .posts
             .bind(to: tableView.rx.items(cellIdentifier: String(describing: PostTableViewCell.self), cellType: PostTableViewCell.self)) { _, post, cell in
-                cell.configure(with: PostTableViewCell.Model(text: post.text, authorFullName: post.author?.fullName, authorPhotoURL: post.author?.photoURL))
+                cell.configure(with: PostTableViewCell.Model(text: post.text, authorFullName: post.author?.fullName, authorPhotoURL: post.author?.photoURL, date: post.date))
             }
             .disposed(by: disposeBag)
     }
