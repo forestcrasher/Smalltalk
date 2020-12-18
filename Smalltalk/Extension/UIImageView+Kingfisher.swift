@@ -14,7 +14,7 @@ extension UIImageView {
         if let downloadURL = url {
             let processor = DownsamplingImageProcessor(size: self.superview?.bounds.size ?? CGSize(width: 0, height: 0))
             let resourse = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
-            self.kf.setImage(with: resourse, options: [.processor(processor), .loadDiskFileSynchronously, .backgroundDecode, .forceRefresh])
+            self.kf.setImage(with: resourse, options: [.processor(processor), .loadDiskFileSynchronously, .backgroundDecode])
         }
     }
 

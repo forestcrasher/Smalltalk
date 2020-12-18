@@ -30,7 +30,9 @@ class HeaderItemView: UIView {
     }
 
     func setUserImage(with url: URL?) {
-        userImageView.setImage(with: url)
+        DispatchQueue.main.async { [weak self] in
+            self?.userImageView.setImage(with: url)
+        }
     }
 
     func setDate(_ date: Date?) {
