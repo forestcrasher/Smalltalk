@@ -20,10 +20,10 @@ class PostTableViewCell: UITableViewCell {
 
     func configure(with model: Model) {
         headerItemView.userText = model.authorFullName
-        headerItemView.geoText = "Test"
         headerItemView.setUserImage(with: model.authorPhotoURL)
         headerItemView.setDate(model.date)
         textView.text = model.text
+        textView.font = .systemFont(ofSize: textView.text.count > 150 ? 16.0 : 24.0)
     }
 
     // MARK: - Private
@@ -57,27 +57,40 @@ class PostTableViewCell: UITableViewCell {
         return textView
     }()
 
+    private lazy var footerItemView: FooterItemView = {
+        let footerItemView = FooterItemView()
+        footerItemView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(footerItemView)
+        return footerItemView
+    }()
+
     private func setupUI() {
         backgroundColor = .clear
 
         NSLayoutConstraint.activate([
             containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8.0),
-            containerView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 20.0),
-            containerView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -20.0),
-            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8.0)
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8.0),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16.0),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16.0)
         ])
 
         NSLayoutConstraint.activate([
             headerItemView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16.0),
-            headerItemView.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 20.0),
-            headerItemView.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -20.0)
+            headerItemView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
+            headerItemView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
         ])
 
         NSLayoutConstraint.activate([
             textView.topAnchor.constraint(equalTo: headerItemView.bottomAnchor, constant: 16.0),
-            textView.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 20.0),
-            textView.rightAnchor.constraint(equalTo: containerView.rightAnchor, constant: -20.0),
-            textView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16.0)
+            textView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
+            textView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
+        ])
+
+        NSLayoutConstraint.activate([
+            footerItemView.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 8.0),
+            footerItemView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8.0),
+            footerItemView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
+            footerItemView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
         ])
     }
 

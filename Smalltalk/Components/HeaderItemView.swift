@@ -15,18 +15,12 @@ class HeaderItemView: UIView {
     // MARK: - Public
     var userText: String? {
         get { userLabel.text }
-        set {
-            userLabel.text = newValue
-            setNeedsUpdateConstraints()
-        }
+        set { userLabel.text = newValue }
     }
 
     var geoText: String? {
         get { geoLabel.text }
-        set {
-            geoLabel.text = newValue
-            setNeedsUpdateConstraints()
-        }
+        set { geoLabel.text = newValue }
     }
 
     func setUserImage(with url: URL?) {
@@ -45,41 +39,48 @@ class HeaderItemView: UIView {
 
     // MARK: - Private
     private lazy var userImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = R.color.backgroundColor()
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
-        imageView.layer.cornerRadius = 20.0
-        addSubview(imageView)
-        return imageView
+        let userImageView = UIImageView()
+        userImageView.translatesAutoresizingMaskIntoConstraints = false
+        userImageView.backgroundColor = R.color.backgroundColor()
+        userImageView.contentMode = .scaleAspectFill
+        userImageView.layer.masksToBounds = true
+        userImageView.layer.cornerRadius = 20.0
+        addSubview(userImageView)
+        return userImageView
+    }()
+
+    private lazy var containerInfoView: UIView = {
+        let containerInfoView = UIView()
+        containerInfoView.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(containerInfoView)
+        return containerInfoView
     }()
 
     private lazy var userLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16.0, weight: .semibold)
-        label.textColor = R.color.labelColor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(label)
-        return label
+        let userLabel = UILabel()
+        userLabel.font = .systemFont(ofSize: 16.0, weight: .semibold)
+        userLabel.textColor = R.color.labelColor()
+        userLabel.translatesAutoresizingMaskIntoConstraints = false
+        containerInfoView.addSubview(userLabel)
+        return userLabel
     }()
 
     private lazy var geoLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12.0)
-        label.textColor = R.color.secondaryLabelColor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(label)
-        return label
+        let geoLabel = UILabel()
+        geoLabel.font = .systemFont(ofSize: 12.0)
+        geoLabel.textColor = R.color.secondaryLabelColor()
+        geoLabel.translatesAutoresizingMaskIntoConstraints = false
+        containerInfoView.addSubview(geoLabel)
+        return geoLabel
     }()
 
     private lazy var dateLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 12.0)
-        label.textColor = R.color.secondaryLabelColor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(label)
-        return label
+        let dateLabel = UILabel()
+        dateLabel.font = .systemFont(ofSize: 12.0)
+        dateLabel.textColor = R.color.secondaryLabelColor()
+        dateLabel.translatesAutoresizingMaskIntoConstraints = false
+        addSubview(dateLabel)
+        return dateLabel
     }()
 
     private func setupUI() {
@@ -87,37 +88,34 @@ class HeaderItemView: UIView {
 
         NSLayoutConstraint.activate([
             userImageView.topAnchor.constraint(equalTo: topAnchor),
-            userImageView.leftAnchor.constraint(equalTo: leftAnchor),
+            userImageView.leadingAnchor.constraint(equalTo: leadingAnchor),
             userImageView.widthAnchor.constraint(equalToConstant: 48.0),
             userImageView.heightAnchor.constraint(equalToConstant: 48.0)
         ])
 
         NSLayoutConstraint.activate([
-            userLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 20.0),
-            userLabel.widthAnchor.constraint(lessThanOrEqualTo: geoLabel.widthAnchor)
+            containerInfoView.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 20.0),
+            containerInfoView.centerYAnchor.constraint(equalTo: centerYAnchor)
+        ])
+
+        NSLayoutConstraint.activate([
+            userLabel.topAnchor.constraint(equalTo: containerInfoView.topAnchor),
+            userLabel.leadingAnchor.constraint(equalTo: containerInfoView.leadingAnchor),
+            userLabel.trailingAnchor.constraint(equalTo: containerInfoView.trailingAnchor)
         ])
 
         NSLayoutConstraint.activate([
             geoLabel.topAnchor.constraint(equalTo: userLabel.bottomAnchor),
-            geoLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 20.0),
-            geoLabel.widthAnchor.constraint(lessThanOrEqualTo: userLabel.widthAnchor)
+            geoLabel.bottomAnchor.constraint(equalTo: containerInfoView.bottomAnchor),
+            geoLabel.leadingAnchor.constraint(equalTo: containerInfoView.leadingAnchor),
+            geoLabel.trailingAnchor.constraint(equalTo: containerInfoView.trailingAnchor)
         ])
 
         NSLayoutConstraint.activate([
             dateLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            dateLabel.rightAnchor.constraint(equalTo: rightAnchor),
-            dateLabel.leftAnchor.constraint(greaterThanOrEqualTo: userLabel.rightAnchor, constant: 20.0)
+            dateLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
+            dateLabel.leadingAnchor.constraint(greaterThanOrEqualTo: containerInfoView.trailingAnchor, constant: 20.0)
         ])
-    }
-
-    private lazy var userLabelTopAnchorConstraint = userLabel.topAnchor.constraint(equalTo: topAnchor, constant: 14.0)
-
-    // MARK: - Lifecycle
-    override func updateConstraints() {
-        super.updateConstraints()
-
-        userLabelTopAnchorConstraint.constant = (geoLabel.text?.isEmpty ?? true) ? 14.0 : 7.0
-        userLabelTopAnchorConstraint.isActive = true
     }
 
     // MARK: - Init
