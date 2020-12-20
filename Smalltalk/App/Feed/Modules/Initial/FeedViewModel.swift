@@ -17,6 +17,7 @@ class FeedViewModel {
 
     // MARK: - Dependencies
     private lazy var postsStorage: PostsStorage = container.resolve(PostsStorage.self, argument: container)!
+    private lazy var usersStorage: UsersStorage = container.resolve(UsersStorage.self, argument: container)!
     weak var coordinator: FeedCoordinator?
 
     // MARK: - Setup
@@ -28,11 +29,17 @@ class FeedViewModel {
             .bind(to: posts)
             .disposed(by: disposeBag)
 
+        usersStorage
+            .fetchCurrentUser()
+            .bind(to: currentUser)
+            .disposed(by: disposeBag)
+
         return Disposables.create()
     }
 
     // MARK: - Public
     let posts = BehaviorRelay<[Post]>(value: [])
+    let currentUser = BehaviorRelay<User?>(value: nil)
 
     // MARK: - Private
     private let disposeBag = DisposeBag()

@@ -32,6 +32,7 @@ class FeedViewController: UIViewController {
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.allowsSelection = false
+        tableView.contentInset = UIEdgeInsets(top: 8.0, left: 0.0, bottom: 8.0, right: 0.0)
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: String(describing: PostTableViewCell.self))
         return tableView
     }()
@@ -57,10 +58,20 @@ class FeedViewController: UIViewController {
             .setup(with: FeedViewModel.Input())
             .disposed(by: disposeBag)
 
-        viewModel
-            .posts
-            .bind(to: tableView.rx.items(cellIdentifier: String(describing: PostTableViewCell.self), cellType: PostTableViewCell.self)) { _, post, cell in
-                cell.configure(with: PostTableViewCell.Model(text: post.text, authorFullName: post.author?.fullName, authorPhotoURL: post.author?.photoURL, date: post.date))
+        Observable.combineLatest(viewModel.posts, viewModel.currentUser)
+            .map { (posts, currentUser) in posts.map { ($0, currentUser) } }
+            .bind(to: tableView.rx.items(cellIdentifier: String(describing: PostTableViewCell.self), cellType: PostTableViewCell.self)) { _, data, cell in
+                let (post, currentUser) = data
+                let model = PostTableViewCell.Model(
+                    text: post.text,
+                    userFullName: post.author?.fullName,
+                    userPhotoURL: post.author?.photoURL,
+                    date: post.date,
+                    countLikes: post.countLikes,
+                    countReposts: post.countReposts,
+                    countComments: post.countComments,
+                    likeEnabled: post.likes.contains(currentUser?.id ?? ""))
+                cell.configure(with: model)
             }
             .disposed(by: disposeBag)
     }

@@ -14,5 +14,6 @@ extension UIImage {
     class var messageFill: UIImage? { UIImage(systemName: "message.fill") }
     class var heartFill: UIImage? { UIImage(systemName: "heart.fill") }
     class var personFill: UIImage? { UIImage(systemName: "person.fill") }
-
+    class var arrowshapeTurnUpRightFill: UIImage? { UIImage(systemName: "arrowshape.turn.up.right.fill") }
+    class var bubbleRightFill: UIImage? { UIImage(systemName: "bubble.right.fill") }
 }

@@ -13,17 +13,25 @@ class PostTableViewCell: UITableViewCell {
     // MARK: - Public
     struct Model {
         let text: String
-        let authorFullName: String?
-        let authorPhotoURL: URL?
+        let userFullName: String?
+        let userPhotoURL: URL?
         let date: Date?
+        let countLikes: Int
+        let countReposts: Int
+        let countComments: Int
+        let likeEnabled: Bool
     }
 
     func configure(with model: Model) {
-        headerItemView.userText = model.authorFullName
-        headerItemView.setUserImage(with: model.authorPhotoURL)
+        headerItemView.userText = model.userFullName
+        headerItemView.setUserImage(with: model.userPhotoURL)
         headerItemView.setDate(model.date)
         textView.text = model.text
         textView.font = .systemFont(ofSize: textView.text.count > 150 ? 16.0 : 24.0)
+        footerItemView.countLikes = model.countLikes
+        footerItemView.countReposts = model.countReposts
+        footerItemView.countComments = model.countComments
+        footerItemView.likeEnabled = model.likeEnabled
     }
 
     // MARK: - Private
@@ -31,7 +39,7 @@ class PostTableViewCell: UITableViewCell {
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
         containerView.backgroundColor = R.color.secondaryBackgroundColor()
-        containerView.layer.cornerRadius = 15.0
+        containerView.layer.cornerRadius = 16.0
         contentView.addSubview(containerView)
         return containerView
     }()
