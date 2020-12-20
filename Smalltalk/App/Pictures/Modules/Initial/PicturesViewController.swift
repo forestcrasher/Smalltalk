@@ -38,17 +38,15 @@ class PicturesViewController: UIViewController {
 
         let collectionView = UICollectionView(frame: view.frame, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .white
+        collectionView.backgroundColor = R.color.backgroundColor()
         collectionView.register(PictureCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: PictureCollectionViewCell.self))
+        view.addSubview(collectionView)
         return collectionView
     }()
 
     private func setupUI() {
-        navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = .white
         title = R.string.localizable.picturesTitle()
-
-        view.addSubview(collectionView)
+        view.backgroundColor = R.color.backgroundColor()
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

@@ -26,30 +26,28 @@ class ProfileViewController: UIViewController {
     // MARK: - Private
     private let disposeBag = DisposeBag()
 
-    private let photoImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .gray
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
-        return imageView
+    private lazy var photoImageView: UIImageView = {
+        let photoImageView = UIImageView()
+        photoImageView.translatesAutoresizingMaskIntoConstraints = false
+        photoImageView.backgroundColor = .gray
+        photoImageView.contentMode = .scaleAspectFill
+        photoImageView.layer.masksToBounds = true
+        view.addSubview(photoImageView)
+        return photoImageView
     }()
 
-    private let fullNameLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 32)
-        label.textColor = .darkGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private lazy var fullNameLabel: UILabel = {
+        let fullNameLabel = UILabel()
+        fullNameLabel.font = .systemFont(ofSize: 32)
+        fullNameLabel.textColor = .darkGray
+        fullNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(fullNameLabel)
+        return fullNameLabel
     }()
 
     private func setupUI() {
-        navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = .white
         title = R.string.localizable.profileTitle()
-
-        view.addSubview(photoImageView)
-        view.addSubview(fullNameLabel)
+        view.backgroundColor = R.color.backgroundColor()
 
         NSLayoutConstraint.activate([
             photoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),

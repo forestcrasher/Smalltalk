@@ -31,16 +31,15 @@ class ActivityViewController: UIViewController {
         tableView.rowHeight = 64.0 + 32.0
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
+        tableView.backgroundColor = R.color.backgroundColor()
         tableView.register(NotificationTableViewCell.self, forCellReuseIdentifier: String(describing: NotificationTableViewCell.self))
+        view.addSubview(tableView)
         return tableView
     }()
 
     private func setupUI() {
-        navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = .white
         title = R.string.localizable.activityTitle()
-
-        view.addSubview(tableView)
+        view.backgroundColor = R.color.backgroundColor()
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

@@ -28,28 +28,26 @@ class FeedViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.frame, style: .plain)
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.backgroundColor = R.color.backgroundColor()
         tableView.separatorStyle = .none
         tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = UITableView.automaticDimension
         tableView.allowsSelection = false
         tableView.contentInset = UIEdgeInsets(top: 8.0, left: 0.0, bottom: 8.0, right: 0.0)
         tableView.register(PostTableViewCell.self, forCellReuseIdentifier: String(describing: PostTableViewCell.self))
+        view.addSubview(tableView)
         return tableView
     }()
 
     private func setupUI() {
-        navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = R.color.backgroundColor()
-        tableView.backgroundColor = R.color.backgroundColor()
         title = R.string.localizable.feedTitle()
-
-        view.addSubview(tableView)
+        view.backgroundColor = R.color.backgroundColor()
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
-            tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
         ])
     }
 

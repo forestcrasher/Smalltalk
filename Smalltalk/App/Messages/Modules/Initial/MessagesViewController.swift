@@ -31,16 +31,15 @@ class MessagesViewController: UIViewController {
         tableView.rowHeight = 64.0 + 32.0
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
+        tableView.backgroundColor = R.color.backgroundColor()
         tableView.register(DialogTableViewCell.self, forCellReuseIdentifier: String(describing: DialogTableViewCell.self))
+        view.addSubview(tableView)
         return tableView
     }()
 
     private func setupUI() {
-        navigationController?.navigationBar.prefersLargeTitles = true
-        view.backgroundColor = .white
         title = R.string.localizable.messagesTitle()
-
-        view.addSubview(tableView)
+        view.backgroundColor = R.color.backgroundColor()
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

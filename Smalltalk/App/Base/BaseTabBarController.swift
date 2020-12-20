@@ -20,6 +20,14 @@ class BaseTabBarController: UITabBarController {
     private lazy var activity = container.resolve(ActivityCoordinator.self, argument: container)!
     private lazy var profile = container.resolve(ProfileCoordinator.self, argument: container)!
 
+    private func setupUI() {
+        tabBar.isTranslucent = false
+        tabBar.backgroundColor = R.color.secondaryBackgroundColor()
+        tabBar.barTintColor = R.color.secondaryBackgroundColor()
+        tabBar.tintColor = R.color.tintColor()
+        tabBar.unselectedItemTintColor = R.color.fillColor()
+    }
+
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,6 +47,8 @@ class BaseTabBarController: UITabBarController {
         ]
 
         selectedIndex = 2
+
+        setupUI()
     }
 
     // MARK: - Init

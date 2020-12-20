@@ -28,11 +28,11 @@ class FooterItemView: UIView {
     var likeEnabled = false {
         didSet {
             if likeEnabled {
-                likeButton.setTitleColor(R.color.secondaryAccentColor()!, for: .normal)
-                likeButton.setTitleColor(R.color.secondaryAccentColor()!.withAlphaComponent(0.3), for: .highlighted)
-                likeButton.setImage(UIImage.heartFill?.withTintColor(R.color.secondaryAccentColor()!), for: .normal)
-                likeButton.setImage(UIImage.heartFill?.withTintColor(R.color.secondaryAccentColor()!.withAlphaComponent(0.3), renderingMode: .alwaysOriginal), for: .highlighted)
-                likeButton.tintColor = R.color.secondaryAccentColor()
+                likeButton.setTitleColor(R.color.secondaryTintColor()!, for: .normal)
+                likeButton.setTitleColor(R.color.secondaryTintColor()!.withAlphaComponent(0.3), for: .highlighted)
+                likeButton.setImage(UIImage.heartFill?.withTintColor(R.color.secondaryTintColor()!), for: .normal)
+                likeButton.setImage(UIImage.heartFill?.withTintColor(R.color.secondaryTintColor()!.withAlphaComponent(0.3), renderingMode: .alwaysOriginal), for: .highlighted)
+                likeButton.tintColor = R.color.secondaryTintColor()
             } else {
                 likeButton.setTitleColor(R.color.fillColor()!, for: .normal)
                 likeButton.setTitleColor(R.color.fillColor()!.withAlphaComponent(0.3), for: .highlighted)

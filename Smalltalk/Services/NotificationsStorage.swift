@@ -44,8 +44,7 @@ class NotificationsStorage {
                     date: date,
                     postId: postId,
                     pictureId: pictureId,
-                    commentId: commentId
-                )
+                    commentId: commentId)
             }
             .toArray()
             .asObservable()
