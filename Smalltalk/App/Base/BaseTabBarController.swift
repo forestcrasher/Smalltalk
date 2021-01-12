@@ -26,6 +26,8 @@ class BaseTabBarController: UITabBarController {
         tabBar.barTintColor = R.color.secondaryBackgroundColor()
         tabBar.tintColor = R.color.tintColor()
         tabBar.unselectedItemTintColor = R.color.fillColor()
+        tabBar.shadowImage = UIImage()
+        tabBar.backgroundImage = UIImage()
     }
 
     // MARK: - Lifecycle

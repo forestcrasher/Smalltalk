@@ -16,6 +16,7 @@ class BaseNavigationController: UINavigationController {
         navigationBar.barTintColor = R.color.secondaryBackgroundColor()
         navigationBar.titleTextAttributes = [.foregroundColor: R.color.labelColor()!]
         navigationBar.tintColor = R.color.fillColor()
+        navigationBar.shadowImage = UIImage()
     }
 
     // MARK: - Lifecycle
