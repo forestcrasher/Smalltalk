@@ -23,11 +23,12 @@ class PostTableViewCell: UITableViewCell {
     }
 
     func configure(with model: Model) {
+        textView.text = model.text
+        textView.font = .systemFont(ofSize: textView.text.count > 150 ? 16.0 : 24.0)
+
         headerItemView.userText = model.userFullName
         headerItemView.setUserImage(with: model.userPhotoURL)
         headerItemView.setDate(model.date)
-        textView.text = model.text
-        textView.font = .systemFont(ofSize: textView.text.count > 150 ? 16.0 : 24.0)
         footerItemView.countLikes = model.countLikes
         footerItemView.countReposts = model.countReposts
         footerItemView.countComments = model.countComments

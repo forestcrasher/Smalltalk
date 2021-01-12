@@ -28,13 +28,13 @@ class PicturesViewController: UIViewController {
     private lazy var collectionView: UICollectionView = {
         let screenSizeWidth: CGFloat = view.safeAreaLayoutGuide.layoutFrame.width
         let leftAndRightPaddings: CGFloat = 32.0
-        let numberOfItemsPerRow: CGFloat = 1.0
-        let side = (screenSizeWidth - leftAndRightPaddings) / numberOfItemsPerRow
+        let width = screenSizeWidth - leftAndRightPaddings
+        let height = width * 1.29
 
         let layout = UICollectionViewFlowLayout()
         layout.sectionInset = UIEdgeInsets(top: 16.0, left: 16.0, bottom: 16.0, right: 16.0)
-        layout.itemSize = CGSize(width: side, height: side)
-        layout.minimumLineSpacing = 32.0
+        layout.itemSize = CGSize(width: width, height: height)
+        layout.minimumLineSpacing = 16.0
 
         let collectionView = UICollectionView(frame: view.frame, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -61,10 +61,20 @@ class PicturesViewController: UIViewController {
             .setup(with: PicturesViewModel.Input())
             .disposed(by: disposeBag)
 
-        viewModel
-            .pictures
-            .bind(to: collectionView.rx.items(cellIdentifier: String(describing: PictureCollectionViewCell.self), cellType: PictureCollectionViewCell.self)) { _, picture, cell in
-                cell.configure(with: PictureCollectionViewCell.Model(URL: picture.URL, authorFullName: picture.author?.fullName, authorPhotoURL: picture.author?.photoURL))
+        Observable.combineLatest(viewModel.pictures, viewModel.currentUser)
+            .map { (posts, currentUser) in posts.map { ($0, currentUser) } }
+            .bind(to: collectionView.rx.items(cellIdentifier: String(describing: PictureCollectionViewCell.self), cellType: PictureCollectionViewCell.self)) { _, data, cell in
+                let (picture, currentUser) = data
+                let model = PictureCollectionViewCell.Model(
+                    URL: picture.URL,
+                    userFullName: picture.author?.fullName,
+                    userPhotoURL: picture.author?.photoURL,
+                    date: picture.date,
+                    countLikes: picture.countLikes,
+                    countReposts: picture.countReposts,
+                    countComments: picture.countComments,
+                    likeEnabled: picture.likes.contains(currentUser?.id ?? ""))
+                cell.configure(with: model)
             }
             .disposed(by: disposeBag)
     }

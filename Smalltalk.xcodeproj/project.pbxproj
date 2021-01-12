@@ -72,7 +72,7 @@
 		C01D31E8256EBB7E002438ED /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		C01D31EA256EBB7E002438ED /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C01F5EDE257577BB00D974A2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
-		C01F5F552575935B00D974A2 /* R.generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = R.generated.swift; path = ../R.generated.swift; sourceTree = "<group>"; };
+		C01F5F552575935B00D974A2 /* R.generated.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = R.generated.swift; path = ../../R.generated.swift; sourceTree = "<group>"; };
 		C0286D7F2576CEE500768D6B /* Post.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Post.swift; sourceTree = "<group>"; };
 		C0286D822576CEF800768D6B /* Picture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Picture.swift; sourceTree = "<group>"; };
 		C0286D852576CF1600768D6B /* Dialog.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Dialog.swift; sourceTree = "<group>"; };
@@ -150,6 +150,18 @@
 			path = Pods;
 			sourceTree = "<group>";
 		};
+		C01D304725AACA09009181E8 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				C01D31E5256EBB7E002438ED /* Assets.xcassets */,
+				C0A3C90D25892DB800AB4677 /* Colors.xcassets */,
+				C01D31E7256EBB7E002438ED /* LaunchScreen.storyboard */,
+				C01F5F552575935B00D974A2 /* R.generated.swift */,
+				C0CD1DDC2588C52400870639 /* Localizable.strings */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
 		C01D31D0256EBB7A002438ED = {
 			isa = PBXGroup;
 			children = (
@@ -177,16 +189,12 @@
 				C0286D732576CDC100768D6B /* Services */,
 				C0CD1DCD2588BF6400870639 /* Extension */,
 				C0A3C8E625892AA900AB4677 /* Components */,
+				C01D304725AACA09009181E8 /* Resources */,
 				C0286DB52576DA7A00768D6B /* AppCoordinator.swift */,
 				C01D31DC256EBB7A002438ED /* AppDelegate.swift */,
 				C01D31DE256EBB7A002438ED /* SceneDelegate.swift */,
-				C01D31E5256EBB7E002438ED /* Assets.xcassets */,
-				C0A3C90D25892DB800AB4677 /* Colors.xcassets */,
-				C01D31E7256EBB7E002438ED /* LaunchScreen.storyboard */,
 				C01D31EA256EBB7E002438ED /* Info.plist */,
 				C01F5EDE257577BB00D974A2 /* GoogleService-Info.plist */,
-				C01F5F552575935B00D974A2 /* R.generated.swift */,
-				C0CD1DDC2588C52400870639 /* Localizable.strings */,
 			);
 			path = Smalltalk;
 			sourceTree = "<group>";
@@ -298,6 +306,7 @@
 			children = (
 				C0286DB92576E0ED00768D6B /* FeedViewController.swift */,
 				C05338F92578251C00DEF37D /* FeedViewModel.swift */,
+				C03CE27825798327005CC466 /* PostTableViewCell.swift */,
 			);
 			path = Initial;
 			sourceTree = "<group>";
@@ -359,9 +368,9 @@
 		C081143C257BE15B0035D1E3 /* Initial */ = {
 			isa = PBXGroup;
 			children = (
-				C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */,
 				C0286DBF2576E13300768D6B /* PicturesViewController.swift */,
 				C081143D257BE1800035D1E3 /* PicturesViewModel.swift */,
+				C08114A1257BEC630035D1E3 /* PictureCollectionViewCell.swift */,
 			);
 			path = Initial;
 			sourceTree = "<group>";
@@ -369,7 +378,6 @@
 		C0A3C8E625892AA900AB4677 /* Components */ = {
 			isa = PBXGroup;
 			children = (
-				C03CE27825798327005CC466 /* PostTableViewCell.swift */,
 				C0A3C8E725892B2200AB4677 /* HeaderItemView.swift */,
 				C0A3C90A25892B7300AB4677 /* FooterItemView.swift */,
 			);

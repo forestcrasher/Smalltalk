@@ -17,6 +17,7 @@ class PicturesViewModel {
 
     // MARK: - Dependencies
     private lazy var picturesStorage: PicturesStorage = container.resolve(PicturesStorage.self, argument: container)!
+    private lazy var usersStorage: UsersStorage = container.resolve(UsersStorage.self, argument: container)!
     weak var coordinator: PicturesCoordinator?
 
     // MARK: - Setup
@@ -28,11 +29,17 @@ class PicturesViewModel {
             .bind(to: pictures)
             .disposed(by: disposeBag)
 
+        usersStorage
+            .fetchCurrentUser()
+            .bind(to: currentUser)
+            .disposed(by: disposeBag)
+
         return Disposables.create()
     }
 
     // MARK: - Public
     let pictures = BehaviorRelay<[Picture]>(value: [])
+    let currentUser = BehaviorRelay<User?>(value: nil)
 
     // MARK: - Private
     private let disposeBag = DisposeBag()

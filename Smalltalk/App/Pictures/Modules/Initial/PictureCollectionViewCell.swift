@@ -15,75 +15,91 @@ class PictureCollectionViewCell: UICollectionViewCell {
     // MARK: - Public
     struct Model {
         let URL: URL?
-        let authorFullName: String?
-        let authorPhotoURL: URL?
+        let userFullName: String?
+        let userPhotoURL: URL?
+        let date: Date?
+        let countLikes: Int
+        let countReposts: Int
+        let countComments: Int
+        let likeEnabled: Bool
     }
 
     func configure(with model: Model) {
-        authorLabel.text = model.authorFullName
-        if let downloadURL = model.URL {
-            let processor = DownsamplingImageProcessor(size: imageView.superview?.bounds.size ?? CGSize(width: 0, height: 0))
-            let resourse = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
-            imageView.kf.setImage(with: resourse, options: [.processor(processor), .loadDiskFileSynchronously, .backgroundDecode])
+        DispatchQueue.main.async { [weak self] in
+            self?.imageView.setImage(with: model.URL)
         }
-        if let downloadURL = model.authorPhotoURL {
-            let processor = DownsamplingImageProcessor(size: authorImageView.superview?.bounds.size ?? CGSize(width: 0, height: 0))
-            let resourse = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
-            authorImageView.kf.setImage(with: resourse, options: [.processor(processor), .loadDiskFileSynchronously, .backgroundDecode])
-        }
+
+        headerItemView.userText = model.userFullName
+        headerItemView.setUserImage(with: model.userPhotoURL)
+        headerItemView.setDate(model.date)
+        footerItemView.countLikes = model.countLikes
+        footerItemView.countReposts = model.countReposts
+        footerItemView.countComments = model.countComments
+        footerItemView.likeEnabled = model.likeEnabled
     }
 
     // MARK: - Private
-    private let authorImageView: UIImageView = {
+    private lazy var containerView: UIView = {
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = R.color.secondaryBackgroundColor()
+        containerView.layer.cornerRadius = 16.0
+        contentView.addSubview(containerView)
+        return containerView
+    }()
+
+    private lazy var headerItemView: HeaderItemView = {
+        let headerItemView = HeaderItemView()
+        headerItemView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(headerItemView)
+        return headerItemView
+    }()
+
+    private lazy var imageView: UIImageView = {
         let imageView = UIImageView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .gray
+        imageView.backgroundColor = R.color.backgroundColor()
         imageView.contentMode = .scaleAspectFill
+        imageView.layer.cornerRadius = 20.0
         imageView.layer.masksToBounds = true
+        containerView.addSubview(imageView)
         return imageView
     }()
 
-    private let authorLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20)
-        label.textColor = .darkGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    private let imageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .gray
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
-        return imageView
+    private lazy var footerItemView: FooterItemView = {
+        let footerItemView = FooterItemView()
+        footerItemView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(footerItemView)
+        return footerItemView
     }()
 
     private func setupUI() {
-        addSubview(authorImageView)
-        addSubview(authorLabel)
-        addSubview(imageView)
+        backgroundColor = .clear
 
         NSLayoutConstraint.activate([
-            authorImageView.topAnchor.constraint(equalTo: topAnchor),
-            authorImageView.leftAnchor.constraint(equalTo: leftAnchor),
-            authorImageView.widthAnchor.constraint(equalToConstant: 64.0),
-            authorImageView.heightAnchor.constraint(equalToConstant: 64.0)
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor)
         ])
 
         NSLayoutConstraint.activate([
-            authorLabel.topAnchor.constraint(equalTo: topAnchor),
-            authorLabel.leftAnchor.constraint(equalTo: authorImageView.rightAnchor, constant: 16.0),
-            authorLabel.rightAnchor.constraint(equalTo: rightAnchor),
-            authorLabel.heightAnchor.constraint(equalToConstant: 64.0)
+            headerItemView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16.0),
+            headerItemView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
+            headerItemView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
         ])
 
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: authorImageView.bottomAnchor, constant: 16.0),
-            imageView.leftAnchor.constraint(equalTo: leftAnchor),
-            imageView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            imageView.rightAnchor.constraint(equalTo: rightAnchor)
+            imageView.topAnchor.constraint(equalTo: headerItemView.bottomAnchor, constant: 16.0),
+            imageView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
+            imageView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
+        ])
+
+        NSLayoutConstraint.activate([
+            footerItemView.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 8.0),
+            footerItemView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8.0),
+            footerItemView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
+            footerItemView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
         ])
     }
 
