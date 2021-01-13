@@ -28,10 +28,11 @@ class MessagesViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.frame, style: .plain)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.rowHeight = 64.0 + 32.0
+        tableView.rowHeight = 60.0 + 32.0 + 16.0
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
         tableView.backgroundColor = R.color.backgroundColor()
+        tableView.contentInset = UIEdgeInsets(top: 8.0, left: 0.0, bottom: 8.0, right: 0.0)
         tableView.register(DialogTableViewCell.self, forCellReuseIdentifier: String(describing: DialogTableViewCell.self))
         view.addSubview(tableView)
         return tableView
@@ -57,7 +58,12 @@ class MessagesViewController: UIViewController {
         viewModel
             .dialogs
             .bind(to: tableView.rx.items(cellIdentifier: String(describing: DialogTableViewCell.self), cellType: DialogTableViewCell.self)) { _, dialog, cell in
-                cell.configure(with: DialogTableViewCell.Model(recipientFullName: dialog.recipient?.fullName, recipientPhotoURL: dialog.recipient?.photoURL, lastMessageText: dialog.lastMessage?.text))
+                let model = DialogTableViewCell.Model(
+                    recipientFullName: dialog.recipient?.fullName,
+                    recipientPhotoURL: dialog.recipient?.photoURL,
+                    lastMessageText: dialog.lastMessage?.text,
+                    date: dialog.lastMessage?.date)
+                cell.configure(with: model)
             }
             .disposed(by: disposeBag)
     }

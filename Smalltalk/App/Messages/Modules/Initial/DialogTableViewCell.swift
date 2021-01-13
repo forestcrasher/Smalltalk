@@ -15,69 +15,48 @@ class DialogTableViewCell: UITableViewCell {
         let recipientFullName: String?
         let recipientPhotoURL: URL?
         let lastMessageText: String?
+        let date: Date?
     }
 
     func configure(with model: Model) {
-        recipientLabel.text = model.recipientFullName
-        lastMessageLabel.text = model.lastMessageText
-        if let downloadURL = model.recipientPhotoURL {
-            let processor = DownsamplingImageProcessor(size: recipientImageView.superview?.bounds.size ?? CGSize(width: 0, height: 0))
-            let resourse = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
-            recipientImageView.kf.setImage(with: resourse, options: [.processor(processor), .loadDiskFileSynchronously, .backgroundDecode])
-        }
+        userCardView.userText = model.recipientFullName
+        userCardView.messageText = model.lastMessageText
+        userCardView.setUserImage(with: model.recipientPhotoURL)
+        userCardView.setDate(model.date)
     }
 
     // MARK: - Private
-    private let recipientImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .gray
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
-        return imageView
+    private lazy var containerView: UIView = {
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = R.color.secondaryBackgroundColor()
+        containerView.layer.cornerRadius = 16.0
+        contentView.addSubview(containerView)
+        return containerView
     }()
 
-    private let recipientLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20.0)
-        label.textColor = .darkGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    private let lastMessageLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16.0)
-        label.textColor = .darkGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private lazy var userCardView: UserCardView = {
+        let userCardView = UserCardView(size: .large)
+        userCardView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.addSubview(userCardView)
+        return userCardView
     }()
 
     private func setupUI() {
-        contentView.addSubview(recipientImageView)
-        contentView.addSubview(recipientLabel)
-        contentView.addSubview(lastMessageLabel)
+        backgroundColor = .clear
 
         NSLayoutConstraint.activate([
-            recipientImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16.0),
-            recipientImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16.0),
-            recipientImageView.widthAnchor.constraint(equalToConstant: 64.0),
-            recipientImageView.heightAnchor.constraint(equalToConstant: 64.0),
-            recipientImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16.0)
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8.0),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8.0),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16.0),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16.0)
         ])
 
         NSLayoutConstraint.activate([
-            recipientLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16.0),
-            recipientLabel.leftAnchor.constraint(equalTo: recipientImageView.rightAnchor, constant: 16.0),
-            recipientLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16.0),
-            recipientLabel.heightAnchor.constraint(equalToConstant: 32.0)
-        ])
-
-        NSLayoutConstraint.activate([
-            lastMessageLabel.topAnchor.constraint(equalTo: recipientLabel.bottomAnchor),
-            lastMessageLabel.leftAnchor.constraint(equalTo: recipientImageView.rightAnchor, constant: 16.0),
-            lastMessageLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16.0),
-            lastMessageLabel.heightAnchor.constraint(equalToConstant: 32.0)
+            userCardView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16.0),
+            userCardView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
+            userCardView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0),
+            userCardView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16.0)
         ])
     }
 
