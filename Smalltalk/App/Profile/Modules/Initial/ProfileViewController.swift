@@ -25,40 +25,55 @@ class ProfileViewController: UIViewController {
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
+    
+    private lazy var headerContainerView: UIView = {
+        let headerContainerView = UIView()
+        headerContainerView.translatesAutoresizingMaskIntoConstraints = false
+        headerContainerView.backgroundColor = R.color.secondaryBackgroundColor()
+        view.addSubview(headerContainerView)
+        return headerContainerView
+    }()
 
     private lazy var photoImageView: UIImageView = {
         let photoImageView = UIImageView()
         photoImageView.translatesAutoresizingMaskIntoConstraints = false
-        photoImageView.backgroundColor = .gray
+        photoImageView.backgroundColor = R.color.backgroundColor()
         photoImageView.contentMode = .scaleAspectFill
+        photoImageView.layer.cornerRadius = 60.0
         photoImageView.layer.masksToBounds = true
-        view.addSubview(photoImageView)
+        headerContainerView.addSubview(photoImageView)
         return photoImageView
     }()
 
     private lazy var fullNameLabel: UILabel = {
         let fullNameLabel = UILabel()
-        fullNameLabel.font = .systemFont(ofSize: 32)
-        fullNameLabel.textColor = .darkGray
+        fullNameLabel.font = .systemFont(ofSize: 34, weight: .bold)
+        fullNameLabel.textColor = R.color.labelColor()
         fullNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(fullNameLabel)
+        headerContainerView.addSubview(fullNameLabel)
         return fullNameLabel
     }()
 
     private func setupUI() {
-        title = R.string.localizable.profileTitle()
         view.backgroundColor = R.color.backgroundColor()
+        
+        NSLayoutConstraint.activate([
+            headerContainerView.topAnchor.constraint(equalTo: view.topAnchor),
+            headerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            headerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            headerContainerView.heightAnchor.constraint(equalToConstant: 304.0),
+        ])
 
         NSLayoutConstraint.activate([
-            photoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            photoImageView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            photoImageView.heightAnchor.constraint(equalToConstant: 256.0),
-            photoImageView.widthAnchor.constraint(equalToConstant: 256.0)
+            photoImageView.centerXAnchor.constraint(equalTo: headerContainerView.centerXAnchor),
+            photoImageView.topAnchor.constraint(equalTo: headerContainerView.topAnchor, constant: 16.0),
+            photoImageView.heightAnchor.constraint(equalToConstant: 144.0),
+            photoImageView.widthAnchor.constraint(equalToConstant: 144.0)
         ])
 
         NSLayoutConstraint.activate([
             fullNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            fullNameLabel.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: 32.0)
+            fullNameLabel.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: 16.0)
         ])
     }
 
