@@ -25,6 +25,13 @@ class FeedViewController: UIViewController {
     // MARK: - Private
     private let disposeBag = DisposeBag()
 
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = R.color.labelColor()
+        tableView.addSubview(refreshControl)
+        return refreshControl
+    }()
+
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.frame, style: .plain)
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -64,6 +71,16 @@ class FeedViewController: UIViewController {
     private func setupInternalBindings() {
         viewModel
             .setup(with: FeedViewModel.Input())
+            .disposed(by: disposeBag)
+
+        viewModel.loading
+            .bind(to: refreshControl.rx.isRefreshing)
+            .disposed(by: disposeBag)
+
+        refreshControl.rx
+            .controlEvent(.valueChanged).subscribe(onNext: { [weak self] in
+                self?.viewModel.fetchPosts()
+            })
             .disposed(by: disposeBag)
 
         Observable.combineLatest(viewModel.posts, viewModel.currentUser)

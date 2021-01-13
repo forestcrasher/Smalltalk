@@ -25,6 +25,13 @@ class PicturesViewController: UIViewController {
     // MARK: - Private
     private let disposeBag = DisposeBag()
 
+    private lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.tintColor = R.color.labelColor()
+        collectionView.addSubview(refreshControl)
+        return refreshControl
+    }()
+
     private lazy var collectionView: UICollectionView = {
         let screenSizeWidth: CGFloat = view.safeAreaLayoutGuide.layoutFrame.width
         let leftAndRightPaddings: CGFloat = 32.0
@@ -69,6 +76,16 @@ class PicturesViewController: UIViewController {
     private func setupInternalBindings() {
         viewModel
             .setup(with: PicturesViewModel.Input())
+            .disposed(by: disposeBag)
+
+        viewModel.loading
+            .bind(to: refreshControl.rx.isRefreshing)
+            .disposed(by: disposeBag)
+
+        refreshControl.rx
+            .controlEvent(.valueChanged).subscribe(onNext: { [weak self] in
+                self?.viewModel.fetchPictures()
+            })
             .disposed(by: disposeBag)
 
         Observable.combineLatest(viewModel.pictures, viewModel.currentUser)

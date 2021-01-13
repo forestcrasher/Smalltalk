@@ -24,22 +24,32 @@ class FeedViewModel {
     struct Input {}
 
     func setup(with input: Input) -> Disposable {
-        postsStorage
-            .fetchPosts()
-            .bind(to: posts)
-            .disposed(by: disposeBag)
-
-        usersStorage
-            .fetchCurrentUser()
-            .bind(to: currentUser)
-            .disposed(by: disposeBag)
-
+        fetchPosts()
+        fetchCurrentUser()
         return Disposables.create()
     }
 
     // MARK: - Public
     let posts = BehaviorRelay<[Post]>(value: [])
     let currentUser = BehaviorRelay<User?>(value: nil)
+    let loading = BehaviorRelay<Bool>(value: true)
+
+    func fetchPosts() {
+        loading.accept(true)
+        posts.accept([])
+        postsStorage
+            .fetchPosts()
+            .do(onCompleted: { [weak self] in self?.loading.accept(false) })
+            .bind(to: posts)
+            .disposed(by: disposeBag)
+    }
+
+    func fetchCurrentUser() {
+        usersStorage
+            .fetchCurrentUser()
+            .bind(to: currentUser)
+            .disposed(by: disposeBag)
+    }
 
     // MARK: - Private
     private let disposeBag = DisposeBag()

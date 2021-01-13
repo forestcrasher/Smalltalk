@@ -24,22 +24,32 @@ class PicturesViewModel {
     struct Input {}
 
     func setup(with input: Input) -> Disposable {
-        picturesStorage
-            .fetchPictures()
-            .bind(to: pictures)
-            .disposed(by: disposeBag)
-
-        usersStorage
-            .fetchCurrentUser()
-            .bind(to: currentUser)
-            .disposed(by: disposeBag)
-
+        fetchPictures()
+        fetchCurrentUser()
         return Disposables.create()
     }
 
     // MARK: - Public
     let pictures = BehaviorRelay<[Picture]>(value: [])
     let currentUser = BehaviorRelay<User?>(value: nil)
+    let loading = BehaviorRelay<Bool>(value: true)
+
+    func fetchPictures() {
+        loading.accept(true)
+        pictures.accept([])
+        picturesStorage
+            .fetchPictures()
+            .do(onCompleted: { [weak self] in self?.loading.accept(false) })
+            .bind(to: pictures)
+            .disposed(by: disposeBag)
+    }
+
+    func fetchCurrentUser() {
+        usersStorage
+            .fetchCurrentUser()
+            .bind(to: currentUser)
+            .disposed(by: disposeBag)
+    }
 
     // MARK: - Private
     private let disposeBag = DisposeBag()

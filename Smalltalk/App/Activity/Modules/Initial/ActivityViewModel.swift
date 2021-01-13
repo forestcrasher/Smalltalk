@@ -23,16 +23,23 @@ class ActivityViewModel {
     struct Input {}
 
     func setup(with input: Input) -> Disposable {
-        notificationsStorage
-            .fetchNotifications()
-            .bind(to: notifications)
-            .disposed(by: disposeBag)
-
+        fetchNotifications()
         return Disposables.create()
     }
 
     // MARK: - Public
     let notifications = BehaviorRelay<[Notification]>(value: [])
+    let loading = BehaviorRelay<Bool>(value: true)
+
+    func fetchNotifications() {
+        loading.accept(true)
+        notifications.accept([])
+        notificationsStorage
+            .fetchNotifications()
+            .do(onCompleted: { [weak self] in self?.loading.accept(false) })
+            .bind(to: notifications)
+            .disposed(by: disposeBag)
+    }
 
     // MARK: - Private
     private let disposeBag = DisposeBag()

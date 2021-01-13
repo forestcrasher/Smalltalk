@@ -23,16 +23,23 @@ class MessagesViewModel {
     struct Input {}
 
     func setup(with input: Input) -> Disposable {
-        dialogsStorage
-            .fetchDialogs()
-            .bind(to: dialogs)
-            .disposed(by: disposeBag)
-
+        fetchDialogs()
         return Disposables.create()
     }
 
     // MARK: - Public
     let dialogs = BehaviorRelay<[Dialog]>(value: [])
+    let loading = BehaviorRelay<Bool>(value: true)
+
+    func fetchDialogs() {
+        loading.accept(true)
+        dialogs.accept([])
+        dialogsStorage
+            .fetchDialogs()
+            .do(onCompleted: { [weak self] in self?.loading.accept(false) })
+            .bind(to: dialogs)
+            .disposed(by: disposeBag)
+    }
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
