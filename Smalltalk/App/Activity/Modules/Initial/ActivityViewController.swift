@@ -28,10 +28,11 @@ class ActivityViewController: UIViewController {
     private lazy var tableView: UITableView = {
         let tableView = UITableView(frame: view.frame, style: .plain)
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.rowHeight = 64.0 + 32.0
+        tableView.rowHeight = 48.0 + 32.0 + 16.0
         tableView.separatorStyle = .none
         tableView.allowsSelection = false
         tableView.backgroundColor = R.color.backgroundColor()
+        tableView.contentInset = UIEdgeInsets(top: 8.0, left: 0.0, bottom: 8.0, right: 0.0)
         tableView.register(NotificationTableViewCell.self, forCellReuseIdentifier: String(describing: NotificationTableViewCell.self))
         view.addSubview(tableView)
         return tableView
@@ -57,10 +58,12 @@ class ActivityViewController: UIViewController {
         viewModel
             .notifications
             .bind(to: tableView.rx.items(cellIdentifier: String(describing: NotificationTableViewCell.self), cellType: NotificationTableViewCell.self)) { _, notification, cell in
-                cell.configure(with: NotificationTableViewCell.Model(
-                                dispatcherFullName: notification.dispatcher?.fullName,
-                                dispatcherPhotoURL: notification.dispatcher?.photoURL,
-                                messageText: notification.message))
+                let model = NotificationTableViewCell.Model(
+                    dispatcherFullName: notification.dispatcher?.fullName,
+                    dispatcherPhotoURL: notification.dispatcher?.photoURL,
+                    messageText: notification.message,
+                    date: notification.date)
+                cell.configure(with: model)
             }
             .disposed(by: disposeBag)
     }

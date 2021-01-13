@@ -335,9 +335,9 @@
 		C06C0C832585253600220B92 /* Initial */ = {
 			isa = PBXGroup;
 			children = (
-				C06C0C89258525B500220B92 /* NotificationTableViewCell.swift */,
 				C0286DCB2576E1A300768D6B /* ActivityViewController.swift */,
 				C06C0C842585258400220B92 /* ActivityViewModel.swift */,
+				C06C0C89258525B500220B92 /* NotificationTableViewCell.swift */,
 			);
 			path = Initial;
 			sourceTree = "<group>";
