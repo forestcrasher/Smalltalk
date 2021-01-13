@@ -25,7 +25,7 @@ class ProfileViewController: UIViewController {
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
-    
+
     private lazy var headerContainerView: UIView = {
         let headerContainerView = UIView()
         headerContainerView.translatesAutoresizingMaskIntoConstraints = false
@@ -54,14 +54,23 @@ class ProfileViewController: UIViewController {
         return fullNameLabel
     }()
 
+    private let settingsBarButtonItem: UIBarButtonItem = {
+        let settingsButton = UIButton(type: .system)
+        settingsButton.translatesAutoresizingMaskIntoConstraints = false
+        settingsButton.setImage(UIImage.gear?.withTintColor(R.color.fillColor()!), for: .normal)
+        settingsButton.setImage(UIImage.gear?.withTintColor(R.color.fillColor()!.withAlphaComponent(0.3), renderingMode: .alwaysOriginal), for: .highlighted)
+        return UIBarButtonItem(customView: settingsButton)
+    }()
+
     private func setupUI() {
         view.backgroundColor = R.color.backgroundColor()
-        
+        navigationItem.rightBarButtonItems = [settingsBarButtonItem]
+
         NSLayoutConstraint.activate([
             headerContainerView.topAnchor.constraint(equalTo: view.topAnchor),
             headerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             headerContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            headerContainerView.heightAnchor.constraint(equalToConstant: 304.0),
+            headerContainerView.heightAnchor.constraint(equalToConstant: 304.0)
         ])
 
         NSLayoutConstraint.activate([

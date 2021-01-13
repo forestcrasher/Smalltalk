@@ -39,9 +39,19 @@ class FeedViewController: UIViewController {
         return tableView
     }()
 
+    private let addBarButtonItem: UIBarButtonItem = {
+        let addButton = UIButton(type: .system)
+        addButton.translatesAutoresizingMaskIntoConstraints = false
+        addButton.setImage(UIImage.plus?.withTintColor(R.color.fillColor()!), for: .normal)
+        addButton.setImage(UIImage.plus?.withTintColor(R.color.fillColor()!.withAlphaComponent(0.3), renderingMode: .alwaysOriginal), for: .highlighted)
+        return UIBarButtonItem(customView: addButton)
+    }()
+
     private func setupUI() {
         title = R.string.localizable.feedTitle()
         view.backgroundColor = R.color.backgroundColor()
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.rightBarButtonItems = [addBarButtonItem]
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),

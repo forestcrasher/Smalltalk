@@ -38,9 +38,19 @@ class ActivityViewController: UIViewController {
         return tableView
     }()
 
+    private let editBarButtonItem: UIBarButtonItem = {
+        let editButton = UIButton(type: .system)
+        editButton.translatesAutoresizingMaskIntoConstraints = false
+        let attributedString = NSAttributedString(string: R.string.localizable.editButton(), attributes: [.font: UIFont.systemFont(ofSize: 17.0)])
+        editButton.setAttributedTitle(attributedString, for: .normal)
+        return UIBarButtonItem(customView: editButton)
+    }()
+
     private func setupUI() {
         title = R.string.localizable.activityTitle()
         view.backgroundColor = R.color.backgroundColor()
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.leftBarButtonItems = [editBarButtonItem]
 
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
