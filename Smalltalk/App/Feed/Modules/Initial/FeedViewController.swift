@@ -19,7 +19,14 @@ class FeedViewController: UIViewController {
         super.viewDidLoad()
 
         setupUI()
-        setupInternalBindings()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if viewModel.loading.value {
+            setupInternalBindings()
+        }
     }
 
     // MARK: - Private
