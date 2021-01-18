@@ -32,6 +32,15 @@ class ActivityViewController: UIViewController {
     // MARK: - Private
     private let disposeBag = DisposeBag()
 
+    private lazy var activityIndicatorView: UIActivityIndicatorView = {
+        let activityIndicatorView = UIActivityIndicatorView()
+        activityIndicatorView.hidesWhenStopped = true
+        activityIndicatorView.style = .large
+        tableView.addSubview(activityIndicatorView)
+        activityIndicatorView.center = tableView.center
+        return activityIndicatorView
+    }()
+
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = R.color.labelColor()
@@ -76,17 +85,15 @@ class ActivityViewController: UIViewController {
 
     private func setupInternalBindings() {
         viewModel
-            .setup(with: ActivityViewModel.Input())
+            .setup(with: ActivityViewModel.Input(refreshDialogs: refreshControl.rx.controlEvent(.valueChanged).asSignal()))
             .disposed(by: disposeBag)
 
         viewModel.loading
-            .bind(to: refreshControl.rx.isRefreshing)
+            .bind(to: activityIndicatorView.rx.isAnimating)
             .disposed(by: disposeBag)
 
-        refreshControl.rx
-            .controlEvent(.valueChanged).subscribe(onNext: { [weak self] in
-                self?.viewModel.fetchNotifications()
-            })
+        viewModel.refreshing
+            .bind(to: refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
 
         viewModel

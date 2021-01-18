@@ -21,11 +21,21 @@ class FeedViewModel {
     weak var coordinator: FeedCoordinator?
 
     // MARK: - Setup
-    struct Input {}
+    struct Input {
+        let refreshDialogs: Signal<Void>
+    }
 
     func setup(with input: Input) -> Disposable {
         fetchPosts()
         fetchCurrentUser()
+
+        input.refreshDialogs
+            .emit(onNext: { [weak self] in
+                self?.refreshing.accept(true)
+                self?.fetchPosts()
+            })
+            .disposed(by: disposeBag)
+
         return Disposables.create()
     }
 
@@ -33,13 +43,16 @@ class FeedViewModel {
     let posts = BehaviorRelay<[Post]>(value: [])
     let currentUser = BehaviorRelay<User?>(value: nil)
     let loading = BehaviorRelay<Bool>(value: true)
+    let refreshing = BehaviorRelay<Bool>(value: false)
 
     func fetchPosts() {
-        loading.accept(true)
         posts.accept([])
         postsStorage
             .fetchPosts()
-            .do(onCompleted: { [weak self] in self?.loading.accept(false) })
+            .do(onCompleted: { [weak self] in
+                self?.loading.accept(false)
+                self?.refreshing.accept(false)
+            })
             .bind(to: posts)
             .disposed(by: disposeBag)
     }

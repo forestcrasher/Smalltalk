@@ -20,23 +20,36 @@ class ActivityViewModel {
     weak var coordinator: ActivityCoordinator?
 
     // MARK: - Setup
-    struct Input {}
+    struct Input {
+        let refreshDialogs: Signal<Void>
+    }
 
     func setup(with input: Input) -> Disposable {
         fetchNotifications()
+
+        input.refreshDialogs
+            .emit(onNext: { [weak self] in
+                self?.refreshing.accept(true)
+                self?.fetchNotifications()
+            })
+            .disposed(by: disposeBag)
+
         return Disposables.create()
     }
 
     // MARK: - Public
     let notifications = BehaviorRelay<[Notification]>(value: [])
     let loading = BehaviorRelay<Bool>(value: true)
+    let refreshing = BehaviorRelay<Bool>(value: false)
 
     func fetchNotifications() {
-        loading.accept(true)
         notifications.accept([])
         notificationsStorage
             .fetchNotifications()
-            .do(onCompleted: { [weak self] in self?.loading.accept(false) })
+            .do(onCompleted: { [weak self] in
+                self?.loading.accept(false)
+                self?.refreshing.accept(false)
+            })
             .bind(to: notifications)
             .disposed(by: disposeBag)
     }

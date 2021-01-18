@@ -32,6 +32,15 @@ class PicturesViewController: UIViewController {
     // MARK: - Private
     private let disposeBag = DisposeBag()
 
+    private lazy var activityIndicatorView: UIActivityIndicatorView = {
+        let activityIndicatorView = UIActivityIndicatorView()
+        activityIndicatorView.hidesWhenStopped = true
+        activityIndicatorView.style = .large
+        collectionView.addSubview(activityIndicatorView)
+        activityIndicatorView.center = collectionView.center
+        return activityIndicatorView
+    }()
+
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = R.color.labelColor()
@@ -82,17 +91,15 @@ class PicturesViewController: UIViewController {
 
     private func setupInternalBindings() {
         viewModel
-            .setup(with: PicturesViewModel.Input())
+            .setup(with: PicturesViewModel.Input(refreshDialogs: refreshControl.rx.controlEvent(.valueChanged).asSignal()))
             .disposed(by: disposeBag)
 
         viewModel.loading
-            .bind(to: refreshControl.rx.isRefreshing)
+            .bind(to: activityIndicatorView.rx.isAnimating)
             .disposed(by: disposeBag)
 
-        refreshControl.rx
-            .controlEvent(.valueChanged).subscribe(onNext: { [weak self] in
-                self?.viewModel.fetchPictures()
-            })
+        viewModel.refreshing
+            .bind(to: refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
 
         Observable.combineLatest(viewModel.pictures, viewModel.currentUser)

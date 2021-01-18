@@ -20,23 +20,36 @@ class MessagesViewModel {
     weak var coordinator: MessagesCoordinator?
 
     // MARK: - Setup
-    struct Input {}
+    struct Input {
+        let refreshDialogs: Signal<Void>
+    }
 
     func setup(with input: Input) -> Disposable {
         fetchDialogs()
+
+        input.refreshDialogs
+            .emit(onNext: { [weak self] in
+                self?.refreshing.accept(true)
+                self?.fetchDialogs()
+            })
+            .disposed(by: disposeBag)
+
         return Disposables.create()
     }
 
     // MARK: - Public
     let dialogs = BehaviorRelay<[Dialog]>(value: [])
     let loading = BehaviorRelay<Bool>(value: true)
+    let refreshing = BehaviorRelay<Bool>(value: false)
 
     func fetchDialogs() {
-        loading.accept(true)
         dialogs.accept([])
         dialogsStorage
             .fetchDialogs()
-            .do(onCompleted: { [weak self] in self?.loading.accept(false) })
+            .do(onCompleted: { [weak self] in
+                self?.loading.accept(false)
+                self?.refreshing.accept(false)
+            })
             .bind(to: dialogs)
             .disposed(by: disposeBag)
     }

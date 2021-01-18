@@ -21,11 +21,21 @@ class PicturesViewModel {
     weak var coordinator: PicturesCoordinator?
 
     // MARK: - Setup
-    struct Input {}
+    struct Input {
+        let refreshDialogs: Signal<Void>
+    }
 
     func setup(with input: Input) -> Disposable {
         fetchPictures()
         fetchCurrentUser()
+
+        input.refreshDialogs
+            .emit(onNext: { [weak self] in
+                self?.refreshing.accept(true)
+                self?.fetchPictures()
+            })
+            .disposed(by: disposeBag)
+
         return Disposables.create()
     }
 
@@ -33,13 +43,16 @@ class PicturesViewModel {
     let pictures = BehaviorRelay<[Picture]>(value: [])
     let currentUser = BehaviorRelay<User?>(value: nil)
     let loading = BehaviorRelay<Bool>(value: true)
+    let refreshing = BehaviorRelay<Bool>(value: false)
 
     func fetchPictures() {
-        loading.accept(true)
         pictures.accept([])
         picturesStorage
             .fetchPictures()
-            .do(onCompleted: { [weak self] in self?.loading.accept(false) })
+            .do(onCompleted: { [weak self] in
+                self?.loading.accept(false)
+                self?.refreshing.accept(false)
+            })
             .bind(to: pictures)
             .disposed(by: disposeBag)
     }
