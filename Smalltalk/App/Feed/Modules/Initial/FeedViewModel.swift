@@ -46,7 +46,6 @@ class FeedViewModel {
     let refreshing = BehaviorRelay<Bool>(value: false)
 
     func fetchPosts() {
-        posts.accept([])
         postsStorage
             .fetchPosts()
             .do(onCompleted: { [weak self] in

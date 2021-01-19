@@ -44,7 +44,6 @@ class PicturesViewController: UIViewController {
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = R.color.labelColor()
-        collectionView.addSubview(refreshControl)
         return refreshControl
     }()
 
@@ -78,7 +77,6 @@ class PicturesViewController: UIViewController {
     private func setupUI() {
         title = R.string.localizable.picturesTitle()
         view.backgroundColor = R.color.backgroundColor()
-        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.rightBarButtonItems = [addBarButtonItem]
 
         NSLayoutConstraint.activate([
@@ -95,6 +93,13 @@ class PicturesViewController: UIViewController {
             .disposed(by: disposeBag)
 
         viewModel.loading
+            .do(onNext: { [weak self] loading in
+                if !loading {
+                    if let refreshControl = self?.refreshControl {
+                        self?.collectionView.addSubview(refreshControl)
+                    }
+                }
+            })
             .bind(to: activityIndicatorView.rx.isAnimating)
             .disposed(by: disposeBag)
 

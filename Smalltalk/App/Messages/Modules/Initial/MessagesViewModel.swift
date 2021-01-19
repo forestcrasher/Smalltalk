@@ -43,7 +43,6 @@ class MessagesViewModel {
     let refreshing = BehaviorRelay<Bool>(value: false)
 
     func fetchDialogs() {
-        dialogs.accept([])
         dialogsStorage
             .fetchDialogs()
             .do(onCompleted: { [weak self] in

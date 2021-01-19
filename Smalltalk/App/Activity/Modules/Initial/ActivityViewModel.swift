@@ -43,7 +43,6 @@ class ActivityViewModel {
     let refreshing = BehaviorRelay<Bool>(value: false)
 
     func fetchNotifications() {
-        notifications.accept([])
         notificationsStorage
             .fetchNotifications()
             .do(onCompleted: { [weak self] in

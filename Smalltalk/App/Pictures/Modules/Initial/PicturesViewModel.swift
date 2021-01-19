@@ -46,7 +46,6 @@ class PicturesViewModel {
     let refreshing = BehaviorRelay<Bool>(value: false)
 
     func fetchPictures() {
-        pictures.accept([])
         picturesStorage
             .fetchPictures()
             .do(onCompleted: { [weak self] in

@@ -44,7 +44,6 @@ class ActivityViewController: UIViewController {
     private lazy var refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = R.color.labelColor()
-        tableView.addSubview(refreshControl)
         return refreshControl
     }()
 
@@ -72,7 +71,6 @@ class ActivityViewController: UIViewController {
     private func setupUI() {
         title = R.string.localizable.activityTitle()
         view.backgroundColor = R.color.backgroundColor()
-        navigationController?.navigationBar.prefersLargeTitles = true
         navigationItem.leftBarButtonItems = [editBarButtonItem]
 
         NSLayoutConstraint.activate([
@@ -89,6 +87,13 @@ class ActivityViewController: UIViewController {
             .disposed(by: disposeBag)
 
         viewModel.loading
+            .do(onNext: { [weak self] loading in
+                if !loading {
+                    if let refreshControl = self?.refreshControl {
+                        self?.tableView.addSubview(refreshControl)
+                    }
+                }
+            })
             .bind(to: activityIndicatorView.rx.isAnimating)
             .disposed(by: disposeBag)
 

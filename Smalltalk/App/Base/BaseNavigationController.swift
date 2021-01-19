@@ -25,6 +25,8 @@ class BaseNavigationController: UINavigationController {
         navigationBar.isTranslucent = false
         navigationBar.barTintColor = R.color.secondaryBackgroundColor()
         navigationBar.tintColor = R.color.fillColor()
+
+        view.backgroundColor = R.color.backgroundColor()
     }
 
     // MARK: - Lifecycle
