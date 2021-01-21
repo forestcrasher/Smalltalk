@@ -16,7 +16,7 @@ class ActivityViewModel {
     private let container: Container
 
     // MARK: - Dependencies
-    private lazy var notificationsStorage: NotificationsStorage = container.resolve(NotificationsStorage.self, argument: container)!
+    private lazy var notificationsStorage = container.resolve(NotificationsStorage.self, argument: container)!
     weak var coordinator: ActivityCoordinator?
 
     // MARK: - Setup
@@ -24,41 +24,60 @@ class ActivityViewModel {
         let refreshDialogs: Signal<Void>
     }
 
-    func setup(with input: Input) -> Disposable {
-        fetchNotifications()
-
-        input.refreshDialogs
-            .emit(onNext: { [weak self] in
-                self?.refreshing.accept(true)
-                self?.fetchNotifications()
-            })
-            .disposed(by: disposeBag)
-
-        return Disposables.create()
-    }
-
-    // MARK: - Public
-    let notifications = BehaviorRelay<[Notification]>(value: [])
-    let loading = BehaviorRelay<Bool>(value: true)
-    let refreshing = BehaviorRelay<Bool>(value: false)
-
-    func fetchNotifications() {
-        notificationsStorage
-            .fetchNotifications()
-            .do(onCompleted: { [weak self] in
-                self?.loading.accept(false)
-                self?.refreshing.accept(false)
-            })
-            .bind(to: notifications)
-            .disposed(by: disposeBag)
-    }
-
     // MARK: - Private
     private let disposeBag = DisposeBag()
+
+    // MARK: - Public
+    let notifications = BehaviorRelay<[NotificationTableViewCell.Model]>(value: [])
+    let loading = BehaviorRelay<Bool>(value: true)
+    let refreshing = BehaviorRelay<Bool>(value: false)
 
     // MARK: - Init
     init(container: Container) {
         self.container = container
+    }
+
+    // MARK: - Public
+    func setup(with input: Input) -> Disposable {
+        let driver: Driver<[Notification]> = notificationsStorage
+            .getData
+            .asDriver(onErrorJustReturn: [])
+
+        driver
+            .map { _ in false }
+            .drive(loading)
+            .disposed(by: disposeBag)
+
+        driver
+            .map { _ in false }
+            .drive(refreshing)
+            .disposed(by: disposeBag)
+
+        driver
+            .map { notifications -> [NotificationTableViewCell.Model] in
+                notifications.reduce(into: [], { result, notification in
+                    result.append(NotificationTableViewCell.Model(
+                        dispatcherFullName: notification.dispatcher?.fullName,
+                        dispatcherPhotoURL: notification.dispatcher?.photoURL,
+                        messageText: notification.message,
+                        date: notification.date
+                    ))
+                })
+            }
+            .drive(notifications)
+            .disposed(by: disposeBag)
+
+        input.refreshDialogs
+            .startWith(())
+            .emit(to: notificationsStorage.notificationsRelay)
+            .disposed(by: disposeBag)
+
+        input.refreshDialogs
+            .map { true }
+            .emit(to: refreshing)
+            .disposed(by: disposeBag)
+
+        return Disposables.create()
     }
 
 }

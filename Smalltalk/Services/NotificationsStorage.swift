@@ -17,7 +17,36 @@ class NotificationsStorage {
     private let container: Container
 
     // MARK: - Dependencies
-    private lazy var usersStorage: UsersStorage = container.resolve(UsersStorage.self, argument: container)!
+    private lazy var usersStorage = container.resolve(UsersStorage.self, argument: container)!
+
+    // MARK: - Private
+    private let firestore = Firestore.firestore()
+    private let disposeBag = DisposeBag()
+
+    // MARK: - Public
+    let notificationsRelay = PublishRelay<Void>()
+    let getData = PublishRelay<[Notification]>()
+
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+
+        notificationsRelay
+            .flatMap { [weak self] in (self?.fetchNotifications() ?? Observable.just([])) }
+            .bind(to: getData)
+            .disposed(by: disposeBag)
+    }
+
+    // MARK: - Private
+    private func getNotificationDocuments() -> Observable<[QueryDocumentSnapshot]?> {
+        return Observable.create { [weak self] observer in
+            self?.firestore.collection("notifications").getDocuments { (querySnapshot, _) in
+                observer.onNext(querySnapshot?.documents)
+                observer.onCompleted()
+            }
+            return Disposables.create()
+        }
+    }
 
     // MARK: - Public
     func fetchNotifications() -> Observable<[Notification]> {
@@ -50,21 +79,4 @@ class NotificationsStorage {
             .asObservable()
     }
 
-    // MARK: - Private
-    private let firestore = Firestore.firestore()
-
-    private func getNotificationDocuments() -> Observable<[QueryDocumentSnapshot]?> {
-        return Observable.create { [weak self] observer in
-            self?.firestore.collection("notifications").getDocuments { (querySnapshot, _) in
-                observer.onNext(querySnapshot?.documents)
-                observer.onCompleted()
-            }
-            return Disposables.create()
-        }
-    }
-
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
-    }
 }

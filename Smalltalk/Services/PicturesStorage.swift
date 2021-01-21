@@ -17,8 +17,37 @@ class PicturesStorage {
     private let container: Container
 
     // MARK: - Dependencies
-    private lazy var usersStorage: UsersStorage = container.resolve(UsersStorage.self, argument: container)!
-    private lazy var filesStorage: FilesStorage = container.resolve(FilesStorage.self)!
+    private lazy var usersStorage = container.resolve(UsersStorage.self, argument: container)!
+    private lazy var filesStorage = container.resolve(FilesStorage.self)!
+
+    // MARK: - Private
+    private let firestore = Firestore.firestore()
+    private let disposeBag = DisposeBag()
+
+    // MARK: - Public
+    let picturesRelay = PublishRelay<Void>()
+    let getData = PublishRelay<[Picture]>()
+
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+
+        picturesRelay
+            .flatMap { [weak self] in (self?.fetchPictures() ?? Observable.just([])) }
+            .bind(to: getData)
+            .disposed(by: disposeBag)
+    }
+
+    // MARK: - Private
+    private func getPicturesDocuments() -> Observable<[QueryDocumentSnapshot]?> {
+        return Observable.create { [weak self] observer in
+            self?.firestore.collection("pictures").getDocuments { (querySnapshot, _) in
+                observer.onNext(querySnapshot?.documents)
+                observer.onCompleted()
+            }
+            return Disposables.create()
+        }
+    }
 
     // MARK: - Public
     func fetchPictures() -> Observable<[Picture]> {
@@ -46,24 +75,6 @@ class PicturesStorage {
             }
             .toArray()
             .asObservable()
-    }
-
-    // MARK: - Private
-    private let firestore = Firestore.firestore()
-
-    private func getPicturesDocuments() -> Observable<[QueryDocumentSnapshot]?> {
-        return Observable.create { [weak self] observer in
-            self?.firestore.collection("pictures").getDocuments { (querySnapshot, _) in
-                observer.onNext(querySnapshot?.documents)
-                observer.onCompleted()
-            }
-            return Disposables.create()
-        }
-    }
-
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
     }
 
 }

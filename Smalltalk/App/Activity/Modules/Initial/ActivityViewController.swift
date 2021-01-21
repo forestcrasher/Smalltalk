@@ -32,16 +32,15 @@ class ActivityViewController: UIViewController {
     // MARK: - Private
     private let disposeBag = DisposeBag()
 
-    private lazy var activityIndicatorView: UIActivityIndicatorView = {
+    private let activityIndicatorView: UIActivityIndicatorView = {
         let activityIndicatorView = UIActivityIndicatorView()
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicatorView.hidesWhenStopped = true
         activityIndicatorView.style = .large
-        tableView.addSubview(activityIndicatorView)
-        activityIndicatorView.center = tableView.center
         return activityIndicatorView
     }()
 
-    private lazy var refreshControl: UIRefreshControl = {
+    private let refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = R.color.labelColor()
         return refreshControl
@@ -56,7 +55,6 @@ class ActivityViewController: UIViewController {
         tableView.backgroundColor = R.color.backgroundColor()
         tableView.contentInset = UIEdgeInsets(top: 8.0, left: 0.0, bottom: 8.0, right: 0.0)
         tableView.register(NotificationTableViewCell.self, forCellReuseIdentifier: String(describing: NotificationTableViewCell.self))
-        view.addSubview(tableView)
         return tableView
     }()
 
@@ -68,16 +66,36 @@ class ActivityViewController: UIViewController {
         return UIBarButtonItem(customView: editButton)
     }()
 
+    // MARK: - Init
+    init(viewModel: ActivityViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Private
     private func setupUI() {
         title = R.string.localizable.activityTitle()
         view.backgroundColor = R.color.backgroundColor()
         navigationItem.leftBarButtonItems = [editBarButtonItem]
 
+        view.addSubview(tableView)
         NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             tableView.leftAnchor.constraint(equalTo: view.leftAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             tableView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
+
+        tableView.addSubview(refreshControl)
+
+        view.addSubview(activityIndicatorView)
+        NSLayoutConstraint.activate([
+            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
 
@@ -87,13 +105,6 @@ class ActivityViewController: UIViewController {
             .disposed(by: disposeBag)
 
         viewModel.loading
-            .do(onNext: { [weak self] loading in
-                if !loading {
-                    if let refreshControl = self?.refreshControl {
-                        self?.tableView.addSubview(refreshControl)
-                    }
-                }
-            })
             .bind(to: activityIndicatorView.rx.isAnimating)
             .disposed(by: disposeBag)
 
@@ -103,25 +114,10 @@ class ActivityViewController: UIViewController {
 
         viewModel
             .notifications
-            .bind(to: tableView.rx.items(cellIdentifier: String(describing: NotificationTableViewCell.self), cellType: NotificationTableViewCell.self)) { _, notification, cell in
-                let model = NotificationTableViewCell.Model(
-                    dispatcherFullName: notification.dispatcher?.fullName,
-                    dispatcherPhotoURL: notification.dispatcher?.photoURL,
-                    messageText: notification.message,
-                    date: notification.date)
+            .bind(to: tableView.rx.items(cellIdentifier: String(describing: NotificationTableViewCell.self), cellType: NotificationTableViewCell.self)) { _, model, cell in
                 cell.configure(with: model)
             }
             .disposed(by: disposeBag)
-    }
-
-    // MARK: - Init
-    init(viewModel: ActivityViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
 }

@@ -32,16 +32,15 @@ class PicturesViewController: UIViewController {
     // MARK: - Private
     private let disposeBag = DisposeBag()
 
-    private lazy var activityIndicatorView: UIActivityIndicatorView = {
+    private let activityIndicatorView: UIActivityIndicatorView = {
         let activityIndicatorView = UIActivityIndicatorView()
+        activityIndicatorView.translatesAutoresizingMaskIntoConstraints = false
         activityIndicatorView.hidesWhenStopped = true
         activityIndicatorView.style = .large
-        collectionView.addSubview(activityIndicatorView)
-        activityIndicatorView.center = collectionView.center
         return activityIndicatorView
     }()
 
-    private lazy var refreshControl: UIRefreshControl = {
+    private let refreshControl: UIRefreshControl = {
         let refreshControl = UIRefreshControl()
         refreshControl.tintColor = R.color.labelColor()
         return refreshControl
@@ -53,16 +52,16 @@ class PicturesViewController: UIViewController {
         let width = screenSizeWidth - leftAndRightPaddings
         let height = width * 1.29
 
+        let margin: CGFloat = 16.0
         let layout = UICollectionViewFlowLayout()
-        layout.sectionInset = UIEdgeInsets(top: 16.0, left: 16.0, bottom: 16.0, right: 16.0)
+        layout.sectionInset = UIEdgeInsets(top: margin, left: margin, bottom: margin, right: margin)
         layout.itemSize = CGSize(width: width, height: height)
-        layout.minimumLineSpacing = 16.0
+        layout.minimumLineSpacing = margin
 
         let collectionView = UICollectionView(frame: view.frame, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = R.color.backgroundColor()
         collectionView.register(PictureCollectionViewCell.self, forCellWithReuseIdentifier: String(describing: PictureCollectionViewCell.self))
-        view.addSubview(collectionView)
         return collectionView
     }()
 
@@ -74,16 +73,36 @@ class PicturesViewController: UIViewController {
         return UIBarButtonItem(customView: addButton)
     }()
 
+    // MARK: - Init
+    init(viewModel: PicturesViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Private
     private func setupUI() {
         title = R.string.localizable.picturesTitle()
         view.backgroundColor = R.color.backgroundColor()
         navigationItem.rightBarButtonItems = [addBarButtonItem]
 
+        view.addSubview(collectionView)
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             collectionView.leftAnchor.constraint(equalTo: view.leftAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             collectionView.rightAnchor.constraint(equalTo: view.rightAnchor)
+        ])
+
+        collectionView.addSubview(refreshControl)
+
+        view.addSubview(activityIndicatorView)
+        NSLayoutConstraint.activate([
+            activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
 
@@ -93,13 +112,6 @@ class PicturesViewController: UIViewController {
             .disposed(by: disposeBag)
 
         viewModel.loading
-            .do(onNext: { [weak self] loading in
-                if !loading {
-                    if let refreshControl = self?.refreshControl {
-                        self?.collectionView.addSubview(refreshControl)
-                    }
-                }
-            })
             .bind(to: activityIndicatorView.rx.isAnimating)
             .disposed(by: disposeBag)
 
@@ -107,32 +119,11 @@ class PicturesViewController: UIViewController {
             .bind(to: refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
 
-        Observable.combineLatest(viewModel.pictures, viewModel.currentUser)
-            .map { (posts, currentUser) in posts.map { ($0, currentUser) } }
-            .bind(to: collectionView.rx.items(cellIdentifier: String(describing: PictureCollectionViewCell.self), cellType: PictureCollectionViewCell.self)) { _, data, cell in
-                let (picture, currentUser) = data
-                let model = PictureCollectionViewCell.Model(
-                    URL: picture.URL,
-                    userFullName: picture.author?.fullName,
-                    userPhotoURL: picture.author?.photoURL,
-                    date: picture.date,
-                    countLikes: picture.countLikes,
-                    countReposts: picture.countReposts,
-                    countComments: picture.countComments,
-                    likeEnabled: picture.likes.contains(currentUser?.id ?? ""))
+        viewModel.pictures
+            .bind(to: collectionView.rx.items(cellIdentifier: String(describing: PictureCollectionViewCell.self), cellType: PictureCollectionViewCell.self)) { _, model, cell in
                 cell.configure(with: model)
             }
             .disposed(by: disposeBag)
-    }
-
-    // MARK: - Init
-    init(viewModel: PicturesViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
     }
 
 }
