@@ -12,48 +12,44 @@ import Swinject
 
 class MessagesViewModel {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var dialogsStorage = container.resolve(DialogsStorage.self, argument: container)!
+    private var dialogsStorage: DialogsStorage
     weak var coordinator: MessagesCoordinator?
 
-    // MARK: - Setup
-    struct Input {
-        let refreshDialogs: Signal<Void>
-    }
-
-    // MARK: - Private
-    private let disposeBag = DisposeBag()
-
     // MARK: - Public
-    let dialogs = BehaviorRelay<[DialogTableViewCell.Model]>(value: [])
-    let loading = BehaviorRelay<Bool>(value: true)
-    let refreshing = BehaviorRelay<Bool>(value: false)
+    let isLoaded = BehaviorRelay<Bool>(value: false)
+    let loadAction = PublishRelay<Void>()
+    let refreshAction = PublishRelay<Void>()
+
+    let dialogs: Driver<[DialogTableViewCell.Model]>
+    let loading: Driver<Bool>
+    let refreshing: Driver<Bool>
 
     // MARK: - Init
     init(container: Container) {
-        self.container = container
-    }
+        dialogsStorage = container.resolve(DialogsStorage.self, argument: container)!
 
-    // MARK: - Public
-    func setup(with input: Input) -> Disposable {
         let driver: Driver<[Dialog]> = dialogsStorage
             .getData
             .asDriver(onErrorJustReturn: [])
 
-        driver
-            .map { _ in false }
-            .drive(loading)
-            .disposed(by: disposeBag)
+        let load = loadAction
+            .do(onNext: { [dialogsStorage] in
+                dialogsStorage.dialogsRelay.accept(())
+            })
 
-        driver
-            .map { _ in false }
-            .drive(refreshing)
-            .disposed(by: disposeBag)
+        loading = Driver
+            .merge(load.map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
 
-        driver
+        let refresh = refreshAction
+            .do(onNext: { [dialogsStorage] in
+                dialogsStorage.dialogsRelay.accept(())
+            })
+
+        refreshing = Driver
+            .merge(refresh.map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
+
+        dialogs = driver
             .map { dialogs -> [DialogTableViewCell.Model] in
                 dialogs.reduce(into: [], { result, dialog in
                     result.append(DialogTableViewCell.Model(
@@ -64,20 +60,6 @@ class MessagesViewModel {
                     ))
                 })
             }
-            .drive(dialogs)
-            .disposed(by: disposeBag)
-
-        input.refreshDialogs
-            .startWith(())
-            .emit(to: dialogsStorage.dialogsRelay)
-            .disposed(by: disposeBag)
-
-        input.refreshDialogs
-            .map { true }
-            .emit(to: refreshing)
-            .disposed(by: disposeBag)
-
-        return Disposables.create()
     }
 
 }

@@ -15,14 +15,6 @@ class ProfileViewController: UIViewController {
     // MARK: - ViewModel
     private var viewModel: ProfileViewModel
 
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupUI()
-        setupInternalBindings()
-    }
-
     // MARK: - Private
     private let disposeBag = DisposeBag()
 
@@ -62,6 +54,17 @@ class ProfileViewController: UIViewController {
         return UIBarButtonItem(customView: settingsButton)
     }()
 
+    // MARK: - Init
+    init(viewModel: ProfileViewModel) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Private
     private func setupUI() {
         view.backgroundColor = R.color.backgroundColor()
         navigationItem.rightBarButtonItems = [settingsBarButtonItem]
@@ -104,13 +107,11 @@ class ProfileViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 
-    // MARK: - Init
-    init(viewModel: ProfileViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        setupUI()
+        setupInternalBindings()
     }
 }

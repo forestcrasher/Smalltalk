@@ -16,6 +16,12 @@ class PicturesCoordinator {
     // MARK: - Public
     var navigationController: UINavigationController = BaseNavigationController()
 
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+    }
+
+    // MARK: - Public
     func start() {
         let picturesViewModel = container.resolve(PicturesViewModel.self, argument: container)!
         picturesViewModel.coordinator = self
@@ -24,8 +30,4 @@ class PicturesCoordinator {
         navigationController.viewControllers = [picturesViewController]
     }
 
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
-    }
 }

@@ -16,6 +16,11 @@ class ActivityCoordinator {
     // MARK: - Public
     var navigationController: UINavigationController = BaseNavigationController()
 
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+    }
+
     func start() {
         let activityViewModel = container.resolve(ActivityViewModel.self, argument: container)!
         activityViewModel.coordinator = self
@@ -24,8 +29,4 @@ class ActivityCoordinator {
         navigationController.viewControllers = [activityViewController]
     }
 
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
-    }
 }

@@ -14,21 +14,6 @@ class MessagesViewController: UIViewController {
     // MARK: - ViewModel
     private var viewModel: MessagesViewModel
 
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupUI()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        if viewModel.loading.value {
-            setupInternalBindings()
-        }
-    }
-
     // MARK: - Private
     private let disposeBag = DisposeBag()
 
@@ -111,27 +96,49 @@ class MessagesViewController: UIViewController {
             activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
+
     }
 
     private func setupInternalBindings() {
-        viewModel
-            .setup(with: MessagesViewModel.Input(refreshDialogs: refreshControl.rx.controlEvent(.valueChanged).asSignal()))
-            .disposed(by: disposeBag)
+        if !viewModel.isLoaded.value {
+            viewModel.loading
+                .drive(activityIndicatorView.rx.isAnimating)
+                .disposed(by: disposeBag)
 
-        viewModel.loading
-            .bind(to: activityIndicatorView.rx.isAnimating)
-            .disposed(by: disposeBag)
+            viewModel.refreshing
+                .drive(refreshControl.rx.isRefreshing)
+                .disposed(by: disposeBag)
 
-        viewModel.refreshing
-            .bind(to: refreshControl.rx.isRefreshing)
-            .disposed(by: disposeBag)
+            viewModel
+                .dialogs
+                .drive(tableView.rx.items(cellIdentifier: String(describing: DialogTableViewCell.self), cellType: DialogTableViewCell.self)) { _, model, cell in
+                    cell.configure(with: model)
+                }
+                .disposed(by: disposeBag)
 
-        viewModel
-            .dialogs
-            .bind(to: tableView.rx.items(cellIdentifier: String(describing: DialogTableViewCell.self), cellType: DialogTableViewCell.self)) { _, model, cell in
-                cell.configure(with: model)
-            }
-            .disposed(by: disposeBag)
+            viewModel.loadAction.accept(())
+            viewModel.isLoaded.accept(true)
+
+            refreshControl.rx
+                .controlEvent(.valueChanged)
+                .asSignal()
+                .emit(to: viewModel.refreshAction)
+                .disposed(by: disposeBag)
+        }
+
+    }
+
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupUI()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        setupInternalBindings()
     }
 
 }

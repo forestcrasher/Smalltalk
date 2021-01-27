@@ -14,21 +14,6 @@ class ActivityViewController: UIViewController {
     // MARK: - ViewModel
     private var viewModel: ActivityViewModel
 
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupUI()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        if viewModel.loading.value {
-            setupInternalBindings()
-        }
-    }
-
     // MARK: - Private
     private let disposeBag = DisposeBag()
 
@@ -118,6 +103,21 @@ class ActivityViewController: UIViewController {
                 cell.configure(with: model)
             }
             .disposed(by: disposeBag)
+    }
+
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupUI()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if viewModel.loading.value {
+            setupInternalBindings()
+        }
     }
 
 }

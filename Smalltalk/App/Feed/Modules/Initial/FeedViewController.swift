@@ -14,21 +14,6 @@ class FeedViewController: UIViewController {
     // MARK: - ViewModel
     private var viewModel: FeedViewModel
 
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupUI()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        if viewModel.loading.value {
-            setupInternalBindings()
-        }
-    }
-
     // MARK: - Private
     private let disposeBag = DisposeBag()
 
@@ -119,6 +104,21 @@ class FeedViewController: UIViewController {
                 cell.configure(with: model)
             }
             .disposed(by: disposeBag)
+    }
+
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupUI()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        if viewModel.loading.value {
+            setupInternalBindings()
+        }
     }
 
 }
