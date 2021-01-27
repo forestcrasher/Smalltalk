@@ -96,7 +96,6 @@ class MessagesViewController: UIViewController {
             activityIndicatorView.centerYAnchor.constraint(equalTo: view.centerYAnchor),
             activityIndicatorView.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
-
     }
 
     private func setupInternalBindings() {
@@ -125,7 +124,6 @@ class MessagesViewController: UIViewController {
                 .emit(to: viewModel.refreshAction)
                 .disposed(by: disposeBag)
         }
-
     }
 
     // MARK: - Lifecycle
