@@ -19,4 +19,5 @@ extension UIImage {
     class var plus: UIImage? { UIImage(systemName: "plus") }
     class var squareAndPencil: UIImage? { UIImage(systemName: "square.and.pencil") }
     class var gear: UIImage? { UIImage(systemName: "gear") }
+
 }

@@ -12,49 +12,39 @@ import Swinject
 
 class PicturesViewModel {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var picturesStorage = container.resolve(PicturesStorage.self, argument: container)!
-    private lazy var usersStorage = container.resolve(UsersStorage.self, argument: container)!
+    private let picturesStorage: PicturesStorage
+    private let usersStorage: UsersStorage
     weak var coordinator: PicturesCoordinator?
 
-    // MARK: - Setup
-    struct Input {
-        let refreshDialogs: Signal<Void>
-    }
-
-    // MARK: - Private
-    private let disposeBag = DisposeBag()
-
     // MARK: - Public
-    let pictures = BehaviorRelay<[PictureCollectionViewCell.Model]>(value: [])
-    let loading = BehaviorRelay<Bool>(value: true)
-    let refreshing = BehaviorRelay<Bool>(value: false)
+    let loadAction = PublishRelay<Void>()
+    let refreshAction = PublishRelay<Void>()
+
+    let pictures: Driver<[PictureCollectionViewCell.Model]>
+    let loading: Driver<Bool>
+    let refreshing: Driver<Bool>
 
     // MARK: - Init
     init(container: Container) {
-        self.container = container
-    }
+        picturesStorage = container.resolve(PicturesStorage.self, argument: container)!
+        usersStorage = container.resolve(UsersStorage.self, argument: container)!
 
-    // MARK: - Public
-    func setup(with input: Input) -> Disposable {
         let driver: Driver<([Picture], User?)> = Observable
-            .combineLatest(picturesStorage.getData, usersStorage.getData)
+            .merge(loadAction.take(1).asObservable(), refreshAction.asObservable())
+            .flatMap { [weak picturesStorage, weak usersStorage] in
+                return Observable
+                    .combineLatest((picturesStorage?.fetchPictures() ?? Observable.just([])), (usersStorage?.fetchCurrentUser() ?? Observable.just(nil)))
+            }
             .asDriver(onErrorJustReturn: ([], nil))
 
-        driver
-            .map { _ in false }
-            .drive(loading)
-            .disposed(by: disposeBag)
+        loading = Driver
+            .merge(loadAction.take(1).map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
 
-        driver
-            .map { _ in false }
-            .drive(refreshing)
-            .disposed(by: disposeBag)
+        refreshing = Driver
+            .merge(refreshAction.map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
 
-        driver
+        pictures = driver
             .map { data -> [PictureCollectionViewCell.Model] in
                 let (pictures, currentUser) = data
                 return pictures.reduce(into: [], { result, picture in
@@ -70,25 +60,6 @@ class PicturesViewModel {
                     ))
                 })
             }
-            .drive(pictures)
-            .disposed(by: disposeBag)
-
-        input.refreshDialogs
-            .startWith(())
-            .emit(to: picturesStorage.picturesRelay)
-            .disposed(by: disposeBag)
-
-        input.refreshDialogs
-            .startWith(())
-            .emit(to: usersStorage.userRelay)
-            .disposed(by: disposeBag)
-
-        input.refreshDialogs
-            .map { true }
-            .emit(to: refreshing)
-            .disposed(by: disposeBag)
-
-        return Disposables.create()
     }
 
 }

@@ -12,7 +12,7 @@ import RxCocoa
 class PicturesViewController: UIViewController {
 
     // MARK: - ViewModel
-    private var viewModel: PicturesViewModel
+    private let viewModel: PicturesViewModel
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
@@ -61,11 +61,26 @@ class PicturesViewController: UIViewController {
     // MARK: - Init
     init(viewModel: PicturesViewModel) {
         self.viewModel = viewModel
+
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupUI()
+        setupInternalBindings()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        viewModel.loadAction.accept(())
     }
 
     // MARK: - Private
@@ -92,38 +107,25 @@ class PicturesViewController: UIViewController {
     }
 
     private func setupInternalBindings() {
-        viewModel
-            .setup(with: PicturesViewModel.Input(refreshDialogs: refreshControl.rx.controlEvent(.valueChanged).asSignal()))
-            .disposed(by: disposeBag)
-
         viewModel.loading
-            .bind(to: activityIndicatorView.rx.isAnimating)
+            .drive(activityIndicatorView.rx.isAnimating)
             .disposed(by: disposeBag)
 
         viewModel.refreshing
-            .bind(to: refreshControl.rx.isRefreshing)
+            .drive(refreshControl.rx.isRefreshing)
             .disposed(by: disposeBag)
 
         viewModel.pictures
-            .bind(to: collectionView.rx.items(cellIdentifier: String(describing: PictureCollectionViewCell.self), cellType: PictureCollectionViewCell.self)) { _, model, cell in
+            .drive(collectionView.rx.items(cellIdentifier: String(describing: PictureCollectionViewCell.self), cellType: PictureCollectionViewCell.self)) { _, model, cell in
                 cell.configure(with: model)
             }
             .disposed(by: disposeBag)
-    }
 
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupUI()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        if viewModel.loading.value {
-            setupInternalBindings()
-        }
+        refreshControl.rx
+            .controlEvent(.valueChanged)
+            .asSignal()
+            .emit(to: viewModel.refreshAction)
+            .disposed(by: disposeBag)
     }
 
 }

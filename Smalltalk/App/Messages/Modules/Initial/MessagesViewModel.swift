@@ -13,11 +13,10 @@ import Swinject
 class MessagesViewModel {
 
     // MARK: - Dependencies
-    private var dialogsStorage: DialogsStorage
+    private let dialogsStorage: DialogsStorage
     weak var coordinator: MessagesCoordinator?
 
     // MARK: - Public
-    let isLoaded = BehaviorRelay<Bool>(value: false)
     let loadAction = PublishRelay<Void>()
     let refreshAction = PublishRelay<Void>()
 
@@ -29,25 +28,16 @@ class MessagesViewModel {
     init(container: Container) {
         dialogsStorage = container.resolve(DialogsStorage.self, argument: container)!
 
-        let driver: Driver<[Dialog]> = dialogsStorage
-            .getData
+        let driver: Driver<[Dialog]> = Observable
+            .merge(loadAction.take(1).asObservable(), refreshAction.asObservable())
+            .flatMap { [weak dialogsStorage] in (dialogsStorage?.fetchDialogs() ?? Observable.just([])) }
             .asDriver(onErrorJustReturn: [])
 
-        let load = loadAction
-            .do(onNext: { [dialogsStorage] in
-                dialogsStorage.dialogsRelay.accept(())
-            })
-
         loading = Driver
-            .merge(load.map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
-
-        let refresh = refreshAction
-            .do(onNext: { [dialogsStorage] in
-                dialogsStorage.dialogsRelay.accept(())
-            })
+            .merge(loadAction.take(1).map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
 
         refreshing = Driver
-            .merge(refresh.map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
+            .merge(refreshAction.map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
 
         dialogs = driver
             .map { dialogs -> [DialogTableViewCell.Model] in

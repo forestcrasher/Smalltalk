@@ -13,28 +13,15 @@ import Swinject
 
 class NotificationsStorage {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var usersStorage = container.resolve(UsersStorage.self, argument: container)!
+    private let usersStorage: UsersStorage
 
     // MARK: - Private
     private let firestore = Firestore.firestore()
-    private let disposeBag = DisposeBag()
-
-    // MARK: - Public
-    let notificationsRelay = PublishRelay<Void>()
-    let getData = PublishRelay<[Notification]>()
 
     // MARK: - Init
     init(container: Container) {
-        self.container = container
-
-        notificationsRelay
-            .flatMap { [weak self] in (self?.fetchNotifications() ?? Observable.just([])) }
-            .bind(to: getData)
-            .disposed(by: disposeBag)
+        usersStorage = container.resolve(UsersStorage.self, argument: container)!
     }
 
     // MARK: - Private

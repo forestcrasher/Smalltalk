@@ -10,23 +10,24 @@ import Swinject
 
 class ProfileCoordinator {
 
-    // MARK: - Container
+    // MARK: - Private
     private let container: Container
 
     // MARK: - Public
-    var navigationController: UINavigationController = BaseNavigationController()
+    let navigationController: UINavigationController = BaseNavigationController()
 
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+    }
+
+    // MARK: - Public
     func start() {
         let profileViewModel = container.resolve(ProfileViewModel.self, argument: container)!
         profileViewModel.coordinator = self
         let profileViewController = ProfileViewController(viewModel: profileViewModel)
         profileViewController.tabBarItem = UITabBarItem(title: R.string.localizable.profileTitle(), image: UIImage.personFill, tag: 4)
         navigationController.viewControllers = [profileViewController]
-    }
-
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
     }
 
 }

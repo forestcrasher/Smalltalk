@@ -10,11 +10,11 @@ import Swinject
 
 class MessagesCoordinator {
 
-    // MARK: - Container
+    // MARK: - Private
     private let container: Container
 
     // MARK: - Public
-    var navigationController: UINavigationController = BaseNavigationController()
+    let navigationController: UINavigationController = BaseNavigationController()
 
     // MARK: - Init
     init(container: Container) {

@@ -12,49 +12,39 @@ import Swinject
 
 class FeedViewModel {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var postsStorage = container.resolve(PostsStorage.self, argument: container)!
-    private lazy var usersStorage = container.resolve(UsersStorage.self, argument: container)!
+    private let postsStorage: PostsStorage
+    private let usersStorage: UsersStorage
     weak var coordinator: FeedCoordinator?
 
-    // MARK: - Setup
-    struct Input {
-        let refreshDialogs: Signal<Void>
-    }
-
-    // MARK: - Private
-    private let disposeBag = DisposeBag()
-
     // MARK: - Public
-    let posts = BehaviorRelay<[PostTableViewCell.Model]>(value: [])
-    let loading = BehaviorRelay<Bool>(value: true)
-    let refreshing = BehaviorRelay<Bool>(value: false)
+    let loadAction = PublishRelay<Void>()
+    let refreshAction = PublishRelay<Void>()
+
+    let posts: Driver<[PostTableViewCell.Model]>
+    let loading: Driver<Bool>
+    let refreshing: Driver<Bool>
 
     // MARK: - Init
     init(container: Container) {
-        self.container = container
-    }
+        postsStorage = container.resolve(PostsStorage.self, argument: container)!
+        usersStorage = container.resolve(UsersStorage.self, argument: container)!
 
-    // MARK: - Public
-    func setup(with input: Input) -> Disposable {
         let driver: Driver<([Post], User?)> = Observable
-            .combineLatest(postsStorage.getData, usersStorage.getData)
+            .merge(loadAction.take(1).asObservable(), refreshAction.asObservable())
+            .flatMap { [weak postsStorage, weak usersStorage] in
+                return Observable
+                    .combineLatest((postsStorage?.fetchPosts() ?? Observable.just([])), (usersStorage?.fetchCurrentUser() ?? Observable.just(nil)))
+            }
             .asDriver(onErrorJustReturn: ([], nil))
 
-        driver
-            .map { _ in false }
-            .drive(loading)
-            .disposed(by: disposeBag)
+        loading = Driver
+            .merge(loadAction.take(1).map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
 
-        driver
-            .map { _ in false }
-            .drive(refreshing)
-            .disposed(by: disposeBag)
+        refreshing = Driver
+            .merge(refreshAction.map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
 
-        driver
+        posts = driver
             .map { data -> [PostTableViewCell.Model] in
                 let (posts, currentUser) = data
                 return posts.reduce(into: [], { result, post in
@@ -70,25 +60,6 @@ class FeedViewModel {
                     ))
                 })
             }
-            .drive(posts)
-            .disposed(by: disposeBag)
-
-        input.refreshDialogs
-            .startWith(())
-            .emit(to: postsStorage.postsRelay)
-            .disposed(by: disposeBag)
-
-        input.refreshDialogs
-            .startWith(())
-            .emit(to: usersStorage.userRelay)
-            .disposed(by: disposeBag)
-
-        input.refreshDialogs
-            .map { true }
-            .emit(to: refreshing)
-            .disposed(by: disposeBag)
-
-        return Disposables.create()
     }
 
 }

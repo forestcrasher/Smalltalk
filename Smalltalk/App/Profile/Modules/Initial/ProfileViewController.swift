@@ -13,36 +13,33 @@ import Kingfisher
 class ProfileViewController: UIViewController {
 
     // MARK: - ViewModel
-    private var viewModel: ProfileViewModel
+    private let viewModel: ProfileViewModel
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
 
-    private lazy var headerContainerView: UIView = {
+    private let headerContainerView: UIView = {
         let headerContainerView = UIView()
         headerContainerView.translatesAutoresizingMaskIntoConstraints = false
         headerContainerView.backgroundColor = R.color.secondaryBackgroundColor()
-        view.addSubview(headerContainerView)
         return headerContainerView
     }()
 
-    private lazy var photoImageView: UIImageView = {
+    private let photoImageView: UIImageView = {
         let photoImageView = UIImageView()
         photoImageView.translatesAutoresizingMaskIntoConstraints = false
         photoImageView.backgroundColor = R.color.backgroundColor()
         photoImageView.contentMode = .scaleAspectFill
         photoImageView.layer.cornerRadius = 60.0
         photoImageView.layer.masksToBounds = true
-        headerContainerView.addSubview(photoImageView)
         return photoImageView
     }()
 
-    private lazy var fullNameLabel: UILabel = {
+    private let fullNameLabel: UILabel = {
         let fullNameLabel = UILabel()
         fullNameLabel.font = .systemFont(ofSize: 34, weight: .bold)
         fullNameLabel.textColor = R.color.labelColor()
         fullNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        headerContainerView.addSubview(fullNameLabel)
         return fullNameLabel
     }()
 
@@ -57,6 +54,7 @@ class ProfileViewController: UIViewController {
     // MARK: - Init
     init(viewModel: ProfileViewModel) {
         self.viewModel = viewModel
+
         super.init(nibName: nil, bundle: nil)
     }
 
@@ -64,11 +62,26 @@ class ProfileViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupUI()
+        setupInternalBindings()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        viewModel.loadAction.accept(())
+    }
+
     // MARK: - Private
     private func setupUI() {
         view.backgroundColor = R.color.backgroundColor()
         navigationItem.rightBarButtonItems = [settingsBarButtonItem]
 
+        view.addSubview(headerContainerView)
         NSLayoutConstraint.activate([
             headerContainerView.topAnchor.constraint(equalTo: view.topAnchor),
             headerContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
@@ -76,6 +89,7 @@ class ProfileViewController: UIViewController {
             headerContainerView.heightAnchor.constraint(equalToConstant: 304.0)
         ])
 
+        headerContainerView.addSubview(photoImageView)
         NSLayoutConstraint.activate([
             photoImageView.centerXAnchor.constraint(equalTo: headerContainerView.centerXAnchor),
             photoImageView.topAnchor.constraint(equalTo: headerContainerView.topAnchor, constant: 16.0),
@@ -83,6 +97,7 @@ class ProfileViewController: UIViewController {
             photoImageView.widthAnchor.constraint(equalToConstant: 144.0)
         ])
 
+        headerContainerView.addSubview(fullNameLabel)
         NSLayoutConstraint.activate([
             fullNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             fullNameLabel.topAnchor.constraint(equalTo: photoImageView.bottomAnchor, constant: 16.0)
@@ -91,11 +106,8 @@ class ProfileViewController: UIViewController {
 
     private func setupInternalBindings() {
         viewModel
-            .setup(with: ProfileViewModel.Input())
-            .disposed(by: disposeBag)
-
-        viewModel
             .currentUser
+            .asObservable()
             .subscribe(onNext: { [weak self] currentUser in
                 self?.fullNameLabel.text = currentUser?.fullName
                 if let downloadURL = currentUser?.photoURL {
@@ -107,11 +119,4 @@ class ProfileViewController: UIViewController {
             .disposed(by: disposeBag)
     }
 
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupUI()
-        setupInternalBindings()
-    }
 }

@@ -13,28 +13,15 @@ import Swinject
 
 class DialogsStorage {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var usersStorage = container.resolve(UsersStorage.self, argument: container)!
+    private let usersStorage: UsersStorage
 
     // MARK: - Private
     private let firestore = Firestore.firestore()
-    private let disposeBag = DisposeBag()
-
-    // MARK: - Public
-    let dialogsRelay = PublishRelay<Void>()
-    let getData = PublishRelay<[Dialog]>()
 
     // MARK: - Init
     init(container: Container) {
-        self.container = container
-
-        dialogsRelay
-            .flatMap { [weak self] in (self?.fetchDialogs() ?? Observable.just([])) }
-            .bind(to: getData)
-            .disposed(by: disposeBag)
+        usersStorage = container.resolve(UsersStorage.self, argument: container)!
     }
 
     // MARK: - Private

@@ -9,6 +9,13 @@ import UIKit
 
 class BaseNavigationController: UINavigationController {
 
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupUI()
+    }
+
     // MARK: - Private
     private func setupUI() {
         let appearance = UINavigationBarAppearance()
@@ -21,7 +28,6 @@ class BaseNavigationController: UINavigationController {
         navigationBar.standardAppearance = appearance
         navigationBar.compactAppearance = appearance
         navigationBar.scrollEdgeAppearance = appearance
-
         navigationBar.isTranslucent = false
         navigationBar.barTintColor = R.color.secondaryBackgroundColor()
         navigationBar.tintColor = R.color.fillColor()
@@ -29,10 +35,4 @@ class BaseNavigationController: UINavigationController {
         view.backgroundColor = R.color.backgroundColor()
     }
 
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupUI()
-    }
 }

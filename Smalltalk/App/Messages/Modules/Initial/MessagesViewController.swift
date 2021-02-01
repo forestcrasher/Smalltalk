@@ -12,7 +12,7 @@ import RxCocoa
 class MessagesViewController: UIViewController {
 
     // MARK: - ViewModel
-    private var viewModel: MessagesViewModel
+    private let viewModel: MessagesViewModel
 
     // MARK: - Private
     private let disposeBag = DisposeBag()
@@ -66,11 +66,26 @@ class MessagesViewController: UIViewController {
     // MARK: - Init
     init(viewModel: MessagesViewModel) {
         self.viewModel = viewModel
+
         super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Lifecycle
+    override func viewDidLoad() {
+        super.viewDidLoad()
+
+        setupUI()
+        setupInternalBindings()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+
+        viewModel.loadAction.accept(())
     }
 
     // MARK: - Private
@@ -99,44 +114,26 @@ class MessagesViewController: UIViewController {
     }
 
     private func setupInternalBindings() {
-        if !viewModel.isLoaded.value {
-            viewModel.loading
-                .drive(activityIndicatorView.rx.isAnimating)
-                .disposed(by: disposeBag)
+        viewModel.loading
+            .drive(activityIndicatorView.rx.isAnimating)
+            .disposed(by: disposeBag)
 
-            viewModel.refreshing
-                .drive(refreshControl.rx.isRefreshing)
-                .disposed(by: disposeBag)
+        viewModel.refreshing
+            .drive(refreshControl.rx.isRefreshing)
+            .disposed(by: disposeBag)
 
-            viewModel
-                .dialogs
-                .drive(tableView.rx.items(cellIdentifier: String(describing: DialogTableViewCell.self), cellType: DialogTableViewCell.self)) { _, model, cell in
-                    cell.configure(with: model)
-                }
-                .disposed(by: disposeBag)
+        viewModel
+            .dialogs
+            .drive(tableView.rx.items(cellIdentifier: String(describing: DialogTableViewCell.self), cellType: DialogTableViewCell.self)) { _, model, cell in
+                cell.configure(with: model)
+            }
+            .disposed(by: disposeBag)
 
-            viewModel.loadAction.accept(())
-            viewModel.isLoaded.accept(true)
-
-            refreshControl.rx
-                .controlEvent(.valueChanged)
-                .asSignal()
-                .emit(to: viewModel.refreshAction)
-                .disposed(by: disposeBag)
-        }
-    }
-
-    // MARK: - Lifecycle
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        setupUI()
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-        setupInternalBindings()
+        refreshControl.rx
+            .controlEvent(.valueChanged)
+            .asSignal()
+            .emit(to: viewModel.refreshAction)
+            .disposed(by: disposeBag)
     }
 
 }

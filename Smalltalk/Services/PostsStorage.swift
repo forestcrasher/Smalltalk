@@ -13,28 +13,15 @@ import Swinject
 
 class PostsStorage {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var usersStorage = container.resolve(UsersStorage.self, argument: container)!
+    private let usersStorage: UsersStorage
 
     // MARK: - Private
     private let firestore = Firestore.firestore()
-    private let disposeBag = DisposeBag()
-
-    // MARK: - Public
-    let postsRelay = PublishRelay<Void>()
-    let getData = PublishRelay<[Post]>()
 
     // MARK: - Init
     init(container: Container) {
-        self.container = container
-
-        postsRelay
-            .flatMap { [weak self] in (self?.fetchPosts() ?? Observable.just([])) }
-            .bind(to: getData)
-            .disposed(by: disposeBag)
+        usersStorage = container.resolve(UsersStorage.self, argument: container)!
     }
 
     // MARK: - Private

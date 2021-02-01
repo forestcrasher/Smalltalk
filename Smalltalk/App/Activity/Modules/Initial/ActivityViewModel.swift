@@ -12,48 +12,34 @@ import Swinject
 
 class ActivityViewModel {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var notificationsStorage = container.resolve(NotificationsStorage.self, argument: container)!
+    private let notificationsStorage: NotificationsStorage
     weak var coordinator: ActivityCoordinator?
 
-    // MARK: - Setup
-    struct Input {
-        let refreshDialogs: Signal<Void>
-    }
-
-    // MARK: - Private
-    private let disposeBag = DisposeBag()
-
     // MARK: - Public
-    let notifications = BehaviorRelay<[NotificationTableViewCell.Model]>(value: [])
-    let loading = BehaviorRelay<Bool>(value: true)
-    let refreshing = BehaviorRelay<Bool>(value: false)
+    let loadAction = PublishRelay<Void>()
+    let refreshAction = PublishRelay<Void>()
+
+    let notifications: Driver<[NotificationTableViewCell.Model]>
+    let loading: Driver<Bool>
+    let refreshing: Driver<Bool>
 
     // MARK: - Init
     init(container: Container) {
-        self.container = container
-    }
+        notificationsStorage = container.resolve(NotificationsStorage.self, argument: container)!
 
-    // MARK: - Public
-    func setup(with input: Input) -> Disposable {
-        let driver: Driver<[Notification]> = notificationsStorage
-            .getData
+        let driver: Driver<[Notification]> = Observable
+            .merge(loadAction.take(1).asObservable(), refreshAction.asObservable())
+            .flatMap { [weak notificationsStorage] in (notificationsStorage?.fetchNotifications() ?? Observable.just([])) }
             .asDriver(onErrorJustReturn: [])
 
-        driver
-            .map { _ in false }
-            .drive(loading)
-            .disposed(by: disposeBag)
+        loading = Driver
+            .merge(loadAction.take(1).map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
 
-        driver
-            .map { _ in false }
-            .drive(refreshing)
-            .disposed(by: disposeBag)
+        refreshing = Driver
+            .merge(refreshAction.map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
 
-        driver
+        notifications = driver
             .map { notifications -> [NotificationTableViewCell.Model] in
                 notifications.reduce(into: [], { result, notification in
                     result.append(NotificationTableViewCell.Model(
@@ -64,20 +50,5 @@ class ActivityViewModel {
                     ))
                 })
             }
-            .drive(notifications)
-            .disposed(by: disposeBag)
-
-        input.refreshDialogs
-            .startWith(())
-            .emit(to: notificationsStorage.notificationsRelay)
-            .disposed(by: disposeBag)
-
-        input.refreshDialogs
-            .map { true }
-            .emit(to: refreshing)
-            .disposed(by: disposeBag)
-
-        return Disposables.create()
     }
-
 }
