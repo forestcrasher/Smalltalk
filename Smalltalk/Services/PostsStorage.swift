@@ -57,4 +57,42 @@ class PostsStorage {
             .asObservable()
     }
 
+    func likePost(by postId: String) -> Observable<(String, Bool)> {
+        return usersStorage.fetchCurrentUser()
+            .flatMap { [weak self] currentUser -> Observable<(String, Bool)> in
+                return Observable.create { observer in
+                    if let id = currentUser?.id {
+                        self?.firestore.collection("posts").document(postId).updateData(["likes": FieldValue.arrayUnion([id])]) { error in
+                            if let error = error {
+                                observer.onError(error)
+                            } else {
+                                observer.onNext((id, true))
+                                observer.onCompleted()
+                            }
+                        }
+                    }
+                    return Disposables.create()
+                }
+            }
+    }
+
+    func unlikePost(by postId: String) -> Observable<(String, Bool)> {
+        return usersStorage.fetchCurrentUser()
+            .flatMap { [weak self] currentUser -> Observable<(String, Bool)> in
+                return Observable.create { observer in
+                    if let id = currentUser?.id {
+                        self?.firestore.collection("posts").document(postId).updateData(["likes": FieldValue.arrayRemove([id])]) { error in
+                            if let error = error {
+                                observer.onError(error)
+                            } else {
+                                observer.onNext((id, false))
+                                observer.onCompleted()
+                            }
+                        }
+                    }
+                    return Disposables.create()
+                }
+            }
+    }
+
 }

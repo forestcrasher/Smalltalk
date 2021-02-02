@@ -18,7 +18,7 @@ class FooterItemView: UIView {
         return stackView
     }()
 
-    private let likeButton: UIButton = {
+    let likeButton: UIButton = {
         let likeButton = UIButton()
         likeButton.translatesAutoresizingMaskIntoConstraints = false
         likeButton.setTitleColor(R.color.fillColor()!, for: .normal)

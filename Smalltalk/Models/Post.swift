@@ -13,7 +13,7 @@ struct Post {
     let text: String
     let date: Date
     let author: User?
-    let likes: [String]
+    var likes: [String]
     let reposts: [String]
     let comments: [String]
 

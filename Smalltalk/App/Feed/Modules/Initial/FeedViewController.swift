@@ -112,6 +112,11 @@ class FeedViewController: UIViewController {
 
         viewModel.posts
             .drive(tableView.rx.items(cellIdentifier: String(describing: PostTableViewCell.self), cellType: PostTableViewCell.self)) { _, model, cell in
+                cell.didTapLike = { [weak self] (postId, likeEnabled) in
+                    if let postId = postId, let likeEnabled = likeEnabled {
+                        self?.viewModel.tapLikeAction.accept((postId, likeEnabled))
+                    }
+                }
                 cell.configure(with: model)
             }
             .disposed(by: disposeBag)

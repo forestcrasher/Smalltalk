@@ -11,6 +11,9 @@ import Kingfisher
 class PostTableViewCell: UITableViewCell {
 
     // MARK: - Private
+    private var postId: String?
+    private var likeEnabled: Bool?
+
     private let containerView: UIView = {
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -46,6 +49,7 @@ class PostTableViewCell: UITableViewCell {
 
     // MARK: - Public
     struct Model {
+        let postId: String
         let text: String
         let userFullName: String?
         let userPhotoURL: URL?
@@ -55,6 +59,8 @@ class PostTableViewCell: UITableViewCell {
         let countComments: Int
         let likeEnabled: Bool
     }
+
+    var didTapLike: ((String?, Bool?) -> Void)?
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -100,10 +106,18 @@ class PostTableViewCell: UITableViewCell {
             footerItemView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
             footerItemView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
         ])
+
+        footerItemView.likeButton.addTarget(self, action: #selector(tapLikeAction), for: .touchUpInside)
+    }
+
+    @objc private func tapLikeAction() {
+        didTapLike?(postId, likeEnabled)
     }
 
     // MARK: - Public
     func configure(with model: Model) {
+        postId = model.postId
+        likeEnabled = model.likeEnabled
         textView.text = model.text
         textView.font = .systemFont(ofSize: textView.text.count > 150 ? 16.0 : 24.0)
         headerItemView.userText = model.userFullName
