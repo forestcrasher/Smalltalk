@@ -28,17 +28,14 @@ class PostTableViewCell: UITableViewCell {
         return headerItemView
     }()
 
-    private let textView: UITextView = {
-        let textView = UITextView()
-        textView.font = .systemFont(ofSize: 16.0)
-        textView.textColor = R.color.labelColor()
-        textView.backgroundColor = .clear
-        textView.sizeToFit()
-        textView.isScrollEnabled = false
-        textView.isEditable = false
-        textView.textContainer.lineFragmentPadding = 0
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        return textView
+    private let textContentLabel: UILabel = {
+        let textContentLabel = UILabel()
+        textContentLabel.font = .systemFont(ofSize: 16.0)
+        textContentLabel.textColor = R.color.labelColor()
+        textContentLabel.numberOfLines = 0
+        textContentLabel.sizeToFit()
+        textContentLabel.translatesAutoresizingMaskIntoConstraints = false
+        return textContentLabel
     }()
 
     private let footerItemView: FooterItemView = {
@@ -92,16 +89,16 @@ class PostTableViewCell: UITableViewCell {
             headerItemView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
         ])
 
-        containerView.addSubview(textView)
+        containerView.addSubview(textContentLabel)
         NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: headerItemView.bottomAnchor, constant: 16.0),
-            textView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
-            textView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
+            textContentLabel.topAnchor.constraint(equalTo: headerItemView.bottomAnchor, constant: 16.0),
+            textContentLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
+            textContentLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
         ])
 
         containerView.addSubview(footerItemView)
         NSLayoutConstraint.activate([
-            footerItemView.topAnchor.constraint(equalTo: textView.bottomAnchor, constant: 8.0),
+            footerItemView.topAnchor.constraint(equalTo: textContentLabel.bottomAnchor, constant: 8.0),
             footerItemView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8.0),
             footerItemView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
             footerItemView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
@@ -118,8 +115,8 @@ class PostTableViewCell: UITableViewCell {
     func configure(with model: Model) {
         postId = model.postId
         likeEnabled = model.likeEnabled
-        textView.text = model.text
-        textView.font = .systemFont(ofSize: textView.text.count > 150 ? 16.0 : 24.0)
+        textContentLabel.text = model.text
+        textContentLabel.font = .systemFont(ofSize: (textContentLabel.text?.count ?? 0) > 150 ? 16.0 : 24.0)
         headerItemView.userText = model.userFullName
         headerItemView.setUserImage(with: model.userPhotoURL)
         headerItemView.setDate(model.date)
