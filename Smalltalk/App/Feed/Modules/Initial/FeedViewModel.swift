@@ -45,20 +45,30 @@ class FeedViewModel {
         refreshing = Driver
             .merge(refreshAction.map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
 
-        let driverUpdateLike: Driver<([Post], User?)> = tapLikeAction
+        let driverUpdateLike = tapLikeAction
             .flatMap { [weak postsStorage] (postId, likeEnabled) in
                 return likeEnabled
                     ? (postsStorage?.unlikePost(by: postId) ?? Observable.just((postId, true)))
                     : (postsStorage?.likePost(by: postId) ?? Observable.just((postId, false)))
             }
-            .flatMap { (postId, likeEnabled) in
-                return driver.map { data -> ([Post], User?) in
-                    let (posts, currentUser) = data
-                    let newPosts = posts.map { post -> Post in
+            .asDriver(onErrorJustReturn: ("", false))
+
+        posts = Driver
+            .combineLatest(
+                driver,
+                driverUpdateLike.startWith(("", false))
+            )
+            .scan(([], nil)) { prev, data -> ([Post], User?) in
+                let (oldPosts, oldCurrentUser) = prev
+                let ((newPosts, newCurrentUser), (postId, likeEnabled)) = data
+                let posts = newPosts.isEmpty || newPosts == oldPosts ? oldPosts : newPosts
+                let currentUser = newCurrentUser == nil || newCurrentUser == oldCurrentUser ? oldCurrentUser : newCurrentUser
+                if postId != "" {
+                    let nextPosts = posts.map { post -> Post in
                         var newPost = post
                         if newPost.id == postId {
                             if likeEnabled {
-                                if let id = currentUser?.id {
+                                if let id = currentUser?.id, !newPost.likes.contains(id) {
                                     newPost.likes.append(id)
                                 }
                             } else {
@@ -69,13 +79,11 @@ class FeedViewModel {
                         }
                         return newPost
                     }
-                    return (newPosts, currentUser)
+                    return (nextPosts, currentUser)
+                } else {
+                    return (posts, currentUser)
                 }
             }
-            .asDriver(onErrorJustReturn: ([], nil))
-
-        posts = Driver
-            .merge(driver, driverUpdateLike)
             .map { data -> [PostTableViewCell.Model] in
                 let (posts, currentUser) = data
                 return posts.reduce(into: [], { result, post in

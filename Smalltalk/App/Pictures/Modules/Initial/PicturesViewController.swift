@@ -117,6 +117,11 @@ class PicturesViewController: UIViewController {
 
         viewModel.pictures
             .drive(collectionView.rx.items(cellIdentifier: String(describing: PictureCollectionViewCell.self), cellType: PictureCollectionViewCell.self)) { _, model, cell in
+                cell.didTapLike = { [weak self] (pictureId, likeEnabled) in
+                    if let pictureId = pictureId, let likeEnabled = likeEnabled {
+                        self?.viewModel.tapLikeAction.accept((pictureId, likeEnabled))
+                    }
+                }
                 cell.configure(with: model)
             }
             .disposed(by: disposeBag)

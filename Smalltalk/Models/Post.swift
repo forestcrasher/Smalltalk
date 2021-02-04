@@ -7,15 +7,19 @@
 
 import Foundation
 
-struct Post {
+struct Post: Equatable {
+
+    static func == (lhs: Post, rhs: Post) -> Bool {
+        lhs.id == rhs.id
+    }
 
     let id: String
     let text: String
     let date: Date
     let author: User?
     var likes: [String]
-    let reposts: [String]
-    let comments: [String]
+    var reposts: [String]
+    var comments: [String]
 
     var countLikes: Int { likes.count }
     var countReposts: Int { reposts.count }

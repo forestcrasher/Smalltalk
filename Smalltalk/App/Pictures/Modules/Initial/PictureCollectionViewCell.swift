@@ -13,6 +13,9 @@ import Kingfisher
 class PictureCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Private
+    private var pictureId: String?
+    private var likeEnabled: Bool?
+
     private let containerView: UIView = {
         let containerView = UIView()
         containerView.translatesAutoresizingMaskIntoConstraints = false
@@ -45,6 +48,7 @@ class PictureCollectionViewCell: UICollectionViewCell {
 
     // MARK: - Public
     struct Model {
+        let pictureId: String
         let URL: URL?
         let userFullName: String?
         let userPhotoURL: URL?
@@ -54,6 +58,8 @@ class PictureCollectionViewCell: UICollectionViewCell {
         let countComments: Int
         let likeEnabled: Bool
     }
+
+    var didTapLike: ((String?, Bool?) -> Void)?
 
     // MARK: - Init
     override init(frame: CGRect) {
@@ -99,10 +105,19 @@ class PictureCollectionViewCell: UICollectionViewCell {
             footerItemView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
             footerItemView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
         ])
+
+        footerItemView.likeButton.addTarget(self, action: #selector(tapLikeAction), for: .touchUpInside)
+    }
+
+    @objc private func tapLikeAction() {
+        didTapLike?(pictureId, likeEnabled)
     }
 
     // MARK: - Public
     func configure(with model: Model) {
+        pictureId = model.pictureId
+        likeEnabled = model.likeEnabled
+
         DispatchQueue.main.async { [weak self] in
             self?.imageView.setImage(with: model.URL)
         }

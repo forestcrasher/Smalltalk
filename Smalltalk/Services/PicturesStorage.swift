@@ -65,4 +65,42 @@ class PicturesStorage {
             .asObservable()
     }
 
+    func likePicture(by pictureId: String) -> Observable<(String, Bool)> {
+        return usersStorage.fetchCurrentUser()
+            .flatMap { [weak self] currentUser -> Observable<(String, Bool)> in
+                return Observable.create { observer in
+                    if let id = currentUser?.id {
+                        self?.firestore.collection("pictures").document(pictureId).updateData(["likes": FieldValue.arrayUnion([id])]) { error in
+                            if let error = error {
+                                observer.onError(error)
+                            } else {
+                                observer.onNext((pictureId, true))
+                                observer.onCompleted()
+                            }
+                        }
+                    }
+                    return Disposables.create()
+                }
+            }
+    }
+
+    func unlikePicture(by pictureId: String) -> Observable<(String, Bool)> {
+        return usersStorage.fetchCurrentUser()
+            .flatMap { [weak self] currentUser -> Observable<(String, Bool)> in
+                return Observable.create { observer in
+                    if let id = currentUser?.id {
+                        self?.firestore.collection("pictures").document(pictureId).updateData(["likes": FieldValue.arrayRemove([id])]) { error in
+                            if let error = error {
+                                observer.onError(error)
+                            } else {
+                                observer.onNext((pictureId, false))
+                                observer.onCompleted()
+                            }
+                        }
+                    }
+                    return Disposables.create()
+                }
+            }
+    }
+
 }

@@ -66,7 +66,7 @@ class PostsStorage {
                             if let error = error {
                                 observer.onError(error)
                             } else {
-                                observer.onNext((id, true))
+                                observer.onNext((postId, true))
                                 observer.onCompleted()
                             }
                         }
@@ -85,7 +85,7 @@ class PostsStorage {
                             if let error = error {
                                 observer.onError(error)
                             } else {
-                                observer.onNext((id, false))
+                                observer.onNext((postId, false))
                                 observer.onCompleted()
                             }
                         }
