@@ -10,12 +10,18 @@ import Swinject
 
 class ActivityCoordinator {
 
-    // MARK: - Container
+    // MARK: - Public
+    let navigationController: UINavigationController = BaseNavigationController()
+
+    // MARK: - Private
     private let container: Container
 
-    // MARK: - Public
-    var navigationController: UINavigationController = BaseNavigationController()
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+    }
 
+    // MARK: - Public
     func start() {
         let activityViewModel = container.resolve(ActivityViewModel.self, argument: container)!
         activityViewModel.coordinator = self
@@ -24,8 +30,4 @@ class ActivityCoordinator {
         navigationController.viewControllers = [activityViewController]
     }
 
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
-    }
 }

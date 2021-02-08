@@ -12,33 +12,25 @@ import Swinject
 
 class ProfileViewModel {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var usersStorage: UsersStorage = container.resolve(UsersStorage.self, argument: container)!
+    private let usersStorage: UsersStorage
     weak var coordinator: ProfileCoordinator?
 
-    // MARK: - Setup
-    struct Input {}
-
-    func setup(with input: Input) -> Disposable {
-        usersStorage
-            .fetchCurrentUser()
-            .bind(to: currentUser)
-            .disposed(by: disposeBag)
-
-        return Disposables.create()
-    }
-
     // MARK: - Public
-    let currentUser = BehaviorRelay<User?>(value: nil)
+    let loadAction = PublishRelay<Void>()
 
-    // MARK: - Private
-    private let disposeBag = DisposeBag()
+    let currentUser: Driver<User?>
 
     // MARK: - Init
     init(container: Container) {
-        self.container = container
+        usersStorage = container.resolve(UsersStorage.self, argument: container)!
+
+        currentUser = loadAction
+            .take(1)
+            .asObservable()
+            .flatMap { [weak usersStorage] in
+                usersStorage?.fetchCurrentUser() ?? Observable.just(nil)
+            }
+            .asDriver(onErrorJustReturn: nil)
     }
 }

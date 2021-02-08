@@ -15,71 +15,23 @@ class NotificationTableViewCell: UITableViewCell {
         let dispatcherFullName: String?
         let dispatcherPhotoURL: URL?
         let messageText: String?
-    }
-
-    func configure(with model: Model) {
-        dispatcherLabel.text = model.dispatcherFullName
-        messageLabel.text = model.messageText
-        if let downloadURL = model.dispatcherPhotoURL {
-            let processor = DownsamplingImageProcessor(size: dispatcherImageView.superview?.bounds.size ?? CGSize(width: 0, height: 0))
-            let resourse = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
-            dispatcherImageView.kf.setImage(with: resourse, options: [.processor(processor), .loadDiskFileSynchronously, .backgroundDecode])
-        }
+        let date: Date?
     }
 
     // MARK: - Private
-    private let dispatcherImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .gray
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
-        return imageView
+    private let containerView: UIView = {
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = R.color.secondaryBackgroundColor()
+        containerView.layer.cornerRadius = 16.0
+        return containerView
     }()
 
-    private let dispatcherLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20.0)
-        label.textColor = .darkGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private let userCardView: UserCardView = {
+        let userCardView = UserCardView(size: .small)
+        userCardView.translatesAutoresizingMaskIntoConstraints = false
+        return userCardView
     }()
-
-    private let messageLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 16.0)
-        label.textColor = .darkGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-
-    private func setupUI() {
-        contentView.addSubview(dispatcherImageView)
-        contentView.addSubview(dispatcherLabel)
-        contentView.addSubview(messageLabel)
-
-        NSLayoutConstraint.activate([
-            dispatcherImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16.0),
-            dispatcherImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16.0),
-            dispatcherImageView.widthAnchor.constraint(equalToConstant: 64.0),
-            dispatcherImageView.heightAnchor.constraint(equalToConstant: 64.0),
-            dispatcherImageView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16.0)
-        ])
-
-        NSLayoutConstraint.activate([
-            dispatcherLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16.0),
-            dispatcherLabel.leftAnchor.constraint(equalTo: dispatcherImageView.rightAnchor, constant: 16.0),
-            dispatcherLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16.0),
-            dispatcherLabel.heightAnchor.constraint(equalToConstant: 32.0)
-        ])
-
-        NSLayoutConstraint.activate([
-            messageLabel.topAnchor.constraint(equalTo: dispatcherLabel.bottomAnchor),
-            messageLabel.leftAnchor.constraint(equalTo: dispatcherImageView.rightAnchor, constant: 16.0),
-            messageLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16.0),
-            messageLabel.heightAnchor.constraint(equalToConstant: 32.0)
-        ])
-    }
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -90,6 +42,35 @@ class NotificationTableViewCell: UITableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Public
+    func configure(with model: Model) {
+        userCardView.userText = model.dispatcherFullName
+        userCardView.messageText = model.messageText
+        userCardView.setUserImage(with: model.dispatcherPhotoURL)
+        userCardView.setDate(model.date)
+    }
+
+    // MARK: - Private
+    private func setupUI() {
+        backgroundColor = .clear
+
+        contentView.addSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8.0),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8.0),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16.0),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16.0)
+        ])
+
+        containerView.addSubview(userCardView)
+        NSLayoutConstraint.activate([
+            userCardView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16.0),
+            userCardView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
+            userCardView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0),
+            userCardView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16.0)
+        ])
     }
 
 }

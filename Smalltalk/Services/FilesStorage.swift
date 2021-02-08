@@ -12,6 +12,9 @@ import RxCocoa
 
 class FilesStorage {
 
+    // MARK: - Private
+    private let storage = Storage.storage()
+
     // MARK: - Public
     func getDownloadURL(with path: String) -> Observable<URL?> {
         return Observable.create { [weak self] observer in
@@ -23,6 +26,4 @@ class FilesStorage {
         }
     }
 
-    // MARK: - Private
-    private let storage = Storage.storage()
 }

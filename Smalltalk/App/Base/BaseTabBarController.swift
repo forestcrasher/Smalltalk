@@ -10,19 +10,29 @@ import Swinject
 
 class BaseTabBarController: UITabBarController {
 
-    // MARK: - Container
+    // MARK: - Private
     private let container: Container
 
-    // MARK: - Private
-    private lazy var feed = container.resolve(FeedCoordinator.self, argument: container)!
-    private lazy var pictures = container.resolve(PicturesCoordinator.self, argument: container)!
-    private lazy var messages = container.resolve(MessagesCoordinator.self, argument: container)!
-    private lazy var activity = container.resolve(ActivityCoordinator.self, argument: container)!
-    private lazy var profile = container.resolve(ProfileCoordinator.self, argument: container)!
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+
+        super.init(nibName: nil, bundle: nil)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: - Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        let feed = container.resolve(FeedCoordinator.self, argument: container)!
+        let pictures = container.resolve(PicturesCoordinator.self, argument: container)!
+        let messages = container.resolve(MessagesCoordinator.self, argument: container)!
+        let activity = container.resolve(ActivityCoordinator.self, argument: container)!
+        let profile = container.resolve(ProfileCoordinator.self, argument: container)!
 
         feed.start()
         pictures.start()
@@ -39,15 +49,19 @@ class BaseTabBarController: UITabBarController {
         ]
 
         selectedIndex = 2
+
+        setupUI()
     }
 
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
-        super.init(nibName: nil, bundle: nil)
+    // MARK: - Private
+    private func setupUI() {
+        tabBar.isTranslucent = false
+        tabBar.backgroundColor = R.color.secondaryBackgroundColor()
+        tabBar.barTintColor = R.color.secondaryBackgroundColor()
+        tabBar.tintColor = R.color.tintColor()
+        tabBar.unselectedItemTintColor = R.color.fillColor()
+        tabBar.shadowImage = UIImage()
+        tabBar.backgroundImage = UIImage()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
 }

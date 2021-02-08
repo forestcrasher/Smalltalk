@@ -12,77 +12,52 @@ class PostTableViewCell: UITableViewCell {
 
     // MARK: - Public
     struct Model {
+        let postId: String
         let text: String
-        let authorFullName: String?
-        let authorPhotoURL: URL?
+        let userFullName: String?
+        let userPhotoURL: URL?
+        let date: Date?
+        let countLikes: Int
+        let countReposts: Int
+        let countComments: Int
+        let likeEnabled: Bool
     }
 
-    func configure(with model: Model) {
-        textView.text = model.text
-        authorLabel.text = model.authorFullName
-        if let downloadURL = model.authorPhotoURL {
-            let processor = DownsamplingImageProcessor(size: authorImageView.superview?.bounds.size ?? CGSize(width: 0, height: 0))
-            let resourse = ImageResource(downloadURL: downloadURL, cacheKey: downloadURL.absoluteString)
-            authorImageView.kf.setImage(with: resourse, options: [.processor(processor), .loadDiskFileSynchronously, .backgroundDecode])
-        }
-    }
+    var didTapLike: ((String?, Bool?) -> Void)?
 
     // MARK: - Private
-    private let authorImageView: UIImageView = {
-        let imageView = UIImageView()
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        imageView.backgroundColor = .gray
-        imageView.contentMode = .scaleAspectFill
-        imageView.layer.masksToBounds = true
-        return imageView
+    private var postId: String?
+    private var likeEnabled: Bool?
+
+    private let containerView: UIView = {
+        let containerView = UIView()
+        containerView.translatesAutoresizingMaskIntoConstraints = false
+        containerView.backgroundColor = R.color.secondaryBackgroundColor()
+        containerView.layer.cornerRadius = 16.0
+        return containerView
     }()
 
-    private let authorLabel: UILabel = {
-        let label = UILabel()
-        label.font = .systemFont(ofSize: 20.0)
-        label.textColor = .darkGray
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
+    private let headerItemView: HeaderItemView = {
+        let headerItemView = HeaderItemView()
+        headerItemView.translatesAutoresizingMaskIntoConstraints = false
+        return headerItemView
     }()
 
-    private let textView: UITextView = {
-        let textView = UITextView()
-        textView.font = .systemFont(ofSize: 16.0)
-        textView.textColor = .darkGray
-        textView.sizeToFit()
-        textView.isScrollEnabled = false
-        textView.isEditable = false
-        textView.textContainer.lineFragmentPadding = 0
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        return textView
+    private let textContentLabel: UILabel = {
+        let textContentLabel = UILabel()
+        textContentLabel.font = .systemFont(ofSize: 16.0)
+        textContentLabel.textColor = R.color.labelColor()
+        textContentLabel.numberOfLines = 0
+        textContentLabel.sizeToFit()
+        textContentLabel.translatesAutoresizingMaskIntoConstraints = false
+        return textContentLabel
     }()
 
-    private func setupUI() {
-        contentView.addSubview(authorImageView)
-        contentView.addSubview(authorLabel)
-        contentView.addSubview(textView)
-
-        NSLayoutConstraint.activate([
-            authorImageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16.0),
-            authorImageView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16.0),
-            authorImageView.widthAnchor.constraint(equalToConstant: 64.0),
-            authorImageView.heightAnchor.constraint(equalToConstant: 64.0)
-        ])
-
-        NSLayoutConstraint.activate([
-            authorLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 16.0),
-            authorLabel.leftAnchor.constraint(equalTo: authorImageView.rightAnchor, constant: 16.0),
-            authorLabel.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16.0),
-            authorLabel.heightAnchor.constraint(equalToConstant: 64.0)
-        ])
-
-        NSLayoutConstraint.activate([
-            textView.topAnchor.constraint(equalTo: authorImageView.bottomAnchor, constant: 16.0),
-            textView.leftAnchor.constraint(equalTo: contentView.leftAnchor, constant: 16.0),
-            textView.rightAnchor.constraint(equalTo: contentView.rightAnchor, constant: -16.0),
-            textView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -16.0)
-        ])
-    }
+    private let footerItemView: FooterItemView = {
+        let footerItemView = FooterItemView()
+        footerItemView.translatesAutoresizingMaskIntoConstraints = false
+        return footerItemView
+    }()
 
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -93,6 +68,62 @@ class PostTableViewCell: UITableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Public
+    func configure(with model: Model) {
+        postId = model.postId
+        likeEnabled = model.likeEnabled
+        textContentLabel.text = model.text
+        textContentLabel.font = .systemFont(ofSize: (textContentLabel.text?.count ?? 0) > 150 ? 16.0 : 24.0)
+        headerItemView.userText = model.userFullName
+        headerItemView.setUserImage(with: model.userPhotoURL)
+        headerItemView.setDate(model.date)
+        footerItemView.countLikes = model.countLikes
+        footerItemView.countReposts = model.countReposts
+        footerItemView.countComments = model.countComments
+        footerItemView.likeEnabled = model.likeEnabled
+    }
+
+    // MARK: - Private
+    private func setupUI() {
+        backgroundColor = .clear
+
+        contentView.addSubview(containerView)
+        NSLayoutConstraint.activate([
+            containerView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8.0),
+            containerView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8.0),
+            containerView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 16.0),
+            containerView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -16.0)
+        ])
+
+        containerView.addSubview(headerItemView)
+        NSLayoutConstraint.activate([
+            headerItemView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: 16.0),
+            headerItemView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
+            headerItemView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
+        ])
+
+        containerView.addSubview(textContentLabel)
+        NSLayoutConstraint.activate([
+            textContentLabel.topAnchor.constraint(equalTo: headerItemView.bottomAnchor, constant: 16.0),
+            textContentLabel.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
+            textContentLabel.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
+        ])
+
+        containerView.addSubview(footerItemView)
+        NSLayoutConstraint.activate([
+            footerItemView.topAnchor.constraint(equalTo: textContentLabel.bottomAnchor, constant: 8.0),
+            footerItemView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -8.0),
+            footerItemView.leadingAnchor.constraint(equalTo: containerView.leadingAnchor, constant: 20.0),
+            footerItemView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0)
+        ])
+
+        footerItemView.likeButton.addTarget(self, action: #selector(tapLikeAction), for: .touchUpInside)
+    }
+
+    @objc private func tapLikeAction() {
+        didTapLike?(postId, likeEnabled)
     }
 
 }

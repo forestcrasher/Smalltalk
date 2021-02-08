@@ -13,11 +13,16 @@ import Swinject
 
 class PostsStorage {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var usersStorage: UsersStorage = container.resolve(UsersStorage.self, argument: container)!
+    private let usersStorage: UsersStorage
+
+    // MARK: - Private
+    private let firestore = Firestore.firestore()
+
+    // MARK: - Init
+    init(container: Container) {
+        usersStorage = container.resolve(UsersStorage.self, argument: container)!
+    }
 
     // MARK: - Public
     func fetchPosts() -> Observable<[Post]> {
@@ -41,9 +46,45 @@ class PostsStorage {
             .asObservable()
     }
 
-    // MARK: - Private
-    private let firestore = Firestore.firestore()
+    func likePost(by postId: String) -> Observable<(String, Bool)> {
+        return usersStorage.fetchCurrentUser()
+            .flatMap { [weak self] currentUser -> Observable<(String, Bool)> in
+                return Observable.create { observer in
+                    if let id = currentUser?.id {
+                        self?.firestore.collection("posts").document(postId).updateData(["likes": FieldValue.arrayUnion([id])]) { error in
+                            if let error = error {
+                                observer.onError(error)
+                            } else {
+                                observer.onNext((postId, true))
+                                observer.onCompleted()
+                            }
+                        }
+                    }
+                    return Disposables.create()
+                }
+            }
+    }
 
+    func unlikePost(by postId: String) -> Observable<(String, Bool)> {
+        return usersStorage.fetchCurrentUser()
+            .flatMap { [weak self] currentUser -> Observable<(String, Bool)> in
+                return Observable.create { observer in
+                    if let id = currentUser?.id {
+                        self?.firestore.collection("posts").document(postId).updateData(["likes": FieldValue.arrayRemove([id])]) { error in
+                            if let error = error {
+                                observer.onError(error)
+                            } else {
+                                observer.onNext((postId, false))
+                                observer.onCompleted()
+                            }
+                        }
+                    }
+                    return Disposables.create()
+                }
+            }
+    }
+
+    // MARK: - Private
     private func getPostsDocuments() -> Observable<[QueryDocumentSnapshot]?> {
         return Observable.create { [weak self] observer in
             self?.firestore.collection("posts").getDocuments { (querySnapshot, _) in
@@ -52,11 +93,6 @@ class PostsStorage {
             }
             return Disposables.create()
         }
-    }
-
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
     }
 
 }

@@ -13,15 +13,21 @@ import Swinject
 
 class UsersStorage {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var filesStorage: FilesStorage = container.resolve(FilesStorage.self)!
+    private let filesStorage: FilesStorage
 
     // MARK: - Public
     var currentUserId: String { "1qrqguAWA5JZio8Zx8AV" }
 
+    // MARK: - Private
+    private let firestore = Firestore.firestore()
+
+    // MARK: - Init
+    init(container: Container) {
+        filesStorage = container.resolve(FilesStorage.self)!
+    }
+
+    // MARK: - Public
     func fetchCurrentUser() -> Observable<User?> {
         return fetchUser(by: currentUserId)
     }
@@ -44,8 +50,6 @@ class UsersStorage {
     }
 
     // MARK: - Private
-    private let firestore = Firestore.firestore()
-
     private func getUserDocument(by id: String) -> Observable<DocumentSnapshot?> {
         return Observable.create { [weak self] observer in
             self?.firestore.collection("users").document(id).getDocument { (snapshot, _) in
@@ -54,11 +58,6 @@ class UsersStorage {
             }
             return Disposables.create()
         }
-    }
-
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
     }
 
 }

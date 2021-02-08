@@ -10,12 +10,18 @@ import Swinject
 
 class FeedCoordinator {
 
-    // MARK: - Container
+    // MARK: - Public
+    let navigationController: UINavigationController = BaseNavigationController()
+
+    // MARK: - Private
     private let container: Container
 
-    // MARK: - Public
-    var navigationController: UINavigationController = BaseNavigationController()
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+    }
 
+    // MARK: - Public
     func start() {
         let feedViewModel = container.resolve(FeedViewModel.self, argument: container)!
         feedViewModel.coordinator = self
@@ -24,8 +30,4 @@ class FeedCoordinator {
         navigationController.viewControllers = [feedViewController]
     }
 
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
-    }
 }

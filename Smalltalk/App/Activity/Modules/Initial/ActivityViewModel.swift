@@ -12,34 +12,49 @@ import Swinject
 
 class ActivityViewModel {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var notificationsStorage: NotificationsStorage = container.resolve(NotificationsStorage.self, argument: container)!
+    private let notificationsStorage: NotificationsStorage
     weak var coordinator: ActivityCoordinator?
 
-    // MARK: - Setup
-    struct Input {}
-
-    func setup(with input: Input) -> Disposable {
-        notificationsStorage
-            .fetchNotifications()
-            .bind(to: notifications)
-            .disposed(by: disposeBag)
-
-        return Disposables.create()
-    }
-
     // MARK: - Public
-    let notifications = BehaviorRelay<[Notification]>(value: [])
+    let loadAction = PublishRelay<Void>()
+    let refreshAction = PublishRelay<Void>()
 
-    // MARK: - Private
-    private let disposeBag = DisposeBag()
+    let notifications: Driver<[NotificationTableViewCell.Model]>
+    let loading: Driver<Bool>
+    let refreshing: Driver<Bool>
 
     // MARK: - Init
     init(container: Container) {
-        self.container = container
-    }
+        notificationsStorage = container.resolve(NotificationsStorage.self, argument: container)!
 
+        let driver: Driver<[Notification]> = Observable
+            .merge(loadAction.take(1).asObservable(), refreshAction.asObservable())
+            .flatMap { [weak notificationsStorage] in (notificationsStorage?.fetchNotifications() ?? Observable.just([])) }
+            .asDriver(onErrorJustReturn: [])
+
+        loading = Driver
+            .merge(
+                loadAction.take(1).map { _ in true }.asDriver(onErrorJustReturn: false),
+                driver.map { _ in false }
+            )
+
+        refreshing = Driver
+            .merge(
+                refreshAction.map { _ in true }.asDriver(onErrorJustReturn: false),
+                driver.map { _ in false }
+            )
+
+        notifications = driver
+            .map { notifications -> [NotificationTableViewCell.Model] in
+                notifications.reduce(into: [], { result, notification in
+                    result.append(NotificationTableViewCell.Model(
+                        dispatcherFullName: notification.dispatcher?.fullName,
+                        dispatcherPhotoURL: notification.dispatcher?.photoURL,
+                        messageText: notification.message,
+                        date: notification.date
+                    ))
+                })
+            }
+    }
 }

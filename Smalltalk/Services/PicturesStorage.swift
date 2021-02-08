@@ -13,12 +13,18 @@ import Swinject
 
 class PicturesStorage {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var usersStorage: UsersStorage = container.resolve(UsersStorage.self, argument: container)!
-    private lazy var filesStorage: FilesStorage = container.resolve(FilesStorage.self)!
+    private let usersStorage: UsersStorage
+    private let filesStorage: FilesStorage
+
+    // MARK: - Private
+    private let firestore = Firestore.firestore()
+
+    // MARK: - Init
+    init(container: Container) {
+        usersStorage = container.resolve(UsersStorage.self, argument: container)!
+        filesStorage = container.resolve(FilesStorage.self)!
+    }
 
     // MARK: - Public
     func fetchPictures() -> Observable<[Picture]> {
@@ -48,9 +54,45 @@ class PicturesStorage {
             .asObservable()
     }
 
-    // MARK: - Private
-    private let firestore = Firestore.firestore()
+    func likePicture(by pictureId: String) -> Observable<(String, Bool)> {
+        return usersStorage.fetchCurrentUser()
+            .flatMap { [weak self] currentUser -> Observable<(String, Bool)> in
+                return Observable.create { observer in
+                    if let id = currentUser?.id {
+                        self?.firestore.collection("pictures").document(pictureId).updateData(["likes": FieldValue.arrayUnion([id])]) { error in
+                            if let error = error {
+                                observer.onError(error)
+                            } else {
+                                observer.onNext((pictureId, true))
+                                observer.onCompleted()
+                            }
+                        }
+                    }
+                    return Disposables.create()
+                }
+            }
+    }
 
+    func unlikePicture(by pictureId: String) -> Observable<(String, Bool)> {
+        return usersStorage.fetchCurrentUser()
+            .flatMap { [weak self] currentUser -> Observable<(String, Bool)> in
+                return Observable.create { observer in
+                    if let id = currentUser?.id {
+                        self?.firestore.collection("pictures").document(pictureId).updateData(["likes": FieldValue.arrayRemove([id])]) { error in
+                            if let error = error {
+                                observer.onError(error)
+                            } else {
+                                observer.onNext((pictureId, false))
+                                observer.onCompleted()
+                            }
+                        }
+                    }
+                    return Disposables.create()
+                }
+            }
+    }
+
+    // MARK: - Private
     private func getPicturesDocuments() -> Observable<[QueryDocumentSnapshot]?> {
         return Observable.create { [weak self] observer in
             self?.firestore.collection("pictures").getDocuments { (querySnapshot, _) in
@@ -59,11 +101,6 @@ class PicturesStorage {
             }
             return Disposables.create()
         }
-    }
-
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
     }
 
 }

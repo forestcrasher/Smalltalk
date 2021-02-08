@@ -13,11 +13,16 @@ import Swinject
 
 class NotificationsStorage {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var usersStorage: UsersStorage = container.resolve(UsersStorage.self, argument: container)!
+    private let usersStorage: UsersStorage
+
+    // MARK: - Private
+    private let firestore = Firestore.firestore()
+
+    // MARK: - Init
+    init(container: Container) {
+        usersStorage = container.resolve(UsersStorage.self, argument: container)!
+    }
 
     // MARK: - Public
     func fetchNotifications() -> Observable<[Notification]> {
@@ -44,16 +49,13 @@ class NotificationsStorage {
                     date: date,
                     postId: postId,
                     pictureId: pictureId,
-                    commentId: commentId
-                )
+                    commentId: commentId)
             }
             .toArray()
             .asObservable()
     }
 
     // MARK: - Private
-    private let firestore = Firestore.firestore()
-
     private func getNotificationDocuments() -> Observable<[QueryDocumentSnapshot]?> {
         return Observable.create { [weak self] observer in
             self?.firestore.collection("notifications").getDocuments { (querySnapshot, _) in
@@ -64,8 +66,4 @@ class NotificationsStorage {
         }
     }
 
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
-    }
 }

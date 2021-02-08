@@ -10,23 +10,24 @@ import Swinject
 
 class MessagesCoordinator {
 
-    // MARK: - Container
+    // MARK: - Public
+    let navigationController: UINavigationController = BaseNavigationController()
+
+    // MARK: - Private
     private let container: Container
 
-    // MARK: - Public
-    var navigationController: UINavigationController = BaseNavigationController()
+    // MARK: - Init
+    init(container: Container) {
+        self.container = container
+    }
 
+    // MARK: - Public
     func start() {
         let messagesViewModel = container.resolve(MessagesViewModel.self, argument: container)!
         messagesViewModel.coordinator = self
         let messagesViewController = MessagesViewController(viewModel: messagesViewModel)
         messagesViewController.tabBarItem = UITabBarItem(title: R.string.localizable.messagesTitle(), image: UIImage.messageFill, tag: 2)
         navigationController.viewControllers = [messagesViewController]
-    }
-
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
     }
 
 }

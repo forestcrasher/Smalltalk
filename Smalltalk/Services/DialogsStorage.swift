@@ -13,11 +13,16 @@ import Swinject
 
 class DialogsStorage {
 
-    // MARK: - Container
-    private let container: Container
-
     // MARK: - Dependencies
-    private lazy var usersStorage: UsersStorage = container.resolve(UsersStorage.self, argument: container)!
+    private let usersStorage: UsersStorage
+
+    // MARK: - Private
+    private let firestore = Firestore.firestore()
+
+    // MARK: - Init
+    init(container: Container) {
+        usersStorage = container.resolve(UsersStorage.self, argument: container)!
+    }
 
     // MARK: - Public
     func fetchDialogs() -> Observable<[Dialog]> {
@@ -65,8 +70,6 @@ class DialogsStorage {
     }
 
     // MARK: - Private
-    private let firestore = Firestore.firestore()
-
     private func getDialogsDocuments() -> Observable<[QueryDocumentSnapshot]?> {
         return Observable.create { [weak self] observer in
             self?.firestore
@@ -91,11 +94,6 @@ class DialogsStorage {
                 }
             return Disposables.create()
         }
-    }
-
-    // MARK: - Init
-    init(container: Container) {
-        self.container = container
     }
 
 }
