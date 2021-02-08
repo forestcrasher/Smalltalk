@@ -24,17 +24,6 @@ class PostsStorage {
         usersStorage = container.resolve(UsersStorage.self, argument: container)!
     }
 
-    // MARK: - Private
-    private func getPostsDocuments() -> Observable<[QueryDocumentSnapshot]?> {
-        return Observable.create { [weak self] observer in
-            self?.firestore.collection("posts").getDocuments { (querySnapshot, _) in
-                observer.onNext(querySnapshot?.documents)
-                observer.onCompleted()
-            }
-            return Disposables.create()
-        }
-    }
-
     // MARK: - Public
     func fetchPosts() -> Observable<[Post]> {
         return getPostsDocuments()
@@ -93,6 +82,17 @@ class PostsStorage {
                     return Disposables.create()
                 }
             }
+    }
+
+    // MARK: - Private
+    private func getPostsDocuments() -> Observable<[QueryDocumentSnapshot]?> {
+        return Observable.create { [weak self] observer in
+            self?.firestore.collection("posts").getDocuments { (querySnapshot, _) in
+                observer.onNext(querySnapshot?.documents)
+                observer.onCompleted()
+            }
+            return Disposables.create()
+        }
     }
 
 }

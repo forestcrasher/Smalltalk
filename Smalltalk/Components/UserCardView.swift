@@ -12,6 +12,22 @@ class UserCardView: UIView {
     // MARK: - Static
     private static let dateFormatter = DateFormatter()
 
+    // MARK: - Public
+    var userText: String? {
+        get { userLabel.text }
+        set { userLabel.text = newValue }
+    }
+
+    var messageText: String? {
+        get { messageLabel.text }
+        set { messageLabel.text = newValue }
+    }
+
+    enum Size {
+        case small
+        case large
+    }
+
     // MARK: - Private
     private var size: Size = .small
 
@@ -55,22 +71,6 @@ class UserCardView: UIView {
         return dateLabel
     }()
 
-    // MARK: - Public
-    var userText: String? {
-        get { userLabel.text }
-        set { userLabel.text = newValue }
-    }
-
-    var messageText: String? {
-        get { messageLabel.text }
-        set { messageLabel.text = newValue }
-    }
-
-    enum Size {
-        case small
-        case large
-    }
-
     // MARK: - Init
     convenience init(size: Size) {
         self.init()
@@ -85,6 +85,21 @@ class UserCardView: UIView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Public
+    func setUserImage(with url: URL?) {
+        DispatchQueue.main.async { [weak self] in
+            self?.userImageView.setImage(with: url)
+        }
+    }
+
+    func setDate(_ date: Date?) {
+        if let date = date {
+            let dateFormatter = UserCardView.dateFormatter
+            dateFormatter.dateFormat = "MM/dd/yyyy"
+            dateLabel.text = dateFormatter.string(from: date)
+        }
     }
 
     // MARK: - Private
@@ -128,21 +143,6 @@ class UserCardView: UIView {
             dateLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             dateLabel.leadingAnchor.constraint(greaterThanOrEqualTo: containerInfoView.trailingAnchor, constant: 20.0)
         ])
-    }
-
-    // MARK: - Public
-    func setUserImage(with url: URL?) {
-        DispatchQueue.main.async { [weak self] in
-            self?.userImageView.setImage(with: url)
-        }
-    }
-
-    func setDate(_ date: Date?) {
-        if let date = date {
-            let dateFormatter = UserCardView.dateFormatter
-            dateFormatter.dateFormat = "MM/dd/yyyy"
-            dateLabel.text = dateFormatter.string(from: date)
-        }
     }
 
 }

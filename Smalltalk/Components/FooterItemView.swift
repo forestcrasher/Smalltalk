@@ -9,6 +9,40 @@ import UIKit
 
 class FooterItemView: UIView {
 
+    // MARK: - Public
+    var countLikes: Int {
+        get { Int(likeButton.title(for: .normal) ?? "0") ?? 0 }
+        set { likeButton.setTitle(String(describing: newValue), for: .normal) }
+    }
+
+    var countReposts: Int {
+        get { Int(repostButton.title(for: .normal) ?? "0") ?? 0 }
+        set { repostButton.setTitle(String(describing: newValue), for: .normal) }
+    }
+
+    var countComments: Int {
+        get { Int(commentButton.title(for: .normal) ?? "0") ?? 0 }
+        set { commentButton.setTitle(String(describing: newValue), for: .normal) }
+    }
+
+    var likeEnabled = false {
+        didSet {
+            if likeEnabled {
+                likeButton.setTitleColor(R.color.secondaryTintColor()!, for: .normal)
+                likeButton.setTitleColor(R.color.secondaryTintColor()!.withAlphaComponent(0.3), for: .highlighted)
+                likeButton.setImage(UIImage.heartFill?.withTintColor(R.color.secondaryTintColor()!), for: .normal)
+                likeButton.setImage(UIImage.heartFill?.withTintColor(R.color.secondaryTintColor()!.withAlphaComponent(0.3), renderingMode: .alwaysOriginal), for: .highlighted)
+                likeButton.tintColor = R.color.secondaryTintColor()
+            } else {
+                likeButton.setTitleColor(R.color.fillColor()!, for: .normal)
+                likeButton.setTitleColor(R.color.fillColor()!.withAlphaComponent(0.3), for: .highlighted)
+                likeButton.setImage(UIImage.heartFill?.withTintColor(R.color.fillColor()!), for: .normal)
+                likeButton.setImage(UIImage.heartFill?.withTintColor(R.color.fillColor()!.withAlphaComponent(0.3), renderingMode: .alwaysOriginal), for: .highlighted)
+                likeButton.tintColor = R.color.fillColor()
+            }
+        }
+    }
+
     // MARK: - Private
     private let stackView: UIStackView = {
         let stackView = UIStackView()
@@ -55,40 +89,6 @@ class FooterItemView: UIView {
         commentButton.titleEdgeInsets = UIEdgeInsets(top: 0.0, left: 16.0, bottom: 0.0, right: 0.0)
         return commentButton
     }()
-
-    // MARK: - Public
-    var countLikes: Int {
-        get { Int(likeButton.title(for: .normal) ?? "0") ?? 0 }
-        set { likeButton.setTitle(String(describing: newValue), for: .normal) }
-    }
-
-    var countReposts: Int {
-        get { Int(repostButton.title(for: .normal) ?? "0") ?? 0 }
-        set { repostButton.setTitle(String(describing: newValue), for: .normal) }
-    }
-
-    var countComments: Int {
-        get { Int(commentButton.title(for: .normal) ?? "0") ?? 0 }
-        set { commentButton.setTitle(String(describing: newValue), for: .normal) }
-    }
-
-    var likeEnabled = false {
-        didSet {
-            if likeEnabled {
-                likeButton.setTitleColor(R.color.secondaryTintColor()!, for: .normal)
-                likeButton.setTitleColor(R.color.secondaryTintColor()!.withAlphaComponent(0.3), for: .highlighted)
-                likeButton.setImage(UIImage.heartFill?.withTintColor(R.color.secondaryTintColor()!), for: .normal)
-                likeButton.setImage(UIImage.heartFill?.withTintColor(R.color.secondaryTintColor()!.withAlphaComponent(0.3), renderingMode: .alwaysOriginal), for: .highlighted)
-                likeButton.tintColor = R.color.secondaryTintColor()
-            } else {
-                likeButton.setTitleColor(R.color.fillColor()!, for: .normal)
-                likeButton.setTitleColor(R.color.fillColor()!.withAlphaComponent(0.3), for: .highlighted)
-                likeButton.setImage(UIImage.heartFill?.withTintColor(R.color.fillColor()!), for: .normal)
-                likeButton.setImage(UIImage.heartFill?.withTintColor(R.color.fillColor()!.withAlphaComponent(0.3), renderingMode: .alwaysOriginal), for: .highlighted)
-                likeButton.tintColor = R.color.fillColor()
-            }
-        }
-    }
 
     // MARK: - Init
     override init(frame: CGRect) {

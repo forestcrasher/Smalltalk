@@ -12,6 +12,21 @@ import Kingfisher
 
 class PictureCollectionViewCell: UICollectionViewCell {
 
+    // MARK: - Public
+    struct Model {
+        let pictureId: String
+        let URL: URL?
+        let userFullName: String?
+        let userPhotoURL: URL?
+        let date: Date?
+        let countLikes: Int
+        let countReposts: Int
+        let countComments: Int
+        let likeEnabled: Bool
+    }
+
+    var didTapLike: ((String?, Bool?) -> Void)?
+
     // MARK: - Private
     private var pictureId: String?
     private var likeEnabled: Bool?
@@ -46,21 +61,6 @@ class PictureCollectionViewCell: UICollectionViewCell {
         return footerItemView
     }()
 
-    // MARK: - Public
-    struct Model {
-        let pictureId: String
-        let URL: URL?
-        let userFullName: String?
-        let userPhotoURL: URL?
-        let date: Date?
-        let countLikes: Int
-        let countReposts: Int
-        let countComments: Int
-        let likeEnabled: Bool
-    }
-
-    var didTapLike: ((String?, Bool?) -> Void)?
-
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -70,6 +70,24 @@ class PictureCollectionViewCell: UICollectionViewCell {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Public
+    func configure(with model: Model) {
+        pictureId = model.pictureId
+        likeEnabled = model.likeEnabled
+
+        DispatchQueue.main.async { [weak self] in
+            self?.imageView.setImage(with: model.URL)
+        }
+
+        headerItemView.userText = model.userFullName
+        headerItemView.setUserImage(with: model.userPhotoURL)
+        headerItemView.setDate(model.date)
+        footerItemView.countLikes = model.countLikes
+        footerItemView.countReposts = model.countReposts
+        footerItemView.countComments = model.countComments
+        footerItemView.likeEnabled = model.likeEnabled
     }
 
     // MARK: - Private
@@ -111,24 +129,6 @@ class PictureCollectionViewCell: UICollectionViewCell {
 
     @objc private func tapLikeAction() {
         didTapLike?(pictureId, likeEnabled)
-    }
-
-    // MARK: - Public
-    func configure(with model: Model) {
-        pictureId = model.pictureId
-        likeEnabled = model.likeEnabled
-
-        DispatchQueue.main.async { [weak self] in
-            self?.imageView.setImage(with: model.URL)
-        }
-
-        headerItemView.userText = model.userFullName
-        headerItemView.setUserImage(with: model.userPhotoURL)
-        headerItemView.setDate(model.date)
-        footerItemView.countLikes = model.countLikes
-        footerItemView.countReposts = model.countReposts
-        footerItemView.countComments = model.countComments
-        footerItemView.likeEnabled = model.likeEnabled
     }
 
 }

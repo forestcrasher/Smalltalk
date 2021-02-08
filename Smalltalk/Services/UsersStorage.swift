@@ -16,26 +16,15 @@ class UsersStorage {
     // MARK: - Dependencies
     private let filesStorage: FilesStorage
 
-    // MARK: - Private
-    private let firestore = Firestore.firestore()
-
     // MARK: - Public
     var currentUserId: String { "1qrqguAWA5JZio8Zx8AV" }
+
+    // MARK: - Private
+    private let firestore = Firestore.firestore()
 
     // MARK: - Init
     init(container: Container) {
         filesStorage = container.resolve(FilesStorage.self)!
-    }
-
-    // MARK: - Private
-    private func getUserDocument(by id: String) -> Observable<DocumentSnapshot?> {
-        return Observable.create { [weak self] observer in
-            self?.firestore.collection("users").document(id).getDocument { (snapshot, _) in
-                observer.onNext(snapshot)
-                observer.onCompleted()
-            }
-            return Disposables.create()
-        }
     }
 
     // MARK: - Public
@@ -58,6 +47,17 @@ class UsersStorage {
                 let lastName = userDocument.data()?["lastName"] as? String ?? ""
                 return User(id: id, firstName: firstName, lastName: lastName, photoURL: photoURL)
             }
+    }
+
+    // MARK: - Private
+    private func getUserDocument(by id: String) -> Observable<DocumentSnapshot?> {
+        return Observable.create { [weak self] observer in
+            self?.firestore.collection("users").document(id).getDocument { (snapshot, _) in
+                observer.onNext(snapshot)
+                observer.onCompleted()
+            }
+            return Disposables.create()
+        }
     }
 
 }

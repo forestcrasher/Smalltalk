@@ -35,15 +35,24 @@ class PicturesViewModel {
             .merge(loadAction.take(1).asObservable(), refreshAction.asObservable())
             .flatMap { [weak picturesStorage, weak usersStorage] in
                 return Observable
-                    .combineLatest((picturesStorage?.fetchPictures() ?? Observable.just([])), (usersStorage?.fetchCurrentUser() ?? Observable.just(nil)))
+                    .combineLatest(
+                        (picturesStorage?.fetchPictures() ?? Observable.just([])),
+                        (usersStorage?.fetchCurrentUser() ?? Observable.just(nil))
+                    )
             }
             .asDriver(onErrorJustReturn: ([], nil))
 
         loading = Driver
-            .merge(loadAction.take(1).map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
+            .merge(
+                loadAction.take(1).map { _ in true }.asDriver(onErrorJustReturn: false),
+                driver.map { _ in false }
+            )
 
         refreshing = Driver
-            .merge(refreshAction.map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
+            .merge(
+                refreshAction.map { _ in true }.asDriver(onErrorJustReturn: false),
+                driver.map { _ in false }
+            )
 
         let driverUpdateLike = tapLikeAction
             .flatMap { [weak picturesStorage] (pictureId, likeEnabled) in

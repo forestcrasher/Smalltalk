@@ -12,6 +12,17 @@ class HeaderItemView: UIView {
     // MARK: - Static
     private static let dateFormatter = DateFormatter()
 
+    // MARK: - Public
+    var userText: String? {
+        get { userLabel.text }
+        set { userLabel.text = newValue }
+    }
+
+    var geoText: String? {
+        get { geoLabel.text }
+        set { geoLabel.text = newValue }
+    }
+
     // MARK: - Private
     private let userImageView: UIImageView = {
         let userImageView = UIImageView()
@@ -53,17 +64,6 @@ class HeaderItemView: UIView {
         return dateLabel
     }()
 
-    // MARK: - Public
-    var userText: String? {
-        get { userLabel.text }
-        set { userLabel.text = newValue }
-    }
-
-    var geoText: String? {
-        get { geoLabel.text }
-        set { geoLabel.text = newValue }
-    }
-
     // MARK: - Init
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -73,6 +73,21 @@ class HeaderItemView: UIView {
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Public
+    func setUserImage(with url: URL?) {
+        DispatchQueue.main.async { [weak self] in
+            self?.userImageView.setImage(with: url)
+        }
+    }
+
+    func setDate(_ date: Date?) {
+        if let date = date {
+            let dateFormatter = HeaderItemView.dateFormatter
+            dateFormatter.dateFormat = "MM/dd/yyyy"
+            dateLabel.text = dateFormatter.string(from: date)
+        }
     }
 
     // MARK: - Private
@@ -114,21 +129,6 @@ class HeaderItemView: UIView {
             dateLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             dateLabel.leadingAnchor.constraint(greaterThanOrEqualTo: containerInfoView.trailingAnchor, constant: 20.0)
         ])
-    }
-
-    // MARK: - Public
-    func setUserImage(with url: URL?) {
-        DispatchQueue.main.async { [weak self] in
-            self?.userImageView.setImage(with: url)
-        }
-    }
-
-    func setDate(_ date: Date?) {
-        if let date = date {
-            let dateFormatter = HeaderItemView.dateFormatter
-            dateFormatter.dateFormat = "MM/dd/yyyy"
-            dateLabel.text = dateFormatter.string(from: date)
-        }
     }
 
 }

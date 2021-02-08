@@ -10,11 +10,11 @@ import Swinject
 
 class PicturesCoordinator {
 
-    // MARK: - Private
-    private let container: Container
-
     // MARK: - Public
     let navigationController: UINavigationController = BaseNavigationController()
+
+    // MARK: - Private
+    private let container: Container
 
     // MARK: - Init
     init(container: Container) {

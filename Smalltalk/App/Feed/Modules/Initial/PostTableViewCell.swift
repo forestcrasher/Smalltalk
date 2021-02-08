@@ -10,6 +10,21 @@ import Kingfisher
 
 class PostTableViewCell: UITableViewCell {
 
+    // MARK: - Public
+    struct Model {
+        let postId: String
+        let text: String
+        let userFullName: String?
+        let userPhotoURL: URL?
+        let date: Date?
+        let countLikes: Int
+        let countReposts: Int
+        let countComments: Int
+        let likeEnabled: Bool
+    }
+
+    var didTapLike: ((String?, Bool?) -> Void)?
+
     // MARK: - Private
     private var postId: String?
     private var likeEnabled: Bool?
@@ -44,21 +59,6 @@ class PostTableViewCell: UITableViewCell {
         return footerItemView
     }()
 
-    // MARK: - Public
-    struct Model {
-        let postId: String
-        let text: String
-        let userFullName: String?
-        let userPhotoURL: URL?
-        let date: Date?
-        let countLikes: Int
-        let countReposts: Int
-        let countComments: Int
-        let likeEnabled: Bool
-    }
-
-    var didTapLike: ((String?, Bool?) -> Void)?
-
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -68,6 +68,21 @@ class PostTableViewCell: UITableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Public
+    func configure(with model: Model) {
+        postId = model.postId
+        likeEnabled = model.likeEnabled
+        textContentLabel.text = model.text
+        textContentLabel.font = .systemFont(ofSize: (textContentLabel.text?.count ?? 0) > 150 ? 16.0 : 24.0)
+        headerItemView.userText = model.userFullName
+        headerItemView.setUserImage(with: model.userPhotoURL)
+        headerItemView.setDate(model.date)
+        footerItemView.countLikes = model.countLikes
+        footerItemView.countReposts = model.countReposts
+        footerItemView.countComments = model.countComments
+        footerItemView.likeEnabled = model.likeEnabled
     }
 
     // MARK: - Private
@@ -109,21 +124,6 @@ class PostTableViewCell: UITableViewCell {
 
     @objc private func tapLikeAction() {
         didTapLike?(postId, likeEnabled)
-    }
-
-    // MARK: - Public
-    func configure(with model: Model) {
-        postId = model.postId
-        likeEnabled = model.likeEnabled
-        textContentLabel.text = model.text
-        textContentLabel.font = .systemFont(ofSize: (textContentLabel.text?.count ?? 0) > 150 ? 16.0 : 24.0)
-        headerItemView.userText = model.userFullName
-        headerItemView.setUserImage(with: model.userPhotoURL)
-        headerItemView.setDate(model.date)
-        footerItemView.countLikes = model.countLikes
-        footerItemView.countReposts = model.countReposts
-        footerItemView.countComments = model.countComments
-        footerItemView.likeEnabled = model.likeEnabled
     }
 
 }

@@ -24,17 +24,6 @@ class NotificationsStorage {
         usersStorage = container.resolve(UsersStorage.self, argument: container)!
     }
 
-    // MARK: - Private
-    private func getNotificationDocuments() -> Observable<[QueryDocumentSnapshot]?> {
-        return Observable.create { [weak self] observer in
-            self?.firestore.collection("notifications").getDocuments { (querySnapshot, _) in
-                observer.onNext(querySnapshot?.documents)
-                observer.onCompleted()
-            }
-            return Disposables.create()
-        }
-    }
-
     // MARK: - Public
     func fetchNotifications() -> Observable<[Notification]> {
         return getNotificationDocuments()
@@ -64,6 +53,17 @@ class NotificationsStorage {
             }
             .toArray()
             .asObservable()
+    }
+
+    // MARK: - Private
+    private func getNotificationDocuments() -> Observable<[QueryDocumentSnapshot]?> {
+        return Observable.create { [weak self] observer in
+            self?.firestore.collection("notifications").getDocuments { (querySnapshot, _) in
+                observer.onNext(querySnapshot?.documents)
+                observer.onCompleted()
+            }
+            return Disposables.create()
+        }
     }
 
 }

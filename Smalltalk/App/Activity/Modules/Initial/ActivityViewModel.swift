@@ -34,10 +34,16 @@ class ActivityViewModel {
             .asDriver(onErrorJustReturn: [])
 
         loading = Driver
-            .merge(loadAction.take(1).map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
+            .merge(
+                loadAction.take(1).map { _ in true }.asDriver(onErrorJustReturn: false),
+                driver.map { _ in false }
+            )
 
         refreshing = Driver
-            .merge(refreshAction.map { _ in true }.asDriver(onErrorJustReturn: false), driver.map { _ in false })
+            .merge(
+                refreshAction.map { _ in true }.asDriver(onErrorJustReturn: false),
+                driver.map { _ in false }
+            )
 
         notifications = driver
             .map { notifications -> [NotificationTableViewCell.Model] in

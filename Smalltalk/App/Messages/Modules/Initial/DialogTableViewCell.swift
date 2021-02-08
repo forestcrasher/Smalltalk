@@ -10,6 +10,14 @@ import Kingfisher
 
 class DialogTableViewCell: UITableViewCell {
 
+    // MARK: - Public
+    struct Model {
+        let recipientFullName: String?
+        let recipientPhotoURL: URL?
+        let lastMessageText: String?
+        let date: Date?
+    }
+
     // MARK: - Private
     private let containerView: UIView = {
         let containerView = UIView()
@@ -25,14 +33,6 @@ class DialogTableViewCell: UITableViewCell {
         return userCardView
     }()
 
-    // MARK: - Public
-    struct Model {
-        let recipientFullName: String?
-        let recipientPhotoURL: URL?
-        let lastMessageText: String?
-        let date: Date?
-    }
-
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -42,6 +42,14 @@ class DialogTableViewCell: UITableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Public
+    func configure(with model: Model) {
+        userCardView.userText = model.recipientFullName
+        userCardView.messageText = model.lastMessageText
+        userCardView.setUserImage(with: model.recipientPhotoURL)
+        userCardView.setDate(model.date)
     }
 
     // MARK: - Private
@@ -65,11 +73,4 @@ class DialogTableViewCell: UITableViewCell {
         ])
     }
 
-    // MARK: - Public
-    func configure(with model: Model) {
-        userCardView.userText = model.recipientFullName
-        userCardView.messageText = model.lastMessageText
-        userCardView.setUserImage(with: model.recipientPhotoURL)
-        userCardView.setDate(model.date)
-    }
 }

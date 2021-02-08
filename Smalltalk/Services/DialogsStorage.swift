@@ -24,33 +24,6 @@ class DialogsStorage {
         usersStorage = container.resolve(UsersStorage.self, argument: container)!
     }
 
-    // MARK: - Private
-    private func getDialogsDocuments() -> Observable<[QueryDocumentSnapshot]?> {
-        return Observable.create { [weak self] observer in
-            self?.firestore
-                .collection("dialogs")
-                .getDocuments { (querySnapshot, _) in
-                    observer.onNext(querySnapshot?.documents)
-                    observer.onCompleted()
-                }
-            return Disposables.create()
-        }
-    }
-
-    private func getLastMessageDocument(by dialogId: String) -> Observable<DocumentSnapshot?> {
-        return Observable.create { [weak self] observer in
-            self?.firestore
-                .collection("dialogs/\(dialogId)/messages")
-                .order(by: "date", descending: true)
-                .limit(to: 1)
-                .getDocuments { (querySnapshot, _) in
-                    observer.onNext(querySnapshot?.documents.first)
-                    observer.onCompleted()
-                }
-            return Disposables.create()
-        }
-    }
-
     // MARK: - Public
     func fetchDialogs() -> Observable<[Dialog]> {
         return getDialogsDocuments()
@@ -94,6 +67,33 @@ class DialogsStorage {
                 let isRead = messageDocument.data()?["isRead"] as? Bool ?? false
                 return Message(id: id, text: text, date: date, isRead: isRead, author: author)
             }
+    }
+
+    // MARK: - Private
+    private func getDialogsDocuments() -> Observable<[QueryDocumentSnapshot]?> {
+        return Observable.create { [weak self] observer in
+            self?.firestore
+                .collection("dialogs")
+                .getDocuments { (querySnapshot, _) in
+                    observer.onNext(querySnapshot?.documents)
+                    observer.onCompleted()
+                }
+            return Disposables.create()
+        }
+    }
+
+    private func getLastMessageDocument(by dialogId: String) -> Observable<DocumentSnapshot?> {
+        return Observable.create { [weak self] observer in
+            self?.firestore
+                .collection("dialogs/\(dialogId)/messages")
+                .order(by: "date", descending: true)
+                .limit(to: 1)
+                .getDocuments { (querySnapshot, _) in
+                    observer.onNext(querySnapshot?.documents.first)
+                    observer.onCompleted()
+                }
+            return Disposables.create()
+        }
     }
 
 }

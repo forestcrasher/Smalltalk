@@ -10,6 +10,14 @@ import Kingfisher
 
 class NotificationTableViewCell: UITableViewCell {
 
+    // MARK: - Public
+    struct Model {
+        let dispatcherFullName: String?
+        let dispatcherPhotoURL: URL?
+        let messageText: String?
+        let date: Date?
+    }
+
     // MARK: - Private
     private let containerView: UIView = {
         let containerView = UIView()
@@ -25,14 +33,6 @@ class NotificationTableViewCell: UITableViewCell {
         return userCardView
     }()
 
-    // MARK: - Public
-    struct Model {
-        let dispatcherFullName: String?
-        let dispatcherPhotoURL: URL?
-        let messageText: String?
-        let date: Date?
-    }
-
     // MARK: - Init
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: .default, reuseIdentifier: reuseIdentifier)
@@ -42,6 +42,14 @@ class NotificationTableViewCell: UITableViewCell {
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: - Public
+    func configure(with model: Model) {
+        userCardView.userText = model.dispatcherFullName
+        userCardView.messageText = model.messageText
+        userCardView.setUserImage(with: model.dispatcherPhotoURL)
+        userCardView.setDate(model.date)
     }
 
     // MARK: - Private
@@ -63,14 +71,6 @@ class NotificationTableViewCell: UITableViewCell {
             userCardView.trailingAnchor.constraint(equalTo: containerView.trailingAnchor, constant: -20.0),
             userCardView.bottomAnchor.constraint(equalTo: containerView.bottomAnchor, constant: -16.0)
         ])
-    }
-
-    // MARK: - Public
-    func configure(with model: Model) {
-        userCardView.userText = model.dispatcherFullName
-        userCardView.messageText = model.messageText
-        userCardView.setUserImage(with: model.dispatcherPhotoURL)
-        userCardView.setDate(model.date)
     }
 
 }

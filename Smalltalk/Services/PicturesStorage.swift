@@ -26,17 +26,6 @@ class PicturesStorage {
         filesStorage = container.resolve(FilesStorage.self)!
     }
 
-    // MARK: - Private
-    private func getPicturesDocuments() -> Observable<[QueryDocumentSnapshot]?> {
-        return Observable.create { [weak self] observer in
-            self?.firestore.collection("pictures").getDocuments { (querySnapshot, _) in
-                observer.onNext(querySnapshot?.documents)
-                observer.onCompleted()
-            }
-            return Disposables.create()
-        }
-    }
-
     // MARK: - Public
     func fetchPictures() -> Observable<[Picture]> {
         return getPicturesDocuments()
@@ -101,6 +90,17 @@ class PicturesStorage {
                     return Disposables.create()
                 }
             }
+    }
+
+    // MARK: - Private
+    private func getPicturesDocuments() -> Observable<[QueryDocumentSnapshot]?> {
+        return Observable.create { [weak self] observer in
+            self?.firestore.collection("pictures").getDocuments { (querySnapshot, _) in
+                observer.onNext(querySnapshot?.documents)
+                observer.onCompleted()
+            }
+            return Disposables.create()
+        }
     }
 
 }
